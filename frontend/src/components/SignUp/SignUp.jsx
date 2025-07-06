@@ -31,7 +31,7 @@ const SignUp = () => {
             </h2>
 
             {/* image section */}
-            <div className="text-center mb-0">
+            <div className="text-center mb-2">
               <span className="inline-block h-12 w-12 rounded-full overflow-hidden">
                 <label htmlFor="avatar-input" className="cursor-pointer">
                   {avatar ? (

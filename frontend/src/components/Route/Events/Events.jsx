@@ -1,4 +1,4 @@
-import styles from "../../styles/style";
+import styles from "../../../styles/style";
 import EventsCard from "./EventCard";
 const Events = () => {
   return (

@@ -598,12 +598,15 @@ export const footerProductLinks = [
   },
   {
     name: "Store Locations",
+    link: "locations",
   },
   {
     name: "Our Blog",
+    link: "/blog",
   },
   {
     name: "Reviews",
+    link: "/reviews",
   },
 ];
 

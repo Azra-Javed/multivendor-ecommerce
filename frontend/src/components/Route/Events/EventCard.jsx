@@ -1,4 +1,4 @@
-import styles from "../../styles/style";
+import styles from "../../../styles/style.js";
 import CountDown from "./CountDown.jsx";
 
 const EventCard = () => {

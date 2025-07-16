@@ -5,11 +5,32 @@ import { useEffect } from "react";
 import Store from "./redux/store";
 import { loadUser } from "./redux/actions/user";
 import { router } from "./routes/AppRoutes";
+import { useSelector } from "react-redux";
 
 const App = () => {
   useEffect(() => {
     Store.dispatch(loadUser());
   }, []);
+
+  const { loading } = useSelector((state) => state.user);
+
+  // return loading ? null : (
+  //   <>
+  //     <RouterProvider router={router} />
+  //     <ToastContainer
+  //       position="bottom-center"
+  //       autoClose={5000}
+  //       hideProgressBar={false}
+  //       newestOnTop={false}
+  //       closeOnClick
+  //       rtl={false}
+  //       pauseOnFocusLoss
+  //       draggable
+  //       pauseOnHover
+  //       theme="dark"
+  //     />
+  //   </>
+  // );
 
   return (
     <>

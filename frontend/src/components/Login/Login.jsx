@@ -10,7 +10,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,7 +26,8 @@ const Login = () => {
       )
       .then((res) => {
         toast.success("Login Success!");
-        Navigate("/");
+        navigate("/");
+        window.location.reload();
       })
       .catch((err) => {
         toast.error(err.response.data.message);

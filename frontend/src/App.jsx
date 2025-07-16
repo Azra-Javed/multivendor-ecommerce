@@ -12,26 +12,6 @@ const App = () => {
     Store.dispatch(loadUser());
   }, []);
 
-  const { loading } = useSelector((state) => state.user);
-
-  // return loading ? null : (
-  //   <>
-  //     <RouterProvider router={router} />
-  //     <ToastContainer
-  //       position="bottom-center"
-  //       autoClose={5000}
-  //       hideProgressBar={false}
-  //       newestOnTop={false}
-  //       closeOnClick
-  //       rtl={false}
-  //       pauseOnFocusLoss
-  //       draggable
-  //       pauseOnHover
-  //       theme="dark"
-  //     />
-  //   </>
-  // );
-
   return (
     <>
       <RouterProvider router={router} />

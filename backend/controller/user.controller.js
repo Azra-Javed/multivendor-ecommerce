@@ -16,21 +16,21 @@ const createActivationToken = (user) => {
 
 //@desc: create new user
 //@route: POST /api/user/v2/create-user
+
 const createUser = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
     const userEmail = await User.findOne({ email });
+
     if (userEmail) {
       const filename = req.file.filename;
       const filePath = `uploads/${filename}`;
-
-      try {
-        fs.unlinkSync(filePath);
-        console.log("File deleted successfully");
-      } catch (err) {
-        console.log("Error deleting file:", err);
-      }
-
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.log(err);
+          res.status(500).json({ message: "Error deleting file" });
+        }
+      });
       return next(new ErrorHandler("User already exists", 400));
     }
 
@@ -50,13 +50,12 @@ const createUser = async (req, res, next) => {
     try {
       await sendMail({
         email: user.email,
-        subject: "Activate Your Account",
+        subject: "Activate your account",
         message: `Hello ${user.name}, please click on the link to activate your account: ${activationUrl}`,
       });
-
       res.status(201).json({
         success: true,
-        message: `Please check your email: ${user.email} to activate your account.`,
+        message: `please check your email:- ${user.email} to activate your account!`,
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
@@ -133,7 +132,6 @@ const userLogin = catchAsyncErrors(async (req, res, next) => {
 const getUser = catchAsyncErrors(async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
-    e;
     if (!user) {
       return next(new ErrorHandler("User doesn't exists!", 400));
     }

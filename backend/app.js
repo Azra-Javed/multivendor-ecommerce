@@ -3,6 +3,7 @@ const ErrorHandler = require("./middleware/error");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const user = require("./routes/user.routes");
 
 const app = express();
 app.use(express.json());
@@ -27,7 +28,6 @@ app.get("/test", (req, res) => {
   res.send("Server is working");
 });
 
-const user = require("./controller/user");
 app.use("/api/v2/user", user);
 
 // error handling

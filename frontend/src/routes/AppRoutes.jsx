@@ -8,6 +8,7 @@ import {
   BestSellingPage,
   EventsPage,
   FAQPage,
+  ProductDetailsPage,
 } from "./Routes";
 
 export const router = createBrowserRouter([
@@ -31,4 +32,5 @@ export const router = createBrowserRouter([
   },
   { path: "/events", element: <EventsPage /> },
   { path: "faq", element: <FAQPage /> },
+  { path: "/product/:name", element: <ProductDetailsPage /> },
 ]);

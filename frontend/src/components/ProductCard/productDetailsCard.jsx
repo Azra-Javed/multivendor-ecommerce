@@ -82,7 +82,7 @@ const productDetailsCar = ({ setOpen, data }) => {
                     {data.price ? data.price + "$" : null}
                   </h3>
                 </div>
-
+                {/* buttons */}
                 <div className="flex items-center mt-12 justify-between pr-3">
                   <div>
                     <button

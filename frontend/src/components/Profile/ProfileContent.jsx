@@ -1,8 +1,9 @@
 import { useSelector } from "react-redux";
 import { backend_url } from "../../server";
-import { AiOutlineCamera } from "react-icons/ai";
 import styles from "../../styles/style";
 import { useState } from "react";
+import AllOrders from "../../components/Profile/AllOrders.jsx";
+import { AiOutlineCamera } from "react-icons/ai";
 
 const ProfileContent = ({ active }) => {
   const { user } = useSelector((state) => state.user);
@@ -117,6 +118,13 @@ const ProfileContent = ({ active }) => {
             </form>
           </div>
         </>
+      )}
+
+      {/* order page */}
+      {active === 2 && (
+        <div>
+          <AllOrders />
+        </div>
       )}
     </div>
   );

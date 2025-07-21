@@ -3,6 +3,8 @@ import { backend_url } from "../../server";
 import styles from "../../styles/style";
 import { useState } from "react";
 import AllOrders from "../../components/Profile/AllOrders.jsx";
+import AllRefundOrders from "../../components/Profile/AllRefundOrders.jsx";
+
 import { AiOutlineCamera } from "react-icons/ai";
 
 const ProfileContent = ({ active }) => {
@@ -124,6 +126,13 @@ const ProfileContent = ({ active }) => {
       {active === 2 && (
         <div>
           <AllOrders />
+        </div>
+      )}
+
+      {/* refund page */}
+      {active === 3 && (
+        <div>
+          <AllRefundOrders />
         </div>
       )}
     </div>

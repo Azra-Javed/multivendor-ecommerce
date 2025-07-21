@@ -3,8 +3,10 @@ import { backend_url } from "../../server";
 import styles from "../../styles/style";
 import { useState } from "react";
 import AllOrders from "../../components/Profile/AllOrders.jsx";
-import AllRefundOrders from "../../components/Profile/AllRefundOrders.jsx";
-
+import AllRefundOrders from "../../components/Profile/AllRefundOrders";
+import TrackOrder from "../../components/Profile/TrackOrder";
+import PaymentMethod from "../../components/Profile/PaymentMethod";
+import Address from "../../components/Profile/Address.jsx";
 import { AiOutlineCamera } from "react-icons/ai";
 
 const ProfileContent = ({ active }) => {
@@ -22,7 +24,7 @@ const ProfileContent = ({ active }) => {
 
   return (
     <div className="w-full">
-      {/* profile page */}
+      {/* profile */}
       {active === 1 && (
         <>
           <div className="flex justify-center w-full">
@@ -122,17 +124,38 @@ const ProfileContent = ({ active }) => {
         </>
       )}
 
-      {/* order page */}
+      {/* order */}
       {active === 2 && (
         <div>
           <AllOrders />
         </div>
       )}
 
-      {/* refund page */}
+      {/* refund  */}
       {active === 3 && (
         <div>
           <AllRefundOrders />
+        </div>
+      )}
+
+      {/* Track order */}
+      {active === 5 && (
+        <div>
+          <TrackOrder />
+        </div>
+      )}
+
+      {/* payment methods */}
+      {active === 6 && (
+        <div>
+          <PaymentMethod />
+        </div>
+      )}
+
+      {/* address */}
+      {active === 7 && (
+        <div>
+          <Address />
         </div>
       )}
     </div>

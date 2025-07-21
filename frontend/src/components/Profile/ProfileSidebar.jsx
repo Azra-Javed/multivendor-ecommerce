@@ -1,0 +1,62 @@
+import { useNavigate } from "react-router-dom";
+import { RxPerson } from "react-icons/rx";
+import { HiOutlineReceiptRefund, HiOutlineShoppingBag } from "react-icons/hi";
+import {
+  AiOutlineCreditCard,
+  AiOutlineLogout,
+  AiOutlineMessage,
+} from "react-icons/ai";
+import { MdOutlineTrackChanges } from "react-icons/md";
+import { TbAddressBook } from "react-icons/tb";
+
+const sidebarItems = [
+  { id: 1, label: "Profile", icon: RxPerson },
+  { id: 2, label: "Orders", icon: HiOutlineShoppingBag },
+  { id: 3, label: "Refunds", icon: HiOutlineReceiptRefund },
+  {
+    id: 4,
+    label: "Inbox",
+    icon: AiOutlineMessage,
+    route: "/inbox",
+  },
+  { id: 5, label: "Track Order", icon: MdOutlineTrackChanges },
+  { id: 6, label: "Payment Methods", icon: AiOutlineCreditCard },
+  {
+    id: 7,
+    label: "Address",
+    icon: TbAddressBook,
+  },
+  {
+    id: 8,
+    label: "Log out",
+    icon: AiOutlineLogout,
+  },
+];
+
+const ProfileSidebar = ({ active, setActive }) => {
+  const navigate = useNavigate();
+
+  const handleClick = (id, route) => {
+    setActive(id);
+    if (route) navigate(route);
+  };
+
+  return (
+    <div className="w-full bg-white shadow-sm rounded-[10px] p-4 pt-8">
+      {sidebarItems.map(({ id, label, icon: Icon, route }) => (
+        <div
+          key={id}
+          className="flex items-center cursor-pointer w-full mb-8"
+          onClick={() => handleClick(id, route)}
+        >
+          <Icon size={20} color={active === id ? "red" : ""} />
+          <span className={`pl-3 ${active === id ? "text-[red]" : ""}`}>
+            {label}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default ProfileSidebar;

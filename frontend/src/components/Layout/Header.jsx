@@ -26,8 +26,6 @@ const Header = ({ activeHeading }) => {
   const [openCart, setOpenCart] = useState(false);
   const [openWishlist, setOpenWishlist] = useState(false);
 
-  console.log(user);
-
   const handleSearchChange = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
@@ -192,7 +190,7 @@ const Header = ({ activeHeading }) => {
                 <div className={`${styles.noramlFlex}`}>
                   <div className="relative cursor-pointer mr-[15px]">
                     {isAuthenticated ? (
-                      <Link>
+                      <Link to="/profile">
                         <img
                           src={`${backend_url}${user.avatar}`}
                           alt=""

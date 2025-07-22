@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import Store from "./redux/store";
 import { loadUser } from "./redux/actions/user";
 import { router } from "./routes/AppRoutes";
-import { useSelector } from "react-redux";
 
 const App = () => {
   useEffect(() => {

@@ -145,4 +145,22 @@ const getUser = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-module.exports = { createUser, userLogin, getUser, activateUser };
+//@desc: logout usser
+//@route: Delete /api/user/v2/logout
+const logoutUser = catchAsyncErrors(async (req, res, next) => {
+  try {
+    res.cookie("token", null, {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Logout Successful!",
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+module.exports = { createUser, userLogin, getUser, activateUser, logoutUser };

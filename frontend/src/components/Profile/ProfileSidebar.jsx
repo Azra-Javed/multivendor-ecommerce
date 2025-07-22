@@ -54,7 +54,11 @@ const ProfileSidebar = ({ active, setActive }) => {
           onClick={() => handleClick(id, route, logout)}
         >
           <Icon size={20} color={active === id ? "red" : ""} />
-          <span className={`pl-3 ${active === id ? "text-[red]" : ""}`}>
+          <span
+            className={`pl-3 ${
+              active === id ? "text-[red]" : ""
+            } 800px:block hidden`}
+          >
             {label}
           </span>
         </div>

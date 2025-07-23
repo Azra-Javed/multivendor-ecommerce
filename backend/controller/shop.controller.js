@@ -5,7 +5,7 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
-const sendToken = require("../utils/jwtToken");
+const sendShopToken = require("../utils/shopToken");
 
 //activation token
 const createActivationToken = (shop) => {
@@ -15,7 +15,7 @@ const createActivationToken = (shop) => {
 };
 
 //@desc: create new shop
-//@route: POST /api/shop/v2/create-shop
+//@route: POST /api/shop/v2/shop-create
 
 const createShop = async (req, res, next) => {
   try {
@@ -107,4 +107,52 @@ const activateShop = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-module.exports = { createShop, activateShop };
+//@desc: login shop
+//@route: POST /api/shop/v2/login-shop
+const shopLogin = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return next(new ErrorHandler("Please provide the all fields!", 400));
+    }
+
+    const seller = await Shop.findOne({ email }).select("+password");
+
+    if (!seller) {
+      return next(new ErrorHandler("Seller doesn't exists!", 400));
+    }
+
+    const isPasswordValid = await seller.comparePassword(password);
+
+    if (!isPasswordValid) {
+      return next(
+        new ErrorHandler("Please provide the correct information", 400)
+      );
+    }
+
+    sendShopToken(seller, 201, res);
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+//@desc: getShop
+//@route: GET /api/shop/v2/getShop
+
+const getSeller = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const seller = await Shop.findById(req.user.id);
+    if (!seller) {
+      return next(new ErrorHandler("Seller doesn't exists!", 400));
+    }
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+module.exports = { createShop, activateShop, shopLogin, getSeller };

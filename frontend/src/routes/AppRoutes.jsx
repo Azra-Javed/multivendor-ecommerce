@@ -11,6 +11,7 @@ import {
   ProductDetailsPage,
   ProfilePage,
   ShopCreatePage,
+  SellerActivationPage,
 } from "./Routes";
 import ProtectedRoute from "../protectedRoute";
 export const router = createBrowserRouter([
@@ -47,5 +48,9 @@ export const router = createBrowserRouter([
   {
     path: "/shop-create",
     element: <ShopCreatePage />,
+  },
+  {
+    path: "/seller/activation/:activation_token",
+    element: <SellerActivationPage />,
   },
 ]);

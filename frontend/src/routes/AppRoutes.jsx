@@ -10,10 +10,9 @@ import {
   FAQPage,
   ProductDetailsPage,
   ProfilePage,
+  ShopCreatePage,
 } from "./Routes";
 import ProtectedRoute from "../protectedRoute";
-import { useSelector } from "react-redux";
-
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -43,5 +42,10 @@ export const router = createBrowserRouter([
         <ProfilePage />
       </ProtectedRoute>
     ),
+  },
+
+  {
+    path: "/shop-create",
+    element: <ShopCreatePage />,
   },
 ]);

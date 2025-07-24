@@ -15,6 +15,8 @@ import {
   ShopLoginPage,
 } from "./Routes";
 import ProtectedRoute from "../protectedRoute";
+import ShopHomePage from "../pages/ShopHomePage";
+import SellerProtectedRoute from "../sellerProtectedRoute";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -46,6 +48,7 @@ export const router = createBrowserRouter([
     ),
   },
 
+  // shop Routes
   {
     path: "/shop-create",
     element: <ShopCreatePage />,
@@ -57,5 +60,13 @@ export const router = createBrowserRouter([
   {
     path: "/shop-login",
     element: <ShopLoginPage />,
+  },
+  {
+    path: "shop/:id",
+    element: (
+      <SellerProtectedRoute>
+        <ShopHomePage />,
+      </SellerProtectedRoute>
+    ),
   },
 ]);

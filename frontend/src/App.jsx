@@ -1,14 +1,16 @@
-import { RouterProvider } from "react-router-dom";
+import { Navigate, RouterProvider } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 import Store from "./redux/store";
 import { loadUser } from "./redux/actions/user";
+import { loadSeller } from "./redux/actions/seller.actions";
 import { router } from "./routes/AppRoutes";
 
 const App = () => {
   useEffect(() => {
     Store.dispatch(loadUser());
+    Store.dispatch(loadSeller());
   }, []);
 
   return (

@@ -141,14 +141,14 @@ const shopLogin = catchAsyncErrors(async (req, res, next) => {
 
 const getSeller = catchAsyncErrors(async (req, res, next) => {
   try {
-    const seller = await Shop.findById(req.user.id);
+    const seller = await Shop.findById(req.seller.id);
     if (!seller) {
       return next(new ErrorHandler("Seller doesn't exists!", 400));
     }
 
     res.status(200).json({
       success: true,
-      user,
+      seller,
     });
   } catch (error) {
     return next(new ErrorHandler(error.message, 500));

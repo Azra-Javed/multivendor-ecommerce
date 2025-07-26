@@ -13,7 +13,6 @@ const App = () => {
   useEffect(() => {
     Store.dispatch(loadUser());
     Store.dispatch(loadSeller());
-    console.log("Seller:", seller);
   }, []);
 
   return (

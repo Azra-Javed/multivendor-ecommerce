@@ -13,7 +13,7 @@ const ShopLoginPage = () => {
 
   useEffect(() => {
     if (isSellerAuthenticated === true && seller) {
-      navigate(`/shop/${seller._id}`);
+      navigate(`/dashboard`);
     }
   }, [isSellerAuthenticated, navigate, seller]);
   return (

@@ -12,7 +12,7 @@ const ShopCreate = () => {
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
-  const [zipCode, setZipCode] = useState();
+  const [zipCode, setZipCode] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
   const [avatar, setAvatar] = useState();
@@ -33,8 +33,8 @@ const ShopCreate = () => {
     newForm.append("email", email);
     newForm.append("password", password);
     newForm.append("address", address);
-    newForm.append("phoneNumber", phoneNumber);
-    newForm.append("zipCode", zipCode);
+    newForm.append("phoneNumber", Number(phoneNumber));
+    newForm.append("zipCode", Number(zipCode));
 
     axios
       .post(`${server}/shop/create-shop`, newForm, config)
@@ -45,8 +45,8 @@ const ShopCreate = () => {
         setPassword("");
         setAvatar();
         setAddress("");
-        setPhoneNumber();
-        setZipCode();
+        setPhoneNumber("");
+        setZipCode("");
       })
       .catch((error) => {
         toast.error(error.response.data.message);

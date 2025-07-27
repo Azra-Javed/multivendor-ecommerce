@@ -14,7 +14,11 @@ import {
   SellerActivationPage,
   ShopLoginPage,
 } from "./userRoutes";
-import { ShopHomePage, ShopDashboardPage } from "./shopRoutes";
+import {
+  ShopHomePage,
+  ShopDashboardPage,
+  ShopCreateProduct,
+} from "./shopRoutes";
 import {
   UserProtectedRoute,
   SellerProtectedRoute,
@@ -78,6 +82,15 @@ export const router = createBrowserRouter([
     element: (
       <SellerProtectedRoute>
         <ShopDashboardPage />
+      </SellerProtectedRoute>
+    ),
+  },
+
+  {
+    path: "/dashboard-create-product",
+    element: (
+      <SellerProtectedRoute>
+        <ShopCreateProduct />
       </SellerProtectedRoute>
     ),
   },

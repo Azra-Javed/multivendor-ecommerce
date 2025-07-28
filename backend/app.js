@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const user = require("./routes/user.routes");
 const shop = require("./routes/shop.routes");
+const product = require("./routes/product.routes");
 
 const app = express();
 app.use(express.json());
@@ -31,6 +32,7 @@ app.get("/test", (req, res) => {
 
 app.use("/api/v2/user", user);
 app.use("/api/v2/shop", shop);
+app.use("/api/v2/product", product);
 
 // error handling
 app.use(ErrorHandler);

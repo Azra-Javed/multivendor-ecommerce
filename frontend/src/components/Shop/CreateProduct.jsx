@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { categoriesData } from "../../static/data";
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import { createProduct } from "../../redux/actions/product.actions";
+import { toast } from "react-toastify";
 
 const CreateProduct = () => {
   const { seller } = useSelector((state) => state.seller);
+  const { success, error } = useSelector((state) => state.products);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const [images, setImages] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -17,14 +19,43 @@ const CreateProduct = () => {
   const [originalPrice, setOriginalPrice] = useState();
   const [discountPrice, setDiscountPrice] = useState();
   const [stock, setStock] = useState();
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+
+    if (success) {
+      toast.success("Product created successfully!");
+      navigate("/dashboard");
+      window.location.reload();
+    }
+  }, [dispatch, error, success]);
 
   const handleImageChange = (e) => {
     e.preventDefault();
     let files = Array.from(e.target.files);
     setImages((prevImages) => [...prevImages, ...files]);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const newForm = new FormData();
+
+    images.forEach((image) => {
+      newForm.append("images", image);
+    });
+    newForm.append("name", name);
+    newForm.append("description", description);
+    newForm.append("category", category);
+    newForm.append("tags", tags);
+    newForm.append("originalPrice", originalPrice);
+    newForm.append("discountPrice", discountPrice);
+    newForm.append("stock", stock);
+    newForm.append("shopId", seller._id);
+
+    dispatch(createProduct(newForm));
   };
 
   return (
@@ -33,7 +64,7 @@ const CreateProduct = () => {
         Create Product
       </h5>
       {/* form */}
-      <form onSubmit={(e) => handleSubmit(e)}>
+      <form onSubmit={handleSubmit}>
         <br />
         <div>
           <label className="pb-2">
@@ -54,12 +85,15 @@ const CreateProduct = () => {
           <label className="pb-2">
             Description <span className="text-red-500">*</span>
           </label>
-          <input
+          <textarea
+            cols="30"
+            rows="8"
+            required
             type="text"
             name="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none  focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            className="mt-2 appearance-none block w-full px-3  border border-gray-300 rounded-[3px] placeholder-gray-400 pt-2 focus:outline-none  focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             placeholder="Enter Your description..."
           />
         </div>
@@ -174,7 +208,7 @@ const CreateProduct = () => {
         <div>
           <input
             type="submit"
-            value="create"
+            value="Create"
             className="mt-2 cursor-pointer appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none  focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
           />
         </div>

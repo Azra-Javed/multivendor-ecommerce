@@ -18,6 +18,7 @@ import {
   ShopHomePage,
   ShopDashboardPage,
   ShopCreateProduct,
+  ShopAllProducts,
 } from "./shopRoutes";
 import {
   UserProtectedRoute,
@@ -91,6 +92,14 @@ export const router = createBrowserRouter([
     element: (
       <SellerProtectedRoute>
         <ShopCreateProduct />
+      </SellerProtectedRoute>
+    ),
+  },
+  {
+    path: "/dashboard-products",
+    element: (
+      <SellerProtectedRoute>
+        <ShopAllProducts />
       </SellerProtectedRoute>
     ),
   },

@@ -33,4 +33,40 @@ const createProduct = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-module.exports = { createProduct };
+//@desc: get all products
+//@route: POST /api/vs/product/get-all-products-shop/:id
+const getProducts = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const products = await Product.find({ shopId: req.params.id });
+
+    res.status(200).json({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error, 400));
+  }
+});
+
+//@desc: delete a product
+//@route: DELETE /api/v2/product/delete-shop-product/:id
+
+const deleteProduct = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const product = await Product.findByIdAndDelete(req.params.id);
+    console.log(req.params.id);
+
+    if (!product) {
+      return next(new ErrorHandler("Product not found", 404));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Product deleted successfully",
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+module.exports = { createProduct, getProducts, deleteProduct };

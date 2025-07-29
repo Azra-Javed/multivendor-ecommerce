@@ -4,6 +4,7 @@ const {
   activateShop,
   shopLogin,
   getSeller,
+  logoutShop,
 } = require("../controller/shop.controller");
 const { isSellerAuthenticated } = require("../middleware/auth");
 const { upload } = require("../config/multer");
@@ -13,5 +14,6 @@ router.post("/create-shop", upload.single("file"), createShop);
 router.post("/activation", activateShop);
 router.post("/shop-login", shopLogin);
 router.get("/getSeller", isSellerAuthenticated, getSeller);
+router.get("/logoutShop", logoutShop);
 
 module.exports = router;

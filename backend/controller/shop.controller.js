@@ -15,7 +15,7 @@ const createActivationToken = (shop) => {
 };
 
 //@desc: create new shop
-//@route: POST /api/shop/v2/shop-create
+//@route: POST /api/v2/shop/shop-create
 
 const createShop = async (req, res, next) => {
   try {
@@ -69,7 +69,7 @@ const createShop = async (req, res, next) => {
 };
 
 //@desc: activate Shop
-//@route: POST /api/shop/v2/shop/activation
+//@route: POST /api/v2/shop/shop/activation
 const activateShop = catchAsyncErrors(async (req, res, next) => {
   try {
     const { activation_token } = req.body;
@@ -108,7 +108,7 @@ const activateShop = catchAsyncErrors(async (req, res, next) => {
 });
 
 //@desc: login shop
-//@route: POST /api/shop/v2/login-shop
+//@route: POST /api/v2/shop/login-shop
 const shopLogin = catchAsyncErrors(async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -137,7 +137,7 @@ const shopLogin = catchAsyncErrors(async (req, res, next) => {
 });
 
 //@desc: getShop
-//@route: GET /api/shop/v2/getShop
+//@route: GET /api/v2/shop/getShop
 
 const getSeller = catchAsyncErrors(async (req, res, next) => {
   try {
@@ -155,4 +155,22 @@ const getSeller = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-module.exports = { createShop, activateShop, shopLogin, getSeller };
+//@desc: logout from shop
+//@route: Delete /api/v2/shop/logoutShop
+const logoutShop = catchAsyncErrors(async (req, res, next) => {
+  try {
+    res.cookie("seller_token", null, {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Logout Successful!",
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+module.exports = { createShop, activateShop, shopLogin, getSeller, logoutShop };

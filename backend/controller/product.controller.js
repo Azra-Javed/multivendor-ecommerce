@@ -54,7 +54,6 @@ const getProducts = catchAsyncErrors(async (req, res, next) => {
 const deleteProduct = catchAsyncErrors(async (req, res, next) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
-    console.log(req.params.id);
 
     if (!product) {
       return next(new ErrorHandler("Product not found", 404));

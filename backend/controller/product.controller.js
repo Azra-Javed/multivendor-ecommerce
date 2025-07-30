@@ -3,6 +3,7 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/ErrorHandler");
 const Shop = require("../model/shop");
 const Product = require("../model/product");
+const fs = require("fs");
 
 //@desc: Create product
 //@route: POST /api/vs/product/create-product
@@ -53,8 +54,20 @@ const getProducts = catchAsyncErrors(async (req, res, next) => {
 
 const deleteProduct = catchAsyncErrors(async (req, res, next) => {
   try {
-    const product = await Product.findByIdAndDelete(req.params.id);
+    const productData = await Product.findById(req.params.id);
 
+    productData.images.forEach((imageUrl) => {
+      const filename = imageUrl;
+      const filePath = `uploads/${filename}`;
+
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+    });
+
+    const product = await Product.findByIdAndDelete(req.params.id);
     if (!product) {
       return next(new ErrorHandler("Product not found", 404));
     }

@@ -2,6 +2,7 @@ const Shop = require("../model/shop");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/ErrorHandler");
 const Event = require("../model/events.model");
+const fs = require("fs");
 
 //@desc: Create event
 //@route: POST /api/vs/event/create-event
@@ -52,6 +53,19 @@ const getEvents = catchAsyncErrors(async (req, res, next) => {
 
 const deleteEvent = catchAsyncErrors(async (req, res, next) => {
   try {
+    const eventData = await Event.findById(req.params.id);
+
+    eventData.images.forEach((imageUrl) => {
+      const filename = imageUrl;
+      const filePath = `uploads/${filename}`;
+
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+    });
+
     const event = await Event.findByIdAndDelete(req.params.id);
 
     if (!event) {

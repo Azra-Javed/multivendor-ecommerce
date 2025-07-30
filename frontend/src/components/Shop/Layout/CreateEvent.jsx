@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { categoriesData } from "../../../static/data";
+import { createEvent } from "../../../redux/actions/event.actions";
 
 const CreateEvent = () => {
   const { seller } = useSelector((state) => state.seller);
-  const { success, error } = useSelector((state) => state.products);
+  const { success, error } = useSelector((state) => state.events);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [images, setImages] = useState([]);
@@ -49,8 +50,8 @@ const CreateEvent = () => {
     }
 
     if (success) {
-      toast.success("Product created successfully!");
-      navigate("/dashboard");
+      toast.success("event created successfully!");
+      navigate("/dashboard-events");
       window.location.reload();
     }
   }, [dispatch, error, success]);
@@ -77,8 +78,10 @@ const CreateEvent = () => {
     newForm.append("discountPrice", discountPrice);
     newForm.append("stock", stock);
     newForm.append("shopId", seller._id);
+    newForm.append("start_Date", startDate);
+    newForm.append("end_Date", endDate);
 
-    dispatch(createProduct(newForm));
+    dispatch(createEvent(newForm));
   };
 
   return (

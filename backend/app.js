@@ -6,6 +6,7 @@ const cors = require("cors");
 const user = require("./routes/user.routes");
 const shop = require("./routes/shop.routes");
 const product = require("./routes/product.routes");
+const event = require("./routes/event.routes");
 
 const app = express();
 app.use(express.json());
@@ -26,13 +27,10 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
   });
 }
 
-app.get("/test", (req, res) => {
-  res.send("Server is working");
-});
-
 app.use("/api/v2/user", user);
 app.use("/api/v2/shop", shop);
 app.use("/api/v2/product", product);
+app.use("/api/v2/event", event);
 
 // error handling
 app.use(ErrorHandler);

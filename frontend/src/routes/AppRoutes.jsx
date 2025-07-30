@@ -20,6 +20,7 @@ import {
   ShopCreateProduct,
   ShopAllProducts,
   ShopCreateEvent,
+  ShopAllEvents,
 } from "./shopRoutes";
 import {
   UserProtectedRoute,
@@ -109,6 +110,15 @@ export const router = createBrowserRouter([
     element: (
       <SellerProtectedRoute>
         <ShopCreateEvent />
+      </SellerProtectedRoute>
+    ),
+  },
+
+  {
+    path: "/dashboard-events",
+    element: (
+      <SellerProtectedRoute>
+        <ShopAllEvents />
       </SellerProtectedRoute>
     ),
   },

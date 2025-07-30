@@ -32,4 +32,39 @@ const createEvent = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-module.exports = { createEvent };
+//@desc: get all products
+//@route: POST /api/vs/product/get-all-events/id
+const getEvents = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const events = await Event.find({ shopId: req.params.id });
+
+    res.status(200).json({
+      success: true,
+      events,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error, 400));
+  }
+});
+
+//@desc: delete a product
+//@route: DELETE /api/v2/product/delete-shop-event/:id
+
+const deleteEvent = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const event = await Event.findByIdAndDelete(req.params.id);
+
+    if (!event) {
+      return next(new ErrorHandler("Event not found", 404));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Event deleted successfully",
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+module.exports = { createEvent, getEvents, deleteEvent };

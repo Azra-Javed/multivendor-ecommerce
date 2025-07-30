@@ -1,5 +1,4 @@
 const express = require("express");
-const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const { upload } = require("../config/multer");
 const {
   createProduct,

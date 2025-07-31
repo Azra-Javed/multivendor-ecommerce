@@ -5,7 +5,7 @@ import { server } from "../../server";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-const createCouponCode = ({ setOpen }) => {
+const CreateCouponCode = ({ setOpen }) => {
   const { products } = useSelector((state) => state.products);
   const { seller } = useSelector((state) => state.seller);
   const [name, setName] = useState("");
@@ -26,12 +26,14 @@ const createCouponCode = ({ setOpen }) => {
           maxAmount,
           selectedProducts,
           value,
-          shop: seller,
+          shopId: seller._id,
         },
         { withCredentials: true }
       )
       .then((res) => {
-        console.log(res);
+        toast.success("Coupon code created successfully!");
+        setOpen(false);
+        window.location.reload();
       })
       .catch((error) => {
         toast.error(error.response?.data?.message);
@@ -145,4 +147,4 @@ const createCouponCode = ({ setOpen }) => {
   );
 };
 
-export default createCouponCode;
+export default CreateCouponCode;

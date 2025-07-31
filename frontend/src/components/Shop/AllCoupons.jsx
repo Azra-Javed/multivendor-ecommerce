@@ -1,35 +1,56 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteProduct,
-  getAllProductsShop,
-} from "../../redux/actions/product.actions";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import Loader from "../Layout/Loader";
-import { Link } from "react-router-dom";
-import { AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineDelete } from "react-icons/ai";
 import styles from "../../styles/style";
 import { useState } from "react";
 import CreateCouponCode from "./CreateCouponCode.jsx";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { server } from "../../server.js";
 
 const AllCoupons = () => {
   const [open, setOpen] = useState(false);
-  const { products, isLoading } = useSelector((state) => state.products);
+  const [isLoading, setIsLoading] = useState(false);
+  const [coupons, setCoupons] = useState([]);
   const { seller } = useSelector((state) => state.seller);
-  const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllProductsShop(seller._id));
-  }, [dispatch]);
+    if (!seller || !seller._id) return;
+
+    setIsLoading(true);
+    axios
+      .get(`${server}/coupon/get-coupon/${seller._id}`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setIsLoading(false);
+        setCoupons(res.data.couponCodes);
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        toast.error(error.response?.data?.message || "Failed to fetch coupons");
+      });
+  }, [seller, seller._id]);
 
   const handleDelete = (id) => {
-    dispatch(deleteProduct(id));
-    window.location.reload(true);
+    axios
+      .delete(`${server}/coupon/delete-coupon/${id}`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        toast.success(res.data.message);
+        window.location.reload(true);
+      })
+      .catch((error) => {
+        toast.error(error.response?.data?.message || "Something went wrong");
+      });
   };
 
   const columns = [
-    { field: "id", headerName: "Product Id", minWidth: 150, flex: 0.7 },
+    { field: "id", headerName: "Coupon Id", minWidth: 150, flex: 0.7 },
     {
       field: "name",
       headerName: "Name",
@@ -42,42 +63,7 @@ const AllCoupons = () => {
       minWidth: 100,
       flex: 0.6,
     },
-    {
-      field: "Stock",
-      headerName: "Stock",
-      type: "number",
-      minWidth: 80,
-      flex: 0.5,
-    },
 
-    {
-      field: "sold",
-      headerName: "Sold out",
-      type: "number",
-      minWidth: 130,
-      flex: 0.6,
-    },
-    {
-      field: "Preview",
-      flex: 0.8,
-      minWidth: 100,
-      headerName: "",
-      type: "number",
-      sortable: false,
-      renderCell: (params) => {
-        const d = params.row.name;
-        const product_name = d.replace(/\s+/g, "-");
-        return (
-          <>
-            <Link to={`/product/${product_name}`}>
-              <Button>
-                <AiOutlineEye size={20} />
-              </Button>
-            </Link>
-          </>
-        );
-      },
-    },
     {
       field: "Delete",
       flex: 0.8,
@@ -88,7 +74,7 @@ const AllCoupons = () => {
       renderCell: (params) => {
         return (
           <>
-            <Button onClick={() => handleDelete(params.id)}>
+            <Button onClick={() => handleDelete(params.row.id)}>
               <AiOutlineDelete size={20} />
             </Button>
           </>
@@ -99,14 +85,12 @@ const AllCoupons = () => {
 
   const row = [];
 
-  products &&
-    products.forEach((item) => {
+  coupons &&
+    coupons.forEach((item) => {
       row.push({
         id: item._id,
         name: item.name,
-        price: "US$ " + item.discountPrice,
-        Stock: item.stock,
-        sold: 10,
+        price: item.value + "%",
       });
     });
 
@@ -129,6 +113,7 @@ const AllCoupons = () => {
             columns={columns}
             pageSize={10}
             disableRowSelectionOnClick
+            autoHeight
           />
           {open && <CreateCouponCode setOpen={setOpen} />}
         </div>

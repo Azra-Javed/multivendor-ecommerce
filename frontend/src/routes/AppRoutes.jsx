@@ -21,6 +21,7 @@ import {
   ShopAllProducts,
   ShopCreateEvent,
   ShopAllEvents,
+  ShopAllCoupons,
 } from "./shopRoutes";
 import {
   UserProtectedRoute,
@@ -119,6 +120,14 @@ export const router = createBrowserRouter([
     element: (
       <SellerProtectedRoute>
         <ShopAllEvents />
+      </SellerProtectedRoute>
+    ),
+  },
+  {
+    path: "/dashboard-coupons",
+    element: (
+      <SellerProtectedRoute>
+        <ShopAllCoupons />
       </SellerProtectedRoute>
     ),
   },

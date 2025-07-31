@@ -60,7 +60,7 @@ const CreateProduct = () => {
 
   return (
     <div className="w-[90%] 800px:w-[50%] bg-white shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">
-      <h5 className="font-[30px] font-family-poppins text-center">
+      <h5 className="text-[30px] font-family-poppins text-center">
         Create Product
       </h5>
       {/* form */}

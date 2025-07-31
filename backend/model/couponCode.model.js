@@ -21,6 +21,9 @@ const couponCodeSchema = new mongoose.Schema(
       type: Object,
       required: true,
     },
+    selectedProduct: {
+      type: String,
+    },
   },
   {
     timestamps: true,

@@ -13,6 +13,7 @@ import {
   ShopCreatePage,
   SellerActivationPage,
   ShopLoginPage,
+  CheckoutPage,
 } from "./userRoutes";
 import {
   ShopHomePage,
@@ -50,6 +51,22 @@ export const router = createBrowserRouter([
   },
   { path: "/events", element: <EventsPage /> },
   { path: "faq", element: <FAQPage /> },
+  {
+    path: "/checkout",
+    element: (
+      <UserProtectedRoute>
+        <CheckoutPage />
+      </UserProtectedRoute>
+    ),
+  },
+  // {
+  //   path: "/payment",
+  //   element: <PaymentPage />,
+  // },
+  // {
+  //   path: "/order/success/:id",
+  //   element: <OrderSuccessPage />,
+  // },
   { path: "/product/:name", element: <ProductDetailsPage /> },
 
   {

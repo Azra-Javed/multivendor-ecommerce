@@ -173,4 +173,26 @@ const logoutShop = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-module.exports = { createShop, activateShop, shopLogin, getSeller, logoutShop };
+//@desc: get shop info
+//@route: GET /api/v2/shop/get-shop-info/:id
+
+const getShopInfo = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const shop = await Shop.findById(req.params.id);
+    res.status(201).json({
+      success: true,
+      shop,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+module.exports = {
+  createShop,
+  activateShop,
+  shopLogin,
+  getSeller,
+  logoutShop,
+  getShopInfo,
+};

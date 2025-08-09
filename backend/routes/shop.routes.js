@@ -5,6 +5,7 @@ const {
   shopLogin,
   getSeller,
   logoutShop,
+  getShopInfo,
 } = require("../controller/shop.controller");
 const { isSellerAuthenticated } = require("../middleware/auth");
 const { upload } = require("../config/multer");
@@ -15,5 +16,6 @@ router.post("/activation", activateShop);
 router.post("/shop-login", shopLogin);
 router.get("/getSeller", isSellerAuthenticated, getSeller);
 router.get("/logoutShop", logoutShop);
+router.get("/get-shop-info/:id", getShopInfo);
 
 module.exports = router;

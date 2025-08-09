@@ -62,7 +62,7 @@ const ProductDetails = ({ data }) => {
                           <img
                             src={`${backend_url}${i}`}
                             alt=""
-                            className="h-[200px] overflow-hidden mr-3"
+                            className="h-[200px] overflow-hidden mr-3 mt-3"
                             onClick={() => setSelect(index)}
                           />
                         </div>
@@ -132,19 +132,24 @@ const ProductDetails = ({ data }) => {
                   </div>
 
                   <div className="flex items-center pt-8">
-                    <img
-                      src={`${backend_url}${data?.shop?.avatar}`}
-                      alt=""
-                      className="w-[50px] h-[50px] rounded-full mr-2"
-                    />
+                    <Link to={`/shop/preview/${data?.shop._id}`}>
+                      <img
+                        src={`${backend_url}${data?.shop?.avatar}`}
+                        alt=""
+                        className="w-[50px] h-[50px] rounded-full mr-2"
+                      />{" "}
+                    </Link>
 
                     <div className="flex">
-                      <div className="pr-8">
-                        <h3 className={`${styles.shop_name} pb-1 pt-1`}>
-                          {data.shop.name}
-                        </h3>
-                        <h5 className="pb-3 text-[15px]">(4/5) Ratings</h5>
-                      </div>
+                      <Link to={`/shop/preview/${data?.shop._id}`}>
+                        <div className="pr-8">
+                          <h3 className={`${styles.shop_name} pb-1 pt-1`}>
+                            {data.shop.name}
+                          </h3>
+                          <h5 className="pb-3 text-[15px]">(4/5) Ratings</h5>
+                        </div>
+                      </Link>
+
                       <div
                         className={`${styles.button} !bg-[#6443d1] mt-4 !rounded !h-11 `}
                         onClick={handleMessageSubmit}
@@ -232,18 +237,25 @@ const ProductDetailsInfo = ({ data, products }) => {
           <div className="w-full block 800px:flex p-5">
             {/* shop info*/}
             <div className="w-full 800px:w-[50%]">
-              <Link to={`/shop/preview/${data.shop._id}`} />
               <div className="flex items-center">
-                <img
-                  src={`${backend_url}${data?.shop?.avatar}`}
-                  alt=""
-                  className="w-[50px] h-[50px] rounded-full mr-3"
-                />
+                <Link to={`/shop/preview/${data.shop._id}`}>
+                  {" "}
+                  <img
+                    src={`${backend_url}${data?.shop?.avatar}`}
+                    alt=""
+                    className="w-[50px] h-[50px] rounded-full mr-3"
+                  />
+                </Link>
+
                 <div>
-                  <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
+                  <Link to={`/shop/preview/${data.shop._id}`}>
+                    <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
+                  </Link>
+
                   <h5 className="pb-3 text-[15px]">(4/5) Ratings</h5>
                 </div>
               </div>
+
               <p className="pt-2">{data.shop.description}</p>
             </div>
             {/* seller */}
@@ -252,7 +264,7 @@ const ProductDetailsInfo = ({ data, products }) => {
                 <h5 className="font-[600]">
                   Joined on:{" "}
                   <span className="font-[500] ">
-                    {data.shop?.createAt?.slice(0, 10)}
+                    {data.shop?.createdAt?.slice(0, 10)}
                   </span>
                 </h5>
                 <h5 className="font-[600]">

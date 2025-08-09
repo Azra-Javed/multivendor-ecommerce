@@ -34,13 +34,28 @@ const createProduct = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-//@desc: get all products
-//@route: POST /api/vs/product/get-all-products-shop/:id
+//@desc: get all products of a shop
+//@route: GET /api/vs/product/get-all-products-shop/:id
 const getProducts = catchAsyncErrors(async (req, res, next) => {
   try {
     const products = await Product.find({ shopId: req.params.id });
 
     res.status(200).json({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error, 400));
+  }
+});
+
+//@desc: get all products
+//@route: GET /api/vs/product/get-all-products
+const getAllProducts = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const products = await Product.find();
+
+    res.status(201).json({
       success: true,
       products,
     });
@@ -81,4 +96,4 @@ const deleteProduct = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-module.exports = { createProduct, getProducts, deleteProduct };
+module.exports = { createProduct, getProducts, deleteProduct, getAllProducts };

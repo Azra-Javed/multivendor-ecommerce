@@ -1,17 +1,24 @@
 import styles from "../../../styles/style";
-import EventsCard from "./EventCard";
+import EventCard from "./EventCard";
+import { useSelector } from "react-redux";
+
 const Events = () => {
+  const { allEvents, isLoading } = useSelector((state) => state.events);
   return (
-    <div>
-      <div className={`${styles.section}`}>
-        <div className={`${styles.heading}`}>
-          <h1>Popular Events</h1>
+    <>
+      {!isLoading && (
+        <div className={`${styles.section}`}>
+          <div className={`${styles.heading}`}>
+            <h1>Popular Events</h1>
+          </div>
+
+          <div className="w-full grid">
+            {allEvents?.length > 0 && <EventCard data={allEvents[0]} />}
+            {allEvents?.length === 0 && <h4>No events available!</h4>}
+          </div>
         </div>
-        <div className="w-full grid">
-          <EventsCard />
-        </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

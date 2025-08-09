@@ -4,18 +4,17 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 const ShopLoginPage = () => {
-  const { seller, isSellerAuthenticated } = useSelector(
+  const { isSellerAuthenticated, isLoading } = useSelector(
     (state) => state.seller
   );
 
   const navigate = useNavigate();
-  console.log(seller, isSellerAuthenticated);
 
   useEffect(() => {
-    if (isSellerAuthenticated === true && seller) {
+    if (isSellerAuthenticated === true) {
       navigate(`/dashboard`);
     }
-  }, [isSellerAuthenticated, navigate, seller]);
+  }, [isSellerAuthenticated, isLoading]);
   return (
     <div>
       <ShopLogin />

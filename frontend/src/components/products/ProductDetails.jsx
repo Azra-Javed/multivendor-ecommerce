@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../../styles/style";
 import {
@@ -7,12 +7,22 @@ import {
   AiOutlineMessage,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllProductsShop } from "../../redux/actions/product.actions";
+import { backend_url } from "../../server";
 
 const ProductDetails = ({ data }) => {
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   const [select, setSelect] = useState(0);
   const navigate = useNavigate();
+
+  const { products } = useSelector((state) => state.products);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllProductsShop(data && data.shop._id));
+  }, [dispatch, data]);
 
   const decrementCount = () => {
     if (count > 0) {
@@ -37,46 +47,43 @@ const ProductDetails = ({ data }) => {
               <div className="block w-full 800px:flex">
                 <div className="w-full 800px:w-[50%]">
                   <img
-                    src={data.image_Url[select].url}
+                    src={`${backend_url}${data && data.images[select]}`}
                     alt=""
                     className="w-[80%]"
                   />
                   <div className="w-full flex">
-                    <div
-                      className={`${
-                        select === 0 ? "border" : ""
-                      }cursor-pointer`}
-                    >
-                      <img
-                        src={data?.image_Url[0].url}
-                        alt=""
-                        className="h-[200px]"
-                        onClick={() => setSelect(0)}
-                      />
-                    </div>
+                    {data &&
+                      data.images.map((i, index) => (
+                        <div
+                          className={`${
+                            select === 0 ? "border" : ""
+                          }cursor-pointer`}
+                        >
+                          <img
+                            src={`${backend_url}${i}`}
+                            alt=""
+                            className="h-[200px] overflow-hidden mr-3"
+                            onClick={() => setSelect(index)}
+                          />
+                        </div>
+                      ))}
+
                     <div
                       className={`${
                         select === 1 ? "border" : ""
                       }cursor-pointer`}
-                    >
-                      <img
-                        src={data?.image_Url[1].url}
-                        alt=""
-                        className="h-[200px]"
-                        onClick={() => setSelect(1)}
-                      />
-                    </div>
+                    ></div>
                   </div>
                 </div>
                 <div className="w-full 800px:w-[50%] pt-5">
                   <h1 className={`${styles.productTitle}`}>{data.name}</h1>
                   <p>{data.description}</p>
                   <div className="flex pt-3">
-                    <h4 className={`${styles.discount_price}`}>
-                      {data.discount_price}$
+                    <h4 className={`${styles.productDiscountPrice}`}>
+                      {data.discountPrice}$
                     </h4>
                     <h3 className={`${styles.price}`}>
-                      {data.price ? data.price + "$" : null}
+                      {data.originalPrice ? data.originalPrice + "$" : null}
                     </h3>
                   </div>
                   <div className="flex items-center mt-12 justify-between pr-3">
@@ -126,7 +133,7 @@ const ProductDetails = ({ data }) => {
 
                   <div className="flex items-center pt-8">
                     <img
-                      src={data.shop.shop_avatar.url}
+                      src={`${backend_url}${data?.shop?.avatar}`}
                       alt=""
                       className="w-[50px] h-[50px] rounded-full mr-2"
                     />
@@ -136,9 +143,7 @@ const ProductDetails = ({ data }) => {
                         <h3 className={`${styles.shop_name} pb-1 pt-1`}>
                           {data.shop.name}
                         </h3>
-                        <h5 className="pb-3 text-[15px]">
-                          {data.shop.ratings} Ratings
-                        </h5>
+                        <h5 className="pb-3 text-[15px]">(4/5) Ratings</h5>
                       </div>
                       <div
                         className={`${styles.button} !bg-[#6443d1] mt-4 !rounded !h-11 `}
@@ -153,7 +158,7 @@ const ProductDetails = ({ data }) => {
                 </div>
               </div>
             </div>
-            <ProductDetailsInfo data={data} />
+            <ProductDetailsInfo data={data} products={products} />
             <br />
             <br />
           </div>
@@ -163,7 +168,7 @@ const ProductDetails = ({ data }) => {
   );
 };
 
-const ProductDetailsInfo = ({ data }) => {
+const ProductDetailsInfo = ({ data, products }) => {
   const [active, setActive] = useState(1);
 
   return (
@@ -213,31 +218,7 @@ const ProductDetailsInfo = ({ data }) => {
         {active === 1 ? (
           <>
             <p className="py-2 text-[18px] leading-8 pb-10 whitespace-pre-line">
-              Introducing our latest premium-quality product, crafted with
-              precision and designed to deliver both style and functionality.
-              Whether you're seeking durability, performance, or aesthetics,
-              this item checks all the boxes. Manufactured using high-grade
-              materials, it ensures long-lasting usage and minimal wear over
-              time. The product features a sleek, modern design that suits a
-              wide range of preferences and lifestyles. Lightweight yet sturdy,
-              it's ideal for everyday use or occasional needs, depending on your
-              requirements.
-            </p>
-            <p className="py-2 text-[18px] leading-8 pb-10 whitespace-pre-line">
-              From the moment you unpack it, you'll notice the attention to
-              detail in every element—from the smooth finish and compact size to
-              the thoughtfully designed features that enhance user experience.
-              It's not just a product; it’s a solution made to simplify and
-              elevate your life. Whether you're buying it for personal use or as
-              a gift, it promises satisfaction and value for money. Backed by
-              positive customer reviews and reliable after-sales service, this
-              product is one you can trust.
-            </p>
-            <p className="py-2 text-[18px] leading-8 pb-10 whitespace-pre-line">
-              It also complies with all standard safety and quality regulations.
-              Available in multiple colors and sizes, this versatile item is the
-              perfect addition to your collection. Order now and experience the
-              difference it brings to your routine.
+              {data.description}
             </p>
           </>
         ) : null}
@@ -251,34 +232,34 @@ const ProductDetailsInfo = ({ data }) => {
           <div className="w-full block 800px:flex p-5">
             {/* shop info*/}
             <div className="w-full 800px:w-[50%]">
+              <Link to={`/shop/preview/${data.shop._id}`} />
               <div className="flex items-center">
                 <img
-                  src={data.shop.shop_avatar.url}
+                  src={`${backend_url}${data?.shop?.avatar}`}
                   alt=""
                   className="w-[50px] h-[50px] rounded-full mr-3"
                 />
                 <div>
                   <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
-                  <h5 className="pb-3 text-[15px]">
-                    ({data.shop.ratings}) Ratings
-                  </h5>
+                  <h5 className="pb-3 text-[15px]">(4/5) Ratings</h5>
                 </div>
               </div>
-              <p className="pt-2">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Sapiente recusandae praesentium sint earum iusto iure asperiores
-                iste alias maiores vel. Libero incidunt autem officia
-                accusantium consectetur adipisci earum fugit beatae.
-              </p>
+              <p className="pt-2">{data.shop.description}</p>
             </div>
             {/* seller */}
             <div className="w-full 800px:w-[50%] mt-5 800px:mt-0 800px:flex flex-col items-end ">
               <div className="text-left">
                 <h5 className="font-[600]">
-                  Joined on: <span className="font-[500] ">20 July,2025</span>
+                  Joined on:{" "}
+                  <span className="font-[500] ">
+                    {data.shop?.createAt?.slice(0, 10)}
+                  </span>
                 </h5>
                 <h5 className="font-[600]">
-                  Total Products: <span className="font-[500] ">1,233</span>
+                  Total Products:{" "}
+                  <span className="font-[500] ">
+                    {products && products.length}
+                  </span>
                 </h5>
                 <h5 className="font-[600]">
                   Total Reviews: <span className="font-[500] ">133</span>

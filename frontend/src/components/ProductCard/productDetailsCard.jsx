@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { RxCross1 } from "react-icons/rx";
 import styles from "../../styles/style";
+import { Link } from "react-router-dom";
+import { backend_url } from "../../server";
+
 import {
   AiFillHeart,
   AiOutlineHeart,
@@ -8,7 +11,7 @@ import {
   AiOutlineShoppingCart,
 } from "react-icons/ai";
 
-const productDetailsCar = ({ setOpen, data }) => {
+const productDetailsCard = ({ setOpen, data }) => {
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   //const [select, setSelect] = useState(false);
@@ -38,19 +41,24 @@ const productDetailsCar = ({ setOpen, data }) => {
             <div className="block w-full 800px:flex">
               {/* left side */}
               <div className="w-full 800px:w-[50%]">
-                <img src={data.image_Url[0].url} alt="" />
+                <img
+                  src={`${backend_url}${data.images && data.images[0]}`}
+                  alt=""
+                />
                 <div className="flex">
-                  <img
-                    src={data.shop.shop_avatar.url}
-                    alt=""
-                    className="w-[50px] h-[50px] rounded-full mr-2"
-                  />
-                  <div>
-                    <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
-                    <h5 className="pb-3 text-[15px]">
-                      ({data.shop.ratings}) Ratings
-                    </h5>
-                  </div>
+                  <Link to={`/shop/preview/${data.shop._id}`} className="flex">
+                    <img
+                      src={`${backend_url}${data?.shop?.avatar}`}
+                      alt=""
+                      className="w-[50px] h-[50px] rounded-full mr-2"
+                    />
+                    <div>
+                      <h3 className={`${styles.shop_name}`}>
+                        {data.shop.name}
+                      </h3>
+                      <h5 className="pb-3 text-[15px]">(4/5) Ratings</h5>
+                    </div>
+                  </Link>
                 </div>
 
                 <div
@@ -62,9 +70,7 @@ const productDetailsCar = ({ setOpen, data }) => {
                   </span>
                 </div>
 
-                <h5 className="text-[16px] text-[red] mt-5">
-                  ({data.total_sell}) Sold out
-                </h5>
+                <h5 className="text-[16px] text-[red] mt-5">(50) Sold out</h5>
               </div>
               {/* right side */}
               <div className="w-full 800px:w-[50%] pt-5 pl-[5px] pr-[5px]">
@@ -76,10 +82,10 @@ const productDetailsCar = ({ setOpen, data }) => {
                 </p>
                 <div className="flex pt-3">
                   <h4 className={`${styles.productDiscountPrice} `}>
-                    {data.discount_price}
+                    {data.discountPrice}
                   </h4>
                   <h3 className={`${styles.price}`}>
-                    {data.price ? data.price + "$" : null}
+                    {data.originalPrice ? data.originalPrice + "$" : null}
                   </h3>
                 </div>
                 {/* buttons */}
@@ -142,4 +148,4 @@ const productDetailsCar = ({ setOpen, data }) => {
   );
 };
 
-export default productDetailsCar;
+export default productDetailsCard;

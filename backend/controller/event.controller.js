@@ -33,8 +33,8 @@ const createEvent = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-//@desc: get all products
-//@route: POST /api/vs/product/get-all-events/id
+//@desc: get all events of a shop
+//@route: POST /api/vs/event/get-all-events/id
 const getEvents = catchAsyncErrors(async (req, res, next) => {
   try {
     const events = await Event.find({ shopId: req.params.id });
@@ -48,8 +48,23 @@ const getEvents = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-//@desc: delete a product
-//@route: DELETE /api/v2/product/delete-shop-event/:id
+//@desc: get all events
+//@route: GET /api/v2/event/get-all-events
+
+const getAllEvents = async (req, res, next) => {
+  try {
+    const events = await Event.find();
+    res.status(200).json({
+      success: true,
+      events,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 400));
+  }
+};
+
+//@desc: delete an event
+//@route: DELETE /api/v2/event/delete-shop-event/:id
 
 const deleteEvent = catchAsyncErrors(async (req, res, next) => {
   try {
@@ -81,4 +96,4 @@ const deleteEvent = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-module.exports = { createEvent, getEvents, deleteEvent };
+module.exports = { createEvent, getEvents, deleteEvent, getAllEvents };

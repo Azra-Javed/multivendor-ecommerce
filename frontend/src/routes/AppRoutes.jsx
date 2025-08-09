@@ -22,6 +22,7 @@ import {
   ShopCreateEvent,
   ShopAllEvents,
   ShopAllCoupons,
+  ShopPreviewPage,
 } from "./shopRoutes";
 import {
   UserProtectedRoute,
@@ -50,6 +51,7 @@ export const router = createBrowserRouter([
   { path: "/events", element: <EventsPage /> },
   { path: "faq", element: <FAQPage /> },
   { path: "/product/:name", element: <ProductDetailsPage /> },
+
   {
     path: "/profile",
     element: (
@@ -79,6 +81,11 @@ export const router = createBrowserRouter([
         <ShopHomePage />
       </SellerProtectedRoute>
     ),
+  },
+
+  {
+    path: "/shop/preview/:id",
+    element: <ShopPreviewPage />,
   },
 
   {

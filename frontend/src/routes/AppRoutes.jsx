@@ -14,6 +14,7 @@ import {
   SellerActivationPage,
   ShopLoginPage,
   CheckoutPage,
+  OrderSuccessPage,
 } from "./userRoutes";
 import {
   ShopHomePage,
@@ -63,10 +64,10 @@ export const router = createBrowserRouter([
   //   path: "/payment",
   //   element: <PaymentPage />,
   // },
-  // {
-  //   path: "/order/success/:id",
-  //   element: <OrderSuccessPage />,
-  // },
+  {
+    path: "/order/success/:id",
+    element: <OrderSuccessPage />,
+  },
   { path: "/product/:name", element: <ProductDetailsPage /> },
 
   {

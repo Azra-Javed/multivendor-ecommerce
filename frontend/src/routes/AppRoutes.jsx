@@ -15,6 +15,7 @@ import {
   ShopLoginPage,
   CheckoutPage,
   OrderSuccessPage,
+  PaymentPage,
 } from "./userRoutes";
 import {
   ShopHomePage,
@@ -60,10 +61,10 @@ export const router = createBrowserRouter([
       </UserProtectedRoute>
     ),
   },
-  // {
-  //   path: "/payment",
-  //   element: <PaymentPage />,
-  // },
+  {
+    path: "/payment",
+    element: <PaymentPage />,
+  },
   {
     path: "/order/success/:id",
     element: <OrderSuccessPage />,

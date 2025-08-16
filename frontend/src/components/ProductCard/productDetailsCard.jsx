@@ -3,6 +3,9 @@ import { RxCross1 } from "react-icons/rx";
 import styles from "../../styles/style";
 import { Link } from "react-router-dom";
 import { backend_url } from "../../server";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { addToCart } from "../../redux/cartSlice";
 
 import {
   AiFillHeart,
@@ -11,7 +14,9 @@ import {
   AiOutlineShoppingCart,
 } from "react-icons/ai";
 
-const productDetailsCard = ({ setOpen, data }) => {
+const ProductDetailsCard = ({ setOpen, data }) => {
+  const { cart } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   //const [select, setSelect] = useState(false);
@@ -25,7 +30,23 @@ const productDetailsCard = ({ setOpen, data }) => {
   };
 
   const incrementCount = () => {
-    if (setCount(count + 1));
+    setCount(count + 1);
+  };
+
+  const addToCartHandler = (id) => {
+    const isItemExists = cart && cart.find((i) => i._id === id);
+
+    if (isItemExists) {
+      toast.error("Item already in cart");
+    } else {
+      if (data.stock < count) {
+        toast.error("product stock limited");
+      } else {
+        const cartData = { ...data, qty: count };
+        dispatch(addToCart(cartData));
+        toast.success("Item added to cart successfully!");
+      }
+    }
   };
 
   return (
@@ -129,6 +150,7 @@ const productDetailsCard = ({ setOpen, data }) => {
 
                 <div
                   className={`${styles.button} mt-6 rounded-[4px] h-11 flex items-center`}
+                  onClick={() => addToCartHandler(data._id)}
                 >
                   <span className="text-white flex items-center text-[16px]">
                     Add to Cart
@@ -148,4 +170,4 @@ const productDetailsCard = ({ setOpen, data }) => {
   );
 };
 
-export default productDetailsCard;
+export default ProductDetailsCard;

@@ -1,88 +1,108 @@
 import { RxCross1 } from "react-icons/rx";
 import styles from "../../styles/style";
-import { IoBagHandleOutline } from "react-icons/io5";
 import { useState } from "react";
 import { BsCartPlus } from "react-icons/bs";
-import { Link } from "react-router-dom";
 import { AiOutlineHeart } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+import { removeFromWishlist } from "../../redux/features/wishlistSlice";
+import { backend_url } from "../../server";
+import { addToCart } from "../../redux/features/cartSlice";
+import { toast } from "react-toastify";
 
 const Wishlist = ({ setOpenWishlist }) => {
-  const listData = [
-    {
-      name: "Samsung Galaxy S23 Ultra 512GB SSD and 12GB RAM Phantom Black",
-      description:
-        "Flagship Android phone with powerful camera and performance",
-      price: 1199,
-    },
-    {
-      name: "MacBook Air M2 256GB SSD and 8GB RAM Space Gray",
-      description: "Lightweight and powerful laptop with M2 chip",
-      price: 999,
-    },
-    {
-      name: "Dell XPS 15 1TB SSD and 16GB RAM Silver",
-      description: "High-end Windows laptop for creators and professionals",
-      price: 1499,
-    },
-  ];
+  const { wishlist } = useSelector((state) => state.wishlist);
+  const dispatch = useDispatch();
+
+  const removeFromWishlistHandler = (data) => {
+    dispatch(removeFromWishlist(data._id));
+  };
+
+  const addToCartHandler = (data) => {
+    const updatedData = { ...data, qty: 1 };
+    dispatch(addToCart(updatedData));
+    setOpenWishlist(false);
+  };
 
   return (
     <div className="fixed top-0 left-0 w-full bg-[#0000004b] h-screen z-10">
       <div className="fixed top-0 right-0 min-h-full w-[25%] bg-white flex flex-col justify-between shadow-sm">
-        <div>
-          <div className="flex w-full justify-end pt-5 pr-5">
-            <RxCross1
-              size={25}
-              className="cursor-pointer"
-              onClick={() => setOpenWishlist(false)}
-            />
+        {wishlist && wishlist.length === 0 ? (
+          <div className="w-full h-screen flex items-center justify-center">
+            <div className=" flex-full justify-end pt-5 pr-5 fixed top-3 right-3">
+              <RxCross1
+                size={25}
+                className="cursor-pointer "
+                onClick={() => setOpenWishlist(false)}
+              />
+            </div>
+            <h5>Wishlist is empty!</h5>
           </div>
-          {/* item length */}
-          <div className={`${styles.noramlFlex} p-4`}>
-            <AiOutlineHeart size={25} />
-            <h5 className="pl-2 text-[20px] font-[500]">3 items</h5>
-          </div>
+        ) : (
+          <div>
+            <div className="flex w-full justify-end pt-5 pr-5">
+              <RxCross1
+                size={25}
+                className="cursor-pointer"
+                onClick={() => setOpenWishlist(false)}
+              />
+            </div>
+            {/* item length */}
+            <div className={`${styles.noramlFlex} p-4`}>
+              <AiOutlineHeart size={25} />
+              <h5 className="pl-2 text-[20px] font-[500]">
+                {wishlist.length} {wishlist.length > 1 ? "Items" : "Item"}
+              </h5>
+            </div>
 
-          {/* cart single items */}
-          <br />
-          <div className="w-full border-t">
-            {listData.map((i, index) => (
-              <CartSingle key={index} data={i} />
-            ))}
+            {/* wishlist single items */}
+            <br />
+            <div className="w-full border-t">
+              {wishlist.map((i, index) => (
+                <CartSingle
+                  key={index}
+                  data={i}
+                  removeFromWishlistHandler={removeFromWishlistHandler}
+                  addToCartHandler={addToCartHandler}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
 };
 
-const CartSingle = ({ data }) => {
+const CartSingle = ({ data, removeFromWishlistHandler, addToCartHandler }) => {
   const [value, setValue] = useState(1);
-  const totalPrice = data.price * value;
+  const totalPrice = data.discountPrice * value;
 
   return (
-    <div className="border-b p-4">
-      <div className="w-full flex items-center">
-        <RxCross1 className="cursor-pointer" />
+    <div className="border-b !border-[#cfcece] p-4">
+      <div className="w-full flex  items-center">
+        <RxCross1
+          className="cursor-pointer"
+          onClick={() => removeFromWishlistHandler(data)}
+        />
         <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOdx2jNeW45bTh7g9qYUReNrje4TrAZ6A2FA&s"
+          src={`${backend_url}${data.images[0]}`}
           alt=""
-          className="w-[80px] h-[80px] ml-2"
+          className="w-[130px] h-min ml-2 mr-2 rounded-[5px]"
         />
 
         <div className="pl-[5px]">
           <h1>{data.name}</h1>
           <h4 className="font-[600] text-[17px] pt-[3px] text-[#d02222] font-family-Roboto">
-            US${totalPrice}
+            USD${totalPrice}
           </h4>
         </div>
-        <div>
-          <BsCartPlus
-            size={20}
-            className="cursor-pointer"
-            title="Add to cart"
-          />
-        </div>
+
+        <BsCartPlus
+          size={20}
+          className="cursor-pointer ml-auto"
+          title="Add to cart"
+          onClick={() => addToCartHandler(data)}
+        />
       </div>
     </div>
   );

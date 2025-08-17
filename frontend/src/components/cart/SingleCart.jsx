@@ -26,7 +26,7 @@ const SingleCart = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
   };
 
   return (
-    <div className="border-b p-4">
+    <div className="border-b !border-[#cfcece] p-4">
       <div className="w-full flex items-center">
         <div>
           <div
@@ -61,7 +61,7 @@ const SingleCart = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
           </h4>
         </div>
         <RxCross1
-          className="cursor-pointer"
+          className="cursor-pointer ml-auto"
           onClick={() => removeFromCartHandler(data)}
         />
       </div>

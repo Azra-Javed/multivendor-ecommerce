@@ -3,7 +3,7 @@ import styles from "../../styles/style";
 import { IoBagHandleOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, removeFromCart } from "../../redux/cartSlice";
+import { addToCart, removeFromCart } from "../../redux/features/cartSlice";
 import SingleCart from "./SingleCart";
 
 const Cart = ({ setOpenCart }) => {
@@ -52,13 +52,13 @@ const Cart = ({ setOpenCart }) => {
               <div className={`${styles.noramlFlex} p-4`}>
                 <IoBagHandleOutline size={25} />
                 <h5 className="pl-2 text-[20px] font-[500]">
-                  {cart.length} items
+                  {cart.length} {cart.length > 1 ? "Items" : "Item"}
                 </h5>
               </div>
 
               {/* cart single items */}
               <br />
-              <div className="w-full border-t">
+              <div className="w-full border-t ">
                 {cart.map((i, index) => (
                   <SingleCart
                     key={index}

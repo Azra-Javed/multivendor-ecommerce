@@ -69,7 +69,7 @@ export const router = createBrowserRouter([
     path: "/order/success/:id",
     element: <OrderSuccessPage />,
   },
-  { path: "/product/:name", element: <ProductDetailsPage /> },
+  { path: "/product/:id", element: <ProductDetailsPage /> },
 
   {
     path: "/profile",

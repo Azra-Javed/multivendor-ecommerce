@@ -145,7 +145,7 @@ const getUser = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-//@desc: logout usser
+//@desc: logout user
 //@route: Delete /api/user/v2/logout
 const logoutUser = catchAsyncErrors(async (req, res, next) => {
   try {
@@ -163,4 +163,85 @@ const logoutUser = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-module.exports = { createUser, userLogin, getUser, activateUser, logoutUser };
+//@desc: update user
+//@route: PUT /api/user/v2/update-user-info
+const updateUser = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const { email, password, phoneNumber, name } = req.body;
+
+    const user = await User.findOne({ email }).select("+password");
+
+    if (!user) {
+      return next(new ErrorHandler("User not found", 400));
+    }
+
+    const isPasswordValid = await user.comparePassword(password);
+
+    if (!isPasswordValid) {
+      return next(
+        new ErrorHandler("Please provide the correct information", 400)
+      );
+    }
+
+    (user.name = name),
+      (user.email = email),
+      (user.phoneNumber = phoneNumber),
+      await user.save();
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+//@desc: update user avatar
+//@route: PUT /api/user/v2/update-avatar
+
+const updateAvatar = catchAsyncErrors(async (req, res, next) => {
+  const existUser = await User.findById(req.user.id);
+  console.log(existUser.avatar);
+
+  if (existUser.avatar) {
+    const existsAvatarPath = path.join(
+      __dirname,
+      "..",
+      "uploads",
+      existUser.avatar
+    );
+
+    if (fs.existsSync(existsAvatarPath)) {
+      fs.unlinkSync(existsAvatarPath);
+    }
+  }
+
+  const fileUrl = req.file.filename;
+
+  const user = await User.findByIdAndUpdate(
+    fs.req.user.id,
+    { avatar: fileUrl },
+    { new: true }
+  );
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
+
+  try {
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+module.exports = {
+  createUser,
+  userLogin,
+  getUser,
+  activateUser,
+  logoutUser,
+  updateUser,
+  updateAvatar,
+};

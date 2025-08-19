@@ -5,6 +5,8 @@ const {
   getUser,
   activateUser,
   logoutUser,
+  updateUser,
+  updateAvatar,
 } = require("../controller/user.controller");
 const { isAuthenticated } = require("../middleware/auth");
 const { upload } = require("../config/multer");
@@ -15,5 +17,12 @@ router.post("/activation", activateUser);
 router.post("/login-user", userLogin);
 router.get("/getuser", isAuthenticated, getUser);
 router.get("/logoutUser", isAuthenticated, logoutUser);
+router.put("/update-user-info", isAuthenticated, updateUser);
+router.put(
+  "/update-avatar",
+  isAuthenticated,
+  upload.single("image"),
+  updateAvatar
+);
 
 module.exports = router;

@@ -12,12 +12,13 @@ import {
   AiOutlineStar,
 } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
+
+import { toast } from "react-toastify";
+import { addToCart } from "../../redux/features/cartSlice";
 import {
   addToWishlist,
   removeFromWishlist,
 } from "../../redux/features/wishlistSlice";
-import { toast } from "react-toastify";
-import { addToCart } from "../../redux/features/cartSlice";
 
 const ProductCard = ({ data }) => {
   const { wishlist } = useSelector((state) => state.wishlist);

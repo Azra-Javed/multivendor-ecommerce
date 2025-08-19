@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { removeFromWishlist } from "../../redux/features/wishlistSlice";
 import { backend_url } from "../../server";
 import { addToCart } from "../../redux/features/cartSlice";
-import { toast } from "react-toastify";
 
 const Wishlist = ({ setOpenWishlist }) => {
   const { wishlist } = useSelector((state) => state.wishlist);

@@ -1,11 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { RxPerson } from "react-icons/rx";
 import { HiOutlineReceiptRefund, HiOutlineShoppingBag } from "react-icons/hi";
-import {
-  AiOutlineCreditCard,
-  AiOutlineLogout,
-  AiOutlineMessage,
-} from "react-icons/ai";
+import { AiOutlineLogout, AiOutlineMessage } from "react-icons/ai";
+import { RiLockPasswordLine } from "react-icons/ri";
 import { MdOutlineTrackChanges } from "react-icons/md";
 import { TbAddressBook } from "react-icons/tb";
 import axios from "axios";
@@ -18,7 +15,7 @@ const sidebarItems = [
   { id: 3, label: "Refunds", icon: HiOutlineReceiptRefund },
   { id: 4, label: "Inbox", icon: AiOutlineMessage, route: "/inbox" },
   { id: 5, label: "Track Order", icon: MdOutlineTrackChanges },
-  { id: 6, label: "Payment Methods", icon: AiOutlineCreditCard },
+  { id: 6, label: "Change Password", icon: RiLockPasswordLine },
   { id: 7, label: "Address", icon: TbAddressBook },
   { id: 8, label: "Log out", icon: AiOutlineLogout, logout: true },
 ];
@@ -53,7 +50,7 @@ const ProfileSidebar = ({ active, setActive }) => {
           className="flex items-center cursor-pointer w-full mb-8"
           onClick={() => handleClick(id, route, logout)}
         >
-          <Icon size={20} color={active === id ? "red" : ""} />
+          <Icon size={20} color={active === id ? "red" : ""} title={label} />
           <span
             className={`pl-3 ${
               active === id ? "text-[red]" : ""

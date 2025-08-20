@@ -302,6 +302,38 @@ const deleteUserAddress = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+//@desc: update password
+//@route: PUT /api/user/v2/update-user-password
+
+const updatePassword = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id).select("+password");
+
+    const isPasswordMatched = await user.comparePassword(req.body.oldPassword);
+
+    if (!isPasswordMatched) {
+      return next(new ErrorHandler("Old Password is incorrect!", 400));
+    }
+
+    if (req.body.newPassword !== req.body.confirmPassword) {
+      return next(
+        new ErrorHandler("Password and confirm password do not match", 400)
+      );
+    }
+
+    user.password = req.body.newPassword;
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Password updated successfully!",
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500)());
+  }
+});
+
 module.exports = {
   createUser,
   userLogin,
@@ -312,4 +344,5 @@ module.exports = {
   updateAvatar,
   upddateAddress,
   deleteUserAddress,
+  updatePassword,
 };

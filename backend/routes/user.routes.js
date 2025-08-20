@@ -9,6 +9,7 @@ const {
   updateAvatar,
   upddateAddress,
   deleteUserAddress,
+  updatePassword,
 } = require("../controller/user.controller");
 const { isAuthenticated } = require("../middleware/auth");
 const { upload } = require("../config/multer");
@@ -28,5 +29,6 @@ router.put(
 );
 router.put("/update-user-addresses", isAuthenticated, upddateAddress);
 router.delete("/delete-user-address/:id", isAuthenticated, deleteUserAddress);
+router.put("/update-user-password", isAuthenticated, updatePassword);
 
 module.exports = router;

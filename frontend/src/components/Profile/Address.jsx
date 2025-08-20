@@ -240,7 +240,7 @@ const Address = () => {
             </div>
             <div className="pl-8 flex items-center">
               <h6>
-                {item.address1} + {item.address2}
+                {item.address1}, {item.address2}
               </h6>
             </div>
             <div className="pl-8 flex items-center">

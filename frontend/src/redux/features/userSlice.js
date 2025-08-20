@@ -22,6 +22,7 @@ const userSlice = createSliceWithThunks({
     }),
 
     // async thunk
+    // load user
     loadUser: create.asyncThunk(
       async (_, { rejectWithValue }) => {
         try {
@@ -65,7 +66,6 @@ const userSlice = createSliceWithThunks({
             },
             { withCredentials: true }
           );
-          console.log(data.user);
           return data.user;
         } catch (error) {
           return rejectWithValue(error.response.data.message);
@@ -86,10 +86,80 @@ const userSlice = createSliceWithThunks({
         },
       }
     ),
+
+    // update user address
+    updateUserAddress: create.asyncThunk(
+      async (
+        { country, city, address1, address2, addressType },
+        { rejectWithValue }
+      ) => {
+        try {
+          const { data } = await axios.put(
+            `${server}/user/update-user-addresses`,
+            { country, city, address1, address2, addressType },
+            { withCredentials: true }
+          );
+
+          return data;
+        } catch (error) {
+          return rejectWithValue(error.response.data.message);
+        }
+      },
+
+      {
+        pending: (state) => {
+          state.addressLoading = true;
+        },
+        fulfilled: (state, action) => {
+          state.addressLoading = false;
+          state.user = action.payload.user;
+        },
+        rejected: (state, action) => {
+          state.addressLoading = false;
+          state.error = action.payload;
+        },
+      }
+    ),
+
+    // delete user address
+    deleteUserAddress: create.asyncThunk(
+      async (id, { rejectWithValue }) => {
+        try {
+          const { data } = await axios.delete(
+            `${server}/user/delete-user-address/${id}`,
+            {
+              withCredentials: true,
+            }
+          );
+
+          return data;
+        } catch (error) {
+          return rejectWithValue(error.response.data.message);
+        }
+      },
+      {
+        pending: (state) => {
+          state.addressLoading = true;
+        },
+        fulfilled: (state, action) => {
+          state.addressLoading = false;
+          state.user = action.payload.user;
+        },
+        rejected: (state, action) => {
+          state.addressLoading = false;
+          state.error = action.payload;
+        },
+      }
+    ),
   }),
 });
 
-export const { clearErrors, loadUser, updateUserInformation } =
-  userSlice.actions;
+export const {
+  clearErrors,
+  loadUser,
+  updateUserInformation,
+  updateUserAddress,
+  deleteUserAddress,
+} = userSlice.actions;
 
 export default userSlice.reducer;

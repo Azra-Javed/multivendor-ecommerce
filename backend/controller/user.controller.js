@@ -236,6 +236,72 @@ const updateAvatar = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+//@desc: update user addresses
+//@route: PUT /api/user/v2/update-user-addresses
+
+const upddateAddress = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    const sameTypeAddress = user.addresses.find(
+      (address) => address.addressType === req.body.addressType
+    );
+
+    if (sameTypeAddress) {
+      return next(
+        new ErrorHandler(`${req.body.addressType} address already exists`)
+      );
+    }
+
+    const exitsAddress = user.addresses.find(
+      (address) => address._id === req.body._id
+    );
+
+    // update existing address
+    if (exitsAddress) {
+      Object.assign(exitsAddress, req.body);
+    } else {
+      // add new address to the array
+      user.addresses.push(req.body);
+    }
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "User Address updated successfully",
+      user,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+//@desc: delete user address
+//@route: PUT /api/user/v2/delete-user-address/:Id
+
+const deleteUserAddress = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    const addressId = req.params.id;
+
+    await User.updateOne(
+      {
+        _id: userId, // find user
+      },
+      { $pull: { addresses: { _id: addressId } } } // delete address
+    );
+
+    const user = await User.findById(userId);
+
+    res
+      .status(200)
+      .json({ success: true, message: "Address deleted successfully!", user });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
 module.exports = {
   createUser,
   userLogin,
@@ -244,4 +310,6 @@ module.exports = {
   logoutUser,
   updateUser,
   updateAvatar,
+  upddateAddress,
+  deleteUserAddress,
 };

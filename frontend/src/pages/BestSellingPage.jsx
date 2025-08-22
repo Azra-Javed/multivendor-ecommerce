@@ -7,7 +7,9 @@ import Loader from "../components/Layout/Loader";
 
 const BestSellingPage = () => {
   const [data, setData] = useState([]);
-  const { allProducts, isLoading } = useSelector((state) => state.products);
+  const { allProducts = [], isLoading } = useSelector(
+    (state) => state.products
+  );
 
   useEffect(() => {
     const d = allProducts;
@@ -19,7 +21,7 @@ const BestSellingPage = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div>
+        <div className="mb-[10%]">
           <Header activeHeading={2} />
           <br />
           <br />

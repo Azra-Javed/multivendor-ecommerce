@@ -51,4 +51,20 @@ const deleteCoupon = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-module.exports = { createCouponCode, getCoupons, deleteCoupon };
+//@desc: get Coupon code value by its name
+//@route: Delete/api/vs/coupon/get-coupon-value/:name
+
+const getCouponValue = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const couponCode = await CouponCode.findOne({ name: req.params.name });
+
+    res.status(200).json({
+      success: true,
+      couponCode,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error, 400));
+  }
+});
+
+module.exports = { createCouponCode, getCoupons, deleteCoupon, getCouponValue };

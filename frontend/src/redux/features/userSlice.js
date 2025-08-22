@@ -90,13 +90,13 @@ const userSlice = createSliceWithThunks({
     // update user address
     updateUserAddress: create.asyncThunk(
       async (
-        { country, city, address1, address2, addressType },
+        { country, city, address1, address2, zipCode, addressType },
         { rejectWithValue }
       ) => {
         try {
           const { data } = await axios.put(
             `${server}/user/update-user-addresses`,
-            { country, city, address1, address2, addressType },
+            { country, city, address1, address2, zipCode, addressType },
             { withCredentials: true }
           );
 

@@ -37,7 +37,14 @@ const Address = () => {
       toast.error("All fields are required.");
     } else {
       dispatch(
-        updateUserAddress({ country, city, address1, address2, addressType })
+        updateUserAddress({
+          country,
+          city,
+          address1,
+          address2,
+          zipCode,
+          addressType,
+        })
       )
         .unwrap()
         .then((res) => {

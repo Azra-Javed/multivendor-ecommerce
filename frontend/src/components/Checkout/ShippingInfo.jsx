@@ -2,8 +2,20 @@ import { useState } from "react";
 import styles from "../../styles/style";
 import { Country, State } from "country-state-city";
 
-const ShippingInfo = () => {
-  const [country, setCountry] = useState("");
+const ShippingInfo = ({
+  user,
+  country,
+  setCountry,
+  city,
+  setCity,
+  address1,
+  setAddress1,
+  address2,
+  setAddress2,
+  zipCode,
+  setZipCode,
+}) => {
+  const [userInfo, setUserInfo] = useState(false);
 
   return (
     <>
@@ -19,11 +31,17 @@ const ShippingInfo = () => {
                 type="text"
                 required
                 className={`${styles.input} !w-[95%]`}
+                value={user && user.name}
               />
             </div>
             <div className="w-[50%]">
               <label className="block pb-2">Email Address</label>
-              <input type="email" required className={`${styles.input}`} />
+              <input
+                type="email"
+                required
+                className={`${styles.input}`}
+                value={user && user.email}
+              />
             </div>
           </div>
 
@@ -34,11 +52,18 @@ const ShippingInfo = () => {
                 type="number"
                 required
                 className={`${styles.input} !w-[95%]`}
+                value={user && user.phoneNumber}
               />
             </div>
             <div className="w-[50%]">
               <label className="block pb-2">Zip Code</label>
-              <input type="number" required className={`${styles.input}`} />
+              <input
+                type="number"
+                required
+                className={`${styles.input}`}
+                value={zipCode}
+                onChange={(e) => setZipCode(e.target.value)}
+              />
             </div>
           </div>
 
@@ -62,10 +87,12 @@ const ShippingInfo = () => {
 
             <div className="w-[50%]">
               <label className="block pb-2">City</label>
-              <select className="w-[95%] border h-[40px] rounded-[5px]">
-                <option className="block pb-2" value="">
-                  Choose your City
-                </option>
+              <select
+                className="w-[95%] border h-[40px] rounded-[5px]"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+              >
+                <option className="block pb-2">Choose your City</option>
                 {State &&
                   State.getStatesOfCountry(country).map((item) => (
                     <option key={item.isoCode} value={item.isoCode}>
@@ -83,14 +110,52 @@ const ShippingInfo = () => {
                 type="address"
                 required
                 className={`${styles.input} !w-[95%]`}
+                value={address1}
+                onChange={(e) => setAddress1(e.target.value)}
               />
             </div>
             <div className="w-[50%]">
               <label className="block pb-2">Address2</label>
-              <input type="address" required className={`${styles.input}`} />
+              <input
+                type="address"
+                required
+                className={`${styles.input}`}
+                value={address2}
+                onChange={(e) => setAddress2(e.target.value)}
+              />
             </div>
           </div>
         </form>
+
+        <h5
+          className="text-[18px] cursor-pointer inline-block"
+          onClick={() => setUserInfo(!userInfo)}
+        >
+          Choose From saved address
+        </h5>
+        {userInfo && (
+          <div>
+            {user &&
+              user?.addresses?.map((item, index) => (
+                <div className="w-full flex" key={index}>
+                  <input
+                    type="radio"
+                    className="mr-3"
+                    value={item.addressType}
+                    name="address"
+                    onChange={() => {
+                      setAddress1(item.address1);
+                      setAddress2(item.address2);
+                      setZipCode(item.zipCode);
+                      setCountry(item.country);
+                      setCity(item.city);
+                    }}
+                  />
+                  <span>{item.addressType}</span>
+                </div>
+              ))}
+          </div>
+        )}
       </div>
     </>
   );

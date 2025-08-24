@@ -6,26 +6,31 @@ import Store from "./redux/store";
 import { loadUser } from "./redux/features/userSlice";
 import { loadSeller } from "./redux/actions/seller.actions";
 import { router } from "./routes/AppRoutes";
-import { useSelector } from "react-redux";
 import { getAllEvents } from "./redux/actions/event.actions";
 import { getAllProducts } from "./redux/actions/product.actions";
+import { server } from "./server";
+import { useState } from "react";
+import axios from "axios";
 
 const App = () => {
+  const [stripeApiKey, setStripeApiKey] = useState("");
+
+  async function getStripeApikey() {
+    const { data } = await axios.get(`${server}/payment/stripeApikey`);
+    setStripeApiKey(data.stripeApikey);
+  }
+
   useEffect(() => {
     Store.dispatch(loadUser());
     Store.dispatch(loadSeller());
     Store.dispatch(getAllProducts());
     Store.dispatch(getAllEvents());
+    getStripeApikey();
   }, []);
-
-  const { allEvents } = useSelector((state) => state.events);
-  console.log("products:", allEvents);
-  const { allProducts } = useSelector((state) => state.products);
-  console.log(allProducts);
 
   return (
     <>
-      <RouterProvider router={router} />
+      <RouterProvider router={router(stripeApiKey)} />
       <ToastContainer
         position="bottom-center"
         autoClose={5000}

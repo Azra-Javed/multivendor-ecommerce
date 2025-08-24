@@ -6,9 +6,9 @@ const {
   deleteEvent,
   getAllEvents,
 } = require("../controller/event.controller");
-const router = express.Router();
-
 const { isSellerAuthenticated } = require("../middleware/auth");
+
+const router = express.Router();
 
 router.post("/create-event", upload.array("images"), createEvent);
 router.get("/get-all-events/:id", getEvents);

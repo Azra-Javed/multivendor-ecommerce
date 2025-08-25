@@ -8,8 +8,6 @@ import axios from "axios";
 import { server } from "../../server.js";
 import {
   CardNumberElement,
-  CardCvcElement,
-  CardExpiryElement,
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
@@ -134,7 +132,29 @@ const Payment = () => {
 
   const cashOnDeliveryHandler = async (e) => {
     e.preventDefault();
+
+    order.paymentInfo = {
+      type: "Cash On Delivery",
+    };
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    await axios
+      .post(`${server}/order/create-order`, order, config)
+      .then((res) => {
+        setOpen(false);
+        navigate("/order/success");
+        toast.success("Order successful!");
+        localStorage.setItem("cartItems", JSON.stringify([]));
+        localStorage.setItem("latestOrder", JSON.stringify([]));
+        window.location.reload();
+      });
   };
+
   return (
     <>
       <div className="w-full flex flex-col items-center py-8">

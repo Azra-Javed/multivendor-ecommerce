@@ -4,8 +4,6 @@ import {
   CardNumberElement,
   CardCvcElement,
   CardExpiryElement,
-  useElements,
-  useStripe,
 } from "@stripe/react-stripe-js";
 
 const PaymentInfo = ({
@@ -194,7 +192,7 @@ const PaymentInfo = ({
       {/* card*/}
       {select === 3 ? (
         <div className="w-full flex">
-          <form className="w-full" onSubmit={paymentHandler}>
+          <form className="w-full" onSubmit={cashOnDeliveryHandler}>
             <input
               type="submit"
               value="Confirm"

@@ -2,19 +2,17 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import { AiOutlineArrowRight } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getAllOrders } from "../../redux/features/orderSlice";
 const AllOrders = () => {
-  const orders = [
-    {
-      _id: "3i49u4i39493930jdf",
-      orderItems: [
-        {
-          name: "Iphone 14 pro max",
-        },
-      ],
-      totalPrice: 120,
-      orderStatus: "Processing",
-    },
-  ];
+  const { orders } = useSelector((state) => state.order);
+  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllOrders(user?._id));
+  }, []);
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
@@ -71,11 +69,13 @@ const AllOrders = () => {
     orders.forEach((item) => {
       row.push({
         id: item._id,
-        itemsQty: item.orderItems.length,
-        total: "USS" + item.totalPrice,
-        status: item.orderStatus,
+        itemsQty: item.cart.length,
+        total: "USS " + item.totalPrice,
+        status: item.status,
       });
     });
+
+  console.log(orders);
   return (
     <div className="pl-8 pt-1">
       <DataGrid

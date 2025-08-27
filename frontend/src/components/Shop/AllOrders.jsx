@@ -1,17 +1,20 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteProduct } from "../../redux/actions/product.actions";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
+import Loader from "../Layout/Loader";
 import { Link } from "react-router-dom";
+import { getShopAllOrders } from "../../redux/features/orderSlice";
 import { AiOutlineArrowRight } from "react-icons/ai";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { getAllOrders } from "../../redux/features/orderSlice";
+
 const AllOrders = () => {
-  const { orders } = useSelector((state) => state.order);
-  const { user } = useSelector((state) => state.user);
+  const { shopOrders, isLoading } = useSelector((state) => state.order);
+  const { seller } = useSelector((state) => state.seller);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllOrders(user?._id));
+    dispatch(getShopAllOrders(seller?._id));
   }, []);
 
   const columns = [
@@ -52,7 +55,7 @@ const AllOrders = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/user/order/${params.id}`}>
+            <Link to={`/order/${params.id}`}>
               <Button>
                 <AiOutlineArrowRight size={20} />
               </Button>
@@ -65,8 +68,8 @@ const AllOrders = () => {
 
   const row = [];
 
-  orders &&
-    orders.forEach((item) => {
+  shopOrders &&
+    shopOrders.forEach((item) => {
       row.push({
         id: item._id,
         itemsQty: item.cart.length,
@@ -76,15 +79,20 @@ const AllOrders = () => {
     });
 
   return (
-    <div className="pl-8 pt-1">
-      <DataGrid
-        rows={row}
-        columns={columns}
-        pageSize={10}
-        disableSelectionOnClick
-        autoHeight
-      />
-    </div>
+    <>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div className="w-full mx-8 pt-1 mt-10 bg-white">
+          <DataGrid
+            rows={row}
+            columns={columns}
+            pageSize={10}
+            disableRowSelectionOnClick
+          />
+        </div>
+      )}
+    </>
   );
 };
 

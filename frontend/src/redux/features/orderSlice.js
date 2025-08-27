@@ -15,6 +15,7 @@ const orderSlice = createSliceWithThunks({
   initialState,
 
   reducers: (create) => ({
+    // get all orders of user
     getAllOrders: create.asyncThunk(
       async (userId, { rejectWithValue }) => {
         try {
@@ -45,8 +46,39 @@ const orderSlice = createSliceWithThunks({
         },
       }
     ),
+    // get all orders of shop
+    getShopAllOrders: create.asyncThunk(
+      async (shopId, { rejectWithValue }) => {
+        try {
+          const { data } = await axios.get(
+            `${server}/order/get-shop-all-orders/${shopId}`
+          );
+
+          return data;
+        } catch (error) {
+          return rejectWithValue(
+            error.response?.data?.message || error.message
+          );
+        }
+      },
+      {
+        pending: (state) => {
+          state.isLoading = true;
+        },
+
+        fulfilled: (state, action) => {
+          state.isLoading = false;
+          state.shopOrders = action.payload.orders;
+        },
+
+        rejected: (state, action) => {
+          state.isLoading = false;
+          state.error = action.payload;
+        },
+      }
+    ),
   }),
 });
 
-export const { getAllOrders } = orderSlice.actions;
+export const { getAllOrders, getShopAllOrders } = orderSlice.actions;
 export default orderSlice.reducer;

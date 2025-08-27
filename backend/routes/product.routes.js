@@ -5,13 +5,18 @@ const {
   getProducts,
   deleteProduct,
   getAllProducts,
+  createReview,
 } = require("../controller/product.controller");
 const router = express.Router();
-const { isSellerAuthenticated } = require("../middleware/auth");
+const {
+  isSellerAuthenticated,
+  isAuthenticated,
+} = require("../middleware/auth");
 
 router.post("/create-product", upload.array("images"), createProduct);
 router.get("/get-all-products-shop/:id", getProducts);
 router.get("/get-all-products", getAllProducts);
 router.delete("/delete-shop-product/:id", isSellerAuthenticated, deleteProduct);
+router.put("/create-new-review", isAuthenticated, createReview);
 
 module.exports = router;

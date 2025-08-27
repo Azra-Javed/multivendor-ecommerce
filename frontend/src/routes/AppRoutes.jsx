@@ -10,6 +10,7 @@ import {
   FAQPage,
   ProductDetailsPage,
   ProfilePage,
+  OrderDetailsPage,
   ShopCreatePage,
   SellerActivationPage,
   ShopLoginPage,
@@ -23,6 +24,8 @@ import {
   ShopDashboardPage,
   ShopCreateProduct,
   ShopAllProducts,
+  ShopAllOrders,
+  ShopOrderDetails,
   ShopCreateEvent,
   ShopAllEvents,
   ShopAllCoupons,
@@ -94,6 +97,15 @@ export const router = (stripeApiKey) =>
       ),
     },
 
+    {
+      path: "/user/order/:id",
+      element: (
+        <UserProtectedRoute>
+          <OrderDetailsPage />
+        </UserProtectedRoute>
+      ),
+    },
+
     // shop Routes
     {
       path: "/shop-create",
@@ -143,6 +155,22 @@ export const router = (stripeApiKey) =>
       element: (
         <SellerProtectedRoute>
           <ShopAllProducts />
+        </SellerProtectedRoute>
+      ),
+    },
+    {
+      path: "/dashboard-orders",
+      element: (
+        <SellerProtectedRoute>
+          <ShopAllOrders />
+        </SellerProtectedRoute>
+      ),
+    },
+    {
+      path: "/order/:id",
+      element: (
+        <SellerProtectedRoute>
+          <ShopOrderDetails />
         </SellerProtectedRoute>
       ),
     },

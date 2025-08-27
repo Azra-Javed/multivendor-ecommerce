@@ -70,6 +70,7 @@ const Checkout = () => {
 
       setDiscountPrice(discountPrice);
       setCouponCodeData(res.data.couponCode);
+      toast.success("Coupon applied successfully!");
       setCouponCode("");
     } catch (error) {
       console.error(error);

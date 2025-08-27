@@ -20,6 +20,7 @@ import { RxCross1 } from "react-icons/rx";
 
 const Header = ({ activeHeading }) => {
   const { isAuthenticated, user, loading } = useSelector((state) => state.user);
+  const { isSellerAuthenticated } = useSelector((state) => state.seller);
   const { cart } = useSelector((state) => state.cart);
   const { wishlist } = useSelector((state) => state.wishlist);
   const { allProducts } = useSelector((state) => state.products);
@@ -105,9 +106,11 @@ const Header = ({ activeHeading }) => {
               </div>
               {/* seller button */}
               <div className={`${styles.button}`}>
-                <Link to="/shop-create">
+                <Link to={isSellerAuthenticated ? "/dashboard" : "/shop-login"}>
                   <h1 className="text-[#fff] flex items-center">
-                    Become Seller <IoIosArrowForward className="ml-1" />
+                    {isSellerAuthenticated ? "Go Dashboard" : "Become Seller"}
+
+                    <IoIosArrowForward className="ml-1" />
                   </h1>
                 </Link>
               </div>
@@ -316,9 +319,13 @@ const Header = ({ activeHeading }) => {
                   </div>
                   <Navbar active={activeHeading} /> {/* seller button */}
                   <div className={`${styles.button} ml-4 !rounded-[4px]`}>
-                    <Link to="/shop-create">
+                    <Link
+                      to={isSellerAuthenticated ? "/dashboard" : "/shop-login"}
+                    >
                       <h1 className="text-[#fff] flex items-center">
-                        Become Seller <IoIosArrowForward className="ml-1" />
+                        {isSellerAuthenticated
+                          ? "Go Dashboard"
+                          : "Become Seller"}
                       </h1>
                     </Link>
                   </div>

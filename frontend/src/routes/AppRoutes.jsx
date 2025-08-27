@@ -31,6 +31,7 @@ import {
   ShopAllEvents,
   ShopAllCoupons,
   ShopPreviewPage,
+  ShopAllRefunds,
 } from "./shopRoutes";
 
 import {
@@ -173,6 +174,14 @@ export const router = (stripeApiKey) =>
       element: (
         <SellerProtectedRoute>
           <ShopAllOrders />
+        </SellerProtectedRoute>
+      ),
+    },
+    {
+      path: "/dashboard-refunds",
+      element: (
+        <SellerProtectedRoute>
+          <ShopAllRefunds />
         </SellerProtectedRoute>
       ),
     },

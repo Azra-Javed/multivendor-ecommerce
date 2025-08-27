@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { getShopAllOrders } from "../../redux/features/orderSlice";
 import { AiOutlineArrowRight } from "react-icons/ai";
 
-const AllOrders = () => {
+const AllRefundOrders = () => {
   const { shopOrders, isLoading } = useSelector((state) => state.order);
   const { seller } = useSelector((state) => state.seller);
   const dispatch = useDispatch();
@@ -15,6 +15,13 @@ const AllOrders = () => {
   useEffect(() => {
     dispatch(getShopAllOrders(seller?._id));
   }, []);
+
+  const refundOrders =
+    shopOrders &&
+    shopOrders.filter(
+      (item) =>
+        item.status === "Processing refund" || item.status === "Refund Success"
+    );
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
@@ -67,8 +74,8 @@ const AllOrders = () => {
 
   const row = [];
 
-  shopOrders &&
-    shopOrders.forEach((item) => {
+  refundOrders &&
+    refundOrders.forEach((item) => {
       row.push({
         id: item._id,
         itemsQty: item.cart.length,
@@ -95,4 +102,4 @@ const AllOrders = () => {
   );
 };
 
-export default AllOrders;
+export default AllRefundOrders;

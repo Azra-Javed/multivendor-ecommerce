@@ -41,7 +41,23 @@ const OrderDetails = () => {
       )
       .then((res) => {
         toast.success("Order updated!");
-        navigate("/dashboard-orders");
+        setStatus(res.data.order.status);
+        dispatch(getShopAllOrders(seller._id));
+      })
+      .catch((error) => toast.error(error?.response?.data?.message));
+  };
+
+  const refundOrderUpdateHandler = async () => {
+    await axios
+      .patch(
+        `${server}/order/order-refund-success/${id}`,
+        {
+          status,
+        },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        toast.success("Order updated!");
         setStatus(res.data.order.status);
         dispatch(getShopAllOrders(seller._id));
       })
@@ -56,6 +72,13 @@ const OrderDetails = () => {
     "On the way",
     "Delivered",
   ];
+
+  const refundStatus = ["Processing refund", "Refund Success"];
+
+  const optionsArray = !refundStatus.includes(data?.status)
+    ? statuses
+    : refundStatus;
+
   return (
     <div className={`py-4 min-h-screen ${styles.section}`}>
       <div className="w-full flex items-center justify-between">
@@ -97,16 +120,13 @@ const OrderDetails = () => {
             </div>
           </div>
         ))}
-
       <div className="border-t w-full text-right">
         <h5 className="pt-3 text-[18px]">
           Total Price <strong>US$ {data?.totalPrice}</strong>
         </h5>
       </div>
-
       <br />
       <br />
-
       <div className="w-full 800px:flex items-center">
         <div className="w-full 800px:w-[60%]">
           <h4 className="pt-3 text-[20px] font-[600]">Shipping Address:</h4>
@@ -135,22 +155,27 @@ const OrderDetails = () => {
         onChange={(e) => setStatus(e.target.value)}
         className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
       >
-        {statuses
-          .slice(statuses.indexOf(status || data?.status))
+        {optionsArray
+          .slice(optionsArray.indexOf(status || data?.status))
           .map((option, index) => (
             <option value={option} key={index}>
               {option}
             </option>
           ))}
       </select>
-
       <div
         className={`${
           styles.button
         } mt-5 !bg-[#FCE1E6] !text-[#E94560] rounded-[4px] font-[600] !h-[45px] text-[18px] ${
-          status === data?.status ? "opacity-50 cursor-not-allowed" : ""
+          status === data?.status ? "opacity-50 !cursor-not-allowed" : ""
         }`}
-        onClick={status === data?.status ? null : orderUpdateHandler}
+        onClick={
+          status === data?.status
+            ? null
+            : !refundStatus.includes(data?.status)
+            ? orderUpdateHandler
+            : refundOrderUpdateHandler
+        }
       >
         Update Status
       </div>

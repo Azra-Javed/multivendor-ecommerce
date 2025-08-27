@@ -132,9 +132,9 @@ const updateOrderStatus = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-//@desc: give a refund
+//@desc: get a refund --> user
 //@route: put /api/v2/order/order-refund/:id
-const orderRefund = catchAsyncErrors(async (req, res, next) => {
+const requestRefund = catchAsyncErrors(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
 
   if (!order) {
@@ -151,10 +151,44 @@ const orderRefund = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+//@desc: accept the refund --> seller
+//@route: put /api/v2/order/order-refund-success/:id
+
+const acceptRefund = catchAsyncErrors(async (req, res, next) => {
+  const order = await Order.findById(req.params.id);
+
+  if (!order) {
+    return next(new ErrorHandler("Order not found with this Id!", 404));
+  }
+
+  order.status = req.body.status;
+
+  await order.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Order Refund Successfull!",
+  });
+
+  if (req.body.status == "Refund Success") {
+    for (const item of order.cart) {
+      await updateProduct(item._id, item.qty);
+    }
+  }
+
+  async function updateProduct(id, qty) {
+    const product = await Product.findById(id);
+    product.stock += qty;
+    product.sold_out -= qty;
+    await product.save({ validateBeforeSave: false });
+  }
+});
+
 module.exports = {
   createOrder,
   getAllOrders,
   getAllSellerOrders,
   updateOrderStatus,
-  orderRefund,
+  requestRefund,
+  acceptRefund,
 };

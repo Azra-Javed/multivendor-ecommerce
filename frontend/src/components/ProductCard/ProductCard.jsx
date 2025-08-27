@@ -19,6 +19,7 @@ import {
   addToWishlist,
   removeFromWishlist,
 } from "../../redux/features/wishlistSlice";
+import Ratings from "../products/Ratings";
 
 const ProductCard = ({ data }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -80,26 +81,7 @@ const ProductCard = ({ data }) => {
           </h4>
 
           <div className="flex">
-            <AiFillStar
-              className="mr-2 cursor-pointer"
-              color="#F6BA00"
-              size={20}
-            />
-            <AiFillStar
-              className="mr-2 cursor-pointer"
-              color="#F6BA00"
-              size={20}
-            />
-            <AiFillStar
-              className="mr-2 cursor-pointer"
-              color="#F6BA00"
-              size={20}
-            />
-            <AiOutlineStar
-              className="mr-2 cursor-pointer"
-              color="#F6BA00"
-              size={20}
-            />
+            <Ratings rating={data?.ratings} />
           </div>
 
           <div className="py-2 flex items-center justify-between">
@@ -116,7 +98,7 @@ const ProductCard = ({ data }) => {
               </h4>
             </div>
             <div className="font-[400] text-[17px] text-[#68d284]">
-              <span>50 sold</span>
+              <span>{data.sold_out} Sold</span>
             </div>
           </div>
         </Link>

@@ -3,6 +3,7 @@ const {
   getAllOrders,
   getAllSellerOrders,
   updateOrderStatus,
+  orderRefund,
 } = require("../controller/order.controller");
 
 const express = require("express");
@@ -17,5 +18,6 @@ router.patch(
   isSellerAuthenticated,
   updateOrderStatus
 );
+router.put("/order-refund/:id", orderRefund);
 
 module.exports = router;

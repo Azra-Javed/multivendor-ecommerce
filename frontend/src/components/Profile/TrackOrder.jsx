@@ -1,21 +1,20 @@
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
-import { MdOutlineTrackChanges } from "react-icons/md";
+import { MdTrackChanges } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getAllOrders } from "../../redux/features/orderSlice";
 
-const TrackOrder = () => {
-  const orders = [
-    {
-      _id: "3i49u4i39493930jdf",
-      orderItems: [
-        {
-          name: "Iphone 14 pro max",
-        },
-      ],
-      totalPrice: 120,
-      orderStatus: "Processing",
-    },
-  ];
+const AllRefundOrders = () => {
+  const { orders } = useSelector((state) => state.order);
+  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllOrders(user?._id));
+  }, []);
+
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
 
@@ -47,16 +46,16 @@ const TrackOrder = () => {
     {
       field: " ",
       flex: 1,
-      minWidth: 130,
+      minWidth: 150,
       headerName: "",
       type: "number",
       sortable: false,
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/user/order/${params.id}`}>
+            <Link to={`/user/order/track/${params.id}`}>
               <Button>
-                <MdOutlineTrackChanges size={20} />
+                <MdTrackChanges size={20} />
               </Button>
             </Link>
           </>
@@ -71,22 +70,23 @@ const TrackOrder = () => {
     orders.forEach((item) => {
       row.push({
         id: item._id,
-        itemsQty: item.orderItems.length,
-        total: "USS" + item.totalPrice,
-        status: item.orderStatus,
+        itemsQty: item.cart.length,
+        total: "USS " + item.totalPrice,
+        status: item.status,
       });
     });
+
   return (
     <div className="pl-8 pt-1">
       <DataGrid
         rows={row}
         columns={columns}
         pageSize={10}
-        autoHeight
         disableSelectionOnClick
+        autoHeight
       />
     </div>
   );
 };
 
-export default TrackOrder;
+export default AllRefundOrders;

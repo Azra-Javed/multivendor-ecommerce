@@ -81,7 +81,7 @@ const getAllSellerOrders = catchAsyncErrors(async (req, res, next) => {
 });
 
 //@desc: update order status for seller
-//@route: patch /api/v2/order/update-order-status/:id
+//@route: put /api/v2/order/update-order-status/:id
 
 const updateOrderStatus = catchAsyncErrors(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
@@ -132,9 +132,29 @@ const updateOrderStatus = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+//@desc: give a refund
+//@route: put /api/v2/order/order-refund/:id
+const orderRefund = catchAsyncErrors(async (req, res, next) => {
+  const order = await Order.findById(req.params.id);
+
+  if (!order) {
+    return next(new ErrorHandler("Order not found with this id", 400));
+  }
+
+  order.status = req.body.status;
+  await order.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Your refund request has been submitted successfully!",
+    order,
+  });
+});
+
 module.exports = {
   createOrder,
   getAllOrders,
   getAllSellerOrders,
   updateOrderStatus,
+  orderRefund,
 };

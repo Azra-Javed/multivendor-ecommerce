@@ -17,6 +17,7 @@ import {
   CheckoutPage,
   OrderSuccessPage,
   PaymentPage,
+  TrackOrderPage,
 } from "./userRoutes";
 
 import {
@@ -106,6 +107,15 @@ export const router = (stripeApiKey) =>
       ),
     },
 
+    {
+      path: "/user/order/track/:id",
+      element: (
+        <SellerProtectedRoute>
+          <TrackOrderPage />
+        </SellerProtectedRoute>
+      ),
+    },
+
     // shop Routes
     {
       path: "/shop-create",
@@ -174,6 +184,7 @@ export const router = (stripeApiKey) =>
         </SellerProtectedRoute>
       ),
     },
+
     {
       path: "/dashboard-create-event",
       element: (

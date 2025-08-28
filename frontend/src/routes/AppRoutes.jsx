@@ -33,6 +33,7 @@ import {
   ShopPreviewPage,
   ShopAllRefunds,
   ShopSettingsPage,
+  ShopWithDrawMoneyPage,
 } from "./shopRoutes";
 
 import {
@@ -225,6 +226,14 @@ export const router = (stripeApiKey) =>
       element: (
         <SellerProtectedRoute>
           <ShopAllCoupons />
+        </SellerProtectedRoute>
+      ),
+    },
+    {
+      path: "/dashboard-withdraw-money",
+      element: (
+        <SellerProtectedRoute>
+          <ShopWithDrawMoneyPage />
         </SellerProtectedRoute>
       ),
     },

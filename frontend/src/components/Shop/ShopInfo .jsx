@@ -5,14 +5,33 @@ import { backend_url, server } from "../../server";
 import Loader from "../Layout/Loader";
 import styles from "../../styles/style";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllProductsShop } from "../../redux/actions/product.actions";
 
 const ShopInfo = ({ isOwner }) => {
+  const { products } = useSelector((state) => state.products);
+  const dispatch = useDispatch();
+  const { id } = useParams();
+
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const { id } = useParams();
+  const totalReviewsLength =
+    products &&
+    products.reduce((acc, product) => acc + product.reviews.length, 0);
+
+  const totalRatings =
+    products &&
+    products.reduce(
+      (acc, product) =>
+        acc + product.reviews.reduce((sum, review) => sum + review.rating, 0),
+      0
+    );
+
+  const averageRatings = totalRatings / totalReviewsLength || 0;
 
   useEffect(() => {
+    dispatch(getAllProductsShop(id));
     setIsLoading(true);
     axios
       .get(`${server}/shop/get-shop-info/${id}`)
@@ -49,7 +68,9 @@ const ShopInfo = ({ isOwner }) => {
             </div>
             <h3 className="text-center py-2 text-[20px]">{data.name}</h3>
             <p className="text-[16px] text-[#000000a6] p-[10px] flex items-center">
-              {data.description}
+              {data?.description?.length > 60
+                ? data.description.slice(0, 60) + "..."
+                : data.description}
             </p>
           </div>
           <div className="p-3">
@@ -62,11 +83,11 @@ const ShopInfo = ({ isOwner }) => {
           </div>
           <div className="p-3">
             <h5 className="font-[600]">Total Products</h5>
-            <h4 className="text-[#000000a6]">10</h4>
+            <h4 className="text-[#000000a6]">{products?.length}</h4>
           </div>
           <div className="p-3">
             <h5 className="font-[600]">Shop Ratings</h5>
-            <h4 className="text-[#000000b0]">4/5</h4>
+            <h4 className="text-[#000000b0]">{averageRatings}/5</h4>
           </div>
           <div className="p-3">
             <h5 className="font-[600]">Joined On</h5>

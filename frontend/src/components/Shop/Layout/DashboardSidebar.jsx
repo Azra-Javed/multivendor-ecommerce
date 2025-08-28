@@ -69,14 +69,14 @@ const DashboardSidebar = ({ active }) => {
       id: 11,
       label: "Settings",
       icon: CiSettings,
-      path: "/dashboard-settings",
+      path: "/settings",
     },
   ];
 
   return (
     <div className="w-full h-[89vh] bg-white shadow-sm overflow-y-scroll sticky top-0 left-0 z-10">
       {sidebarItems.map(({ id, label, icon: Icon, path }) => (
-        <div key={id} className="w-full flex items-center p-4">
+        <div key={id} className="w-full flex items-center p-4 ">
           <Link to={path} className="w-full flex items-center">
             <Icon
               size={30}

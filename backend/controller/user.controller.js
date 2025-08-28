@@ -202,7 +202,6 @@ const updateUser = catchAsyncErrors(async (req, res, next) => {
 
 const updateAvatar = catchAsyncErrors(async (req, res, next) => {
   const existUser = await User.findById(req.user.id);
-  console.log(existUser.avatar);
 
   if (existUser.avatar) {
     const existsAvatarPath = path.join(
@@ -220,7 +219,7 @@ const updateAvatar = catchAsyncErrors(async (req, res, next) => {
   const fileUrl = req.file.filename;
 
   const user = await User.findByIdAndUpdate(
-    fs.req.user.id,
+    req.user.id,
     { avatar: fileUrl },
     { new: true }
   );

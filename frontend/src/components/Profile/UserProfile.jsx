@@ -3,7 +3,10 @@ import { backend_url, server } from "../../server";
 import styles from "../../styles/style";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUserInformation } from "../../redux/features/userSlice";
+import {
+  loadUser,
+  updateUserInformation,
+} from "../../redux/features/userSlice";
 import { toast } from "react-toastify";
 import axios from "axios";
 const UserProfile = () => {
@@ -43,7 +46,8 @@ const UserProfile = () => {
         withCredentials: true,
       })
       .then((res) => {
-        window.location.reload();
+        dispatch(loadUser());
+        toast.success("avatar updated successfully!");
       })
       .catch((error) => {
         toast.error(error);
@@ -55,7 +59,11 @@ const UserProfile = () => {
       <div className="flex justify-center w-full">
         <div className="relative">
           <img
-            src={`${backend_url}${user?.avatar}`}
+            src={
+              avatar
+                ? URL.createObjectURL(avatar)
+                : `${backend_url}${user?.avatar}`
+            }
             alt=""
             className="w-[150px] h-[150px] rounded-full object-cover border-[3px] border-[#3ad132]"
           />

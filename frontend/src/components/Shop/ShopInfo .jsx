@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { backend_url, server } from "../../server";
 import Loader from "../Layout/Loader";
 import styles from "../../styles/style";
@@ -76,11 +76,12 @@ const ShopInfo = ({ isOwner }) => {
           </div>
           {isOwner && (
             <div className="py-3 px-4">
-              <div
+              <Link
                 className={`${styles.button} !w-full !h-[42px] !rounded-[5px]`}
+                to="/settings"
               >
                 <span className="text-white">Edit Shop</span>
-              </div>
+              </Link>
               <div
                 className={`${styles.button} !w-full !h-[42px] !rounded-[5px]`}
                 onClick={logoutHandler}

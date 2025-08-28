@@ -188,6 +188,74 @@ const getShopInfo = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+//@desc: update shop avatar
+//@route: PUT /api/vs/shop/update-avatar
+
+const updateAvatar = catchAsyncErrors(async (req, res, next) => {
+  const existShop = await Shop.findById(req.seller._id);
+  console.log(existShop.avatar);
+  console.log(req.body.image);
+
+  if (existShop.avatar) {
+    const existsAvatarPath = path.join(
+      __dirname,
+      "..",
+      "uploads",
+      existShop.avatar
+    );
+
+    if (fs.existsSync(existsAvatarPath)) {
+      fs.unlinkSync(existsAvatarPath);
+    }
+  }
+
+  const fileUrl = req.file.filename;
+
+  const seller = await Shop.findByIdAndUpdate(
+    req.seller._id,
+    { avatar: fileUrl },
+    { new: true }
+  );
+
+  res.status(200).json({
+    success: true,
+    seller,
+  });
+
+  try {
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+//@desc: update seller info
+//@route: PUT /api/user/v2/update-user-info
+const updateSeller = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const { name, description, address, phoneNumber, zipCode } = req.body;
+
+    const shop = await Shop.findOne(req.seller._id);
+
+    if (!shop) {
+      return next(new ErrorHandler("Shop not found", 400));
+    }
+
+    shop.name = name;
+    shop.description = description;
+    shop.address = address;
+    shop.phoneNumber = phoneNumber;
+    shop.zipCode = zipCode;
+    await shop.save();
+
+    res.status(200).json({
+      success: true,
+      shop,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
 module.exports = {
   createShop,
   activateShop,
@@ -195,4 +263,6 @@ module.exports = {
   getSeller,
   logoutShop,
   getShopInfo,
+  updateAvatar,
+  updateSeller,
 };

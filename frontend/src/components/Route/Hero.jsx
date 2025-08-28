@@ -1,6 +1,5 @@
-import React from "react";
-import styles from "../../styles/style";
 import { Link } from "react-router-dom";
+import styles from "../../styles/style";
 
 const Hero = () => {
   return (

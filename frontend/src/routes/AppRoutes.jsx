@@ -32,6 +32,7 @@ import {
   ShopAllCoupons,
   ShopPreviewPage,
   ShopAllRefunds,
+  ShopSettingsPage,
 } from "./shopRoutes";
 
 import {
@@ -139,6 +140,14 @@ export const router = (stripeApiKey) =>
       ),
     },
 
+    {
+      path: "/settings",
+      element: (
+        <SellerProtectedRoute>
+          <ShopSettingsPage />
+        </SellerProtectedRoute>
+      ),
+    },
     {
       path: "/shop/preview/:id",
       element: <ShopPreviewPage />,

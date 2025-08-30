@@ -34,6 +34,7 @@ import {
   ShopAllRefunds,
   ShopSettingsPage,
   ShopWithDrawMoneyPage,
+  ShopInboxPage,
 } from "./shopRoutes";
 
 import {
@@ -234,6 +235,14 @@ export const router = (stripeApiKey) =>
       element: (
         <SellerProtectedRoute>
           <ShopWithDrawMoneyPage />
+        </SellerProtectedRoute>
+      ),
+    },
+    {
+      path: "/dashboard-messages",
+      element: (
+        <SellerProtectedRoute>
+          <ShopInboxPage />
         </SellerProtectedRoute>
       ),
     },

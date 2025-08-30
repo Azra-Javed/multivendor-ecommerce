@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { addToCart } from "../../redux/features/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProductsShop } from "../../redux/actions/product.actions";
-import { backend_url } from "../../server";
+import { backend_url, server } from "../../server";
 import {
   addToWishlist,
   removeFromWishlist,
@@ -17,11 +17,14 @@ import {
   AiOutlineShoppingCart,
 } from "react-icons/ai";
 import Ratings from "./Ratings";
+import axios from "axios";
 
 const ProductDetails = ({ data }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
   const { cart } = useSelector((state) => state.cart);
   const { products } = useSelector((state) => state.products);
+  const { user, isAuthenticated, loading } = useSelector((state) => state.user);
+  const { seller } = useSelector((state) => state.seller);
 
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
@@ -52,8 +55,25 @@ const ProductDetails = ({ data }) => {
     setCount(count + 1);
   };
 
-  const handleMessageSubmit = () => {
-    navigate("/inbox?conversation=50ehfw985939jdfejw4u43");
+  const handleMessageSubmit = async (e) => {
+    if (isAuthenticated) {
+      const groupTitle = data?._id + user._id;
+      const userId = user._id;
+      const sellerId = data.shop._id;
+
+      await axios
+        .post(`${server}/conversation/create-conversation`, {
+          groupTitle,
+          userId,
+          sellerId,
+        })
+        .then((res) => navigate(`/conversation/${res.data.conversation._id}`))
+        .catch((error) => {
+          toast.error(error.response.data.message);
+        });
+    } else {
+      toast.error("Please login to start conversation");
+    }
   };
 
   const addToCartHandler = (id) => {
@@ -84,7 +104,7 @@ const ProductDetails = ({ data }) => {
 
   const totalReviewsLength =
     products &&
-    products.reduce((acc, product) => acc + product.reviews.length, 0);
+    products.reduce((acc, product) => acc + product.reviews?.length, 0);
 
   const totalRatings =
     products &&
@@ -299,24 +319,26 @@ const ProductDetailsInfo = ({
         {active === 2 ? (
           <div className="w-full py-4 min-h-[40vh] flex flex-col items-center overflow-y-auto">
             {data &&
-              data.reviews.map((item, index) => (
+              data?.reviews?.map((item, index) => (
                 <div className="w-full flex my-2">
                   <img
-                    src={`${backend_url}/${item.user.avatar}`}
+                    src={`${backend_url}/${item?.user?.avatar}`}
                     className="h-[50px] w-[50px] rounded-full"
                   />
                   <div className="pl-2">
                     <div className="w-full flex items-center">
-                      <h1 className="font-[500] mr-3">{item.user.name}</h1>
+                      <h1 className="font-[500] mr-3">{item?.user?.name}</h1>
                       <Ratings rating={data?.ratings} />
                     </div>
-                    <p>{item.comment}</p>
+                    <p>{item?.comment}</p>
                   </div>
                 </div>
               ))}
-
-            <div className="flex items-center justify-center">
-              {data && data.reviews.length === 0 && <h5>No reviews yet</h5>}
+            <div
+              className=" 
+            flex !items-center justify-center"
+            >
+              {data && data?.reviews?.length === 0 && <h5>No reviews yet</h5>}
             </div>
           </div>
         ) : null}
@@ -367,7 +389,7 @@ const ProductDetailsInfo = ({
                   Total Reviews:{" "}
                   <span className="font-[500] ">{totalReviewsLength}</span>
                 </h5>
-                <Link to="/">
+                <Link to={`/shop/${data?.shop._id}`}>
                   <div
                     className={`${styles.button} !rounded-[4px] !h-[39.5px] mt-3`}
                   >

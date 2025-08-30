@@ -10,6 +10,7 @@ const event = require("./routes/event.routes");
 const coupon = require("./routes/couponCode.routes");
 const payment = require("./routes/payment.routes");
 const order = require("./routes/order.routes");
+const conversation = require("./routes/conversation.routes");
 
 const app = express();
 app.use(express.json());
@@ -30,6 +31,7 @@ app.use("/api/v2/event", event);
 app.use("/api/v2/coupon", coupon);
 app.use("/api/v2/payment", payment);
 app.use("/api/v2/order", order);
+app.use("/api/v2/conversation", conversation);
 
 // error handling
 app.use(ErrorHandler);

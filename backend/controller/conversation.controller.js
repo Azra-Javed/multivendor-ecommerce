@@ -1,5 +1,4 @@
 const Conversation = require("../model/conversation.model");
-const ErrorHanler = require("../utils/ErrorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/ErrorHandler");
 
@@ -30,7 +29,7 @@ const createConversation = catchAsyncErrors(async (req, res, next) => {
       });
     }
   } catch (error) {
-    return next(new ErrorHanler(error.response.message), 500);
+    return next(new ErrorHandler(error.message), 500);
   }
 });
 
@@ -43,9 +42,29 @@ const getSellerConversation = catchAsyncErrors(async (req, res, next) => {
       participants: { $in: [req.params.id] },
     }).sort({ updatedAt: -1, createdAt: -1 });
 
-    res.status(201).json({
+    res.status(200).json({
       sucess: true,
       conversations,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+//@desc create new message
+//@route POST /api/v2/conversation/update-last-message.:id
+const updateLastMessage = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const { lastMessage, lastMessageId } = req.body;
+
+    const conversation = await Conversation.findByIdAndUpdate(req.params.id, {
+      lastMessage,
+      lastMessageId,
+    });
+
+    res.status(200).json({
+      success: true,
+      conversation,
     });
   } catch (error) {
     return next(new ErrorHandler(error.message, 500));
@@ -55,4 +74,5 @@ const getSellerConversation = catchAsyncErrors(async (req, res, next) => {
 module.exports = {
   createConversation,
   getSellerConversation,
+  updateLastMessage,
 };

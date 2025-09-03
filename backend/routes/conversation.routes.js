@@ -3,6 +3,7 @@ const { isSellerAuthenticated } = require("../middleware/auth");
 const {
   createConversation,
   getSellerConversation,
+  updateLastMessage,
 } = require("../controller/conversation.controller");
 
 const router = express.Router();
@@ -13,4 +14,5 @@ router.get(
   isSellerAuthenticated,
   getSellerConversation
 );
+router.put("/update-last-message/:id", updateLastMessage);
 module.exports = router;

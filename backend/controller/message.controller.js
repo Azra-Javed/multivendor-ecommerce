@@ -7,7 +7,7 @@ const Conversation = require("../model/conversation.model");
 //@route POST /api/v2/message/create-message
 const createMessage = catchAsyncErrors(async (req, res, next) => {
   try {
-    const { conversationId, sender } = req.body;
+    const { conversationId, sender, text } = req.body;
 
     const images = req.files ? req.files.map((file) => file.name) : [];
 
@@ -15,13 +15,31 @@ const createMessage = catchAsyncErrors(async (req, res, next) => {
       conversationId,
       sender,
       images,
+      text,
     });
 
     await message.save();
-    res.status(201).json({ sucess: true, message });
+    res.status(201).json({ success: true, message });
   } catch (error) {
-    return next(new ErrorHandler(error.response.message, 500));
+    return next(new ErrorHandler(error.message, 500));
   }
 });
 
-module.exports = { createMessage };
+//@desc get all messages by conversation id
+//@route POST /api/v2/message/get-all-messages
+
+const getAllMessages = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const message = await Message.find({
+      conversationId: req.params.id,
+    });
+
+    res.status(200).json({
+      success: true,
+      message,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+module.exports = { createMessage, getAllMessages };

@@ -1,10 +1,14 @@
 const express = require("express");
-const { upload } = require("multer");
+const { upload } = require("../config/multer");
 
-const { createMessage } = require("../controller/message.controller");
+const {
+  createMessage,
+  getAllMessages,
+} = require("../controller/message.controller");
 
 const router = express.Router();
 
 router.post("/create-message", upload.array("images"), createMessage);
+router.get("/get-all-messages/:id", getAllMessages);
 
 module.exports = router;

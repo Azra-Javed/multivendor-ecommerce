@@ -333,6 +333,21 @@ const updatePassword = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+//@desc: find userInfo by userid
+//@route: PUT /api/user/v2/update-user-password
+const getUserInfo = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
 module.exports = {
   createUser,
   userLogin,
@@ -344,4 +359,5 @@ module.exports = {
   upddateAddress,
   deleteUserAddress,
   updatePassword,
+  getUserInfo,
 };

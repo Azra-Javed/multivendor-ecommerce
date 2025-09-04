@@ -22,19 +22,23 @@ const DashboardContent = () => {
   useEffect(() => {
     dispatch(getShopAllOrders(seller._id));
     dispatch(getAllProductsShop(seller._id));
+  }, [dispatch, seller._id]);
 
-    const orderData =
-      shopOrders && shopOrders.filter((item) => item.status === "Delivered");
-    setDeliveredOrder(orderData);
-  }, [dispatch]);
+  useEffect(() => {
+    if (shopOrders) {
+      const orderData = shopOrders.filter(
+        (item) => item.status === "Delivered"
+      );
+      setDeliveredOrder(orderData);
+    }
+  }, [shopOrders]);
 
-  const totalEarningWithoutDiscount =
-    deliveredOrder &&
-    deliveredOrder.reduce((acc, item) => acc + item.totalPrice, 0);
+  const totalEarningWithoutDiscount = deliveredOrder
+    ? deliveredOrder.reduce((acc, item) => acc + item.totalPrice, 0)
+    : 0;
 
   const serviceCharge = totalEarningWithoutDiscount * 0.1;
-  const availableBalance =
-    totalEarningWithoutDiscount - serviceCharge.toFixed(2);
+  const availableBalance = totalEarningWithoutDiscount - serviceCharge;
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },

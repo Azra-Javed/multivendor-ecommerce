@@ -53,7 +53,7 @@ const getProducts = catchAsyncErrors(async (req, res, next) => {
 //@route: GET /api/vs/product/get-all-products
 const getAllProducts = catchAsyncErrors(async (req, res, next) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find().sort({ createdAt: -1 });
 
     res.status(201).json({
       success: true,

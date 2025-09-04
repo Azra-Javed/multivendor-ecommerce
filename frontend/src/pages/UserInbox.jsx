@@ -1,19 +1,18 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import Header from "../components/Layout/Header";
 import { useSelector } from "react-redux";
-import axios from "axios";
-import { backend_url, server } from "../../server";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { AiOutlineArrowRight, AiOutlineSend } from "react-icons/ai";
-import styles from "../../styles/style";
-import { TfiGallery } from "react-icons/tfi";
 import { format } from "timeago.js";
 import socketIO from "socket.io-client";
+import { backend_url, server } from "../server";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { AiOutlineArrowRight, AiOutlineSend } from "react-icons/ai";
+import { TfiGallery } from "react-icons/tfi";
 const ENDPOINT = "http://localhost:5000/";
 const socket = socketIO(ENDPOINT, { transports: ["websocket"] });
 
-const DashboardMessages = () => {
-  const { seller } = useSelector((state) => state.seller);
+const UserInbox = () => {
+  const { user } = useSelector((state) => state.user);
   const [conversations, setConversations] = useState([]);
   const [open, setOpen] = useState(false);
   const [arrivalMessage, setarrivalMessage] = useState(null);
@@ -42,15 +41,25 @@ const DashboardMessages = () => {
   }, [arrivalMessage, currentChat]);
 
   useEffect(() => {
-    axios
-      .get(`${server}/conversation/get-seller-conversation/${seller._id}`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        setConversations(res.data.conversations);
-      })
-      .catch((error) => console.log(error));
-  }, [seller]);
+    const getConversation = async () => {
+      try {
+        const response = await axios.get(
+          `${server}/conversation/get-user-conversation/${user?._id}`,
+          {
+            withCredentials: true,
+          }
+        );
+        setConversations(response.data.conversations);
+        console.log("conversation:", response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (user?._id) {
+      getConversation();
+    }
+  }, [user, messages]);
 
   // Get all messages
   useEffect(() => {
@@ -65,27 +74,25 @@ const DashboardMessages = () => {
       }
     };
 
-    if (seller?._id && currentChat) {
+    if (user?._id && currentChat) {
       getMessage();
     }
-  }, [currentChat, seller?._id]);
+  }, [currentChat, user?._id]);
 
   // Create new message
   const sendMessageHandler = async (e) => {
     e.preventDefault();
 
     const message = {
-      sender: seller._id,
+      sender: user._id,
       text: newMessage,
       conversationId: currentChat._id,
     };
 
-    const receiverId = currentChat?.participants?.find(
-      (i) => i.id !== seller?._id
-    );
+    const receiverId = currentChat?.participants?.find((i) => i !== user?._id);
 
     socket.emit("sendMessage", {
-      senderId: seller._id,
+      senderId: user._id,
       receiverId,
       text: newMessage,
     });
@@ -107,7 +114,7 @@ const DashboardMessages = () => {
   const updateLastMessage = async () => {
     socket.emit("updateLastMessage", {
       lastMessage: newMessage,
-      lastMessageId: seller._id,
+      lastMessageId: user._id,
     });
 
     try {
@@ -115,7 +122,7 @@ const DashboardMessages = () => {
         `${server}/conversation/update-last-message/${currentChat._id}`,
         {
           lastMessage: newMessage,
-          lastMessageId: seller._id,
+          lastMessageId: user._id,
         }
       );
       console.log(res.data.conversation);
@@ -127,30 +134,34 @@ const DashboardMessages = () => {
 
   // Online users
   useEffect(() => {
-    if (seller) {
-      const sellerId = seller?._id;
-      console.log("seller", sellerId);
+    if (user) {
+      const userId = user?._id;
 
-      socket.emit("addUser", sellerId);
+      socket.emit("addUser", userId);
       socket.on("getUsers", (data) => {
         setOnlineUsers(data);
       });
     }
 
-    console.log("onlineusers", onlineUsers);
-  }, [seller]);
+    console.log(onlineUsers);
+  }, [user]);
 
-  //  online check function
   const onlineCheck = (chat) => {
     const chatMembers = chat.participants.find(
-      (member) => member !== seller?._id
+      (member) => member !== user?._id
     );
-    const online = onlineUsers.find((user) => user?.userId === chatMembers);
+    const online = onlineUsers.find(
+      (onlineUser) => onlineUser.userId === chatMembers
+    );
+
     return !!online;
   };
 
+  console.log("164", conversations);
+
   return (
-    <div className="w-[90%] bg-white m-5 h-[85vh] overflow-y-auto rounded">
+    <div className="w-full">
+      <Header />
       {!open && (
         <>
           <h1 className="text-center text-[30px] py-3 font-family-poppins">
@@ -164,7 +175,7 @@ const DashboardMessages = () => {
               key={index}
               setOpen={setOpen}
               setCurrentChat={setCurrentChat}
-              me={seller._id}
+              me={user._id}
               userData={userData}
               setUserData={setUserData}
               online={onlineCheck(item)}
@@ -177,13 +188,13 @@ const DashboardMessages = () => {
       )}
 
       {open && (
-        <SellerInbox
+        <UserInboxChat
           setOpen={setOpen}
           newMessage={newMessage}
           setNewMessage={setNewMessage}
           sendMessageHandler={sendMessageHandler}
           messages={messages}
-          sellerId={seller._id}
+          userId={user._id}
           userData={userData}
           activeStatus={activeStatus}
         />
@@ -205,21 +216,19 @@ const MessageList = ({
   activeChatId,
   setActiveChatId,
 }) => {
-  const [user, setUser] = useState([]);
   const navigate = useNavigate();
-  console.log("online", online);
-
+  const [user, setUser] = useState([]);
   const handleClick = (id) => {
-    navigate(`/dashboard-messages?${id}`);
+    navigate(`?${id}`);
   };
 
   useEffect(() => {
     setActiveStatus(online);
-    const userId = data.participants.find((user) => user !== me);
+    const sellerId = data.participants.find((user) => user != me);
     const getUser = async () => {
       try {
-        const res = await axios.get(`${server}/user/user-info/${userId}`);
-        setUser(res.data.user);
+        const res = await axios.get(`${server}/shop/get-shop-info/${sellerId}`);
+        setUser(res?.data?.shop);
       } catch (error) {
         console.log(error);
       }
@@ -243,7 +252,7 @@ const MessageList = ({
     >
       <div className="relative">
         <img
-          src={`${backend_url}/${user?.avatar}`}
+          src={`${backend_url}${user?.avatar}`}
           alt=""
           className="w-[50px] h-[50px] rounded-full"
         />
@@ -257,7 +266,7 @@ const MessageList = ({
         <p className="text-[16px] text-[#000c]">
           {data?.lastMessageId !== user?._id
             ? "You: "
-            : user?.name?.split("")[0] + ": "}
+            : user?.name?.split(" ")[0] + ": "}
           {data?.lastMessage}
         </p>
       </div>
@@ -265,13 +274,14 @@ const MessageList = ({
   );
 };
 
-const SellerInbox = ({
+//  UserInboxChat component
+const UserInboxChat = ({
   setOpen,
   newMessage,
   setNewMessage,
   sendMessageHandler,
   messages,
-  sellerId,
+  userId,
   userData,
   activeStatus,
 }) => {
@@ -308,10 +318,10 @@ const SellerInbox = ({
             <div
               key={index}
               className={`flex w-full my-2 ${
-                item.sender === sellerId ? "justify-end" : "justify-start"
+                item.sender === userId ? "justify-end" : "justify-start"
               }`}
             >
-              {item.sender !== sellerId && (
+              {item.sender !== userId && (
                 <img
                   src={`${backend_url}/${userData?.avatar}`}
                   alt=""
@@ -342,7 +352,7 @@ const SellerInbox = ({
           <input
             type="text"
             placeholder="Enter your message..."
-            className={`${styles.input}`}
+            className="w-full border border-gray-300 rounded px-3 py-2 pr-10"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             required
@@ -360,4 +370,4 @@ const SellerInbox = ({
   );
 };
 
-export default DashboardMessages;
+export default UserInbox;

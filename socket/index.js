@@ -21,7 +21,9 @@ app.get("/", (req, res) => {
 
 let users = [];
 const addUser = (userId, socketId) => {
-  !users.some((user) => user.userId) && users.push({ userId, socketId });
+  if (!users.some((user) => user.userId === userId)) {
+    users.push({ userId, socketId });
+  }
 };
 
 // Define a message format
@@ -94,7 +96,7 @@ io.on("connection", (socket) => {
   });
 
   // disconnect
-  socket.on("disconnect", (socket) => {
+  socket.on("disconnect", () => {
     console.log("a user disconnected!");
     removeUser(socket.id);
     io.emit("getUsers", users);

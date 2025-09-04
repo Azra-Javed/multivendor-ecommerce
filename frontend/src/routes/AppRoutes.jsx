@@ -18,6 +18,7 @@ import {
   OrderSuccessPage,
   PaymentPage,
   TrackOrderPage,
+  UserInbox,
 } from "./userRoutes";
 
 import {
@@ -98,6 +99,15 @@ export const router = (stripeApiKey) =>
       element: (
         <UserProtectedRoute>
           <ProfilePage />
+        </UserProtectedRoute>
+      ),
+    },
+
+    {
+      path: "/inbox",
+      element: (
+        <UserProtectedRoute>
+          <UserInbox />
         </UserProtectedRoute>
       ),
     },

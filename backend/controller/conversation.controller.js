@@ -51,6 +51,24 @@ const getSellerConversation = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+//@desc get seller conversation
+//@route POST /api/v2/message/get-seller-conversation
+
+const getUserConversation = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const conversations = await Conversation.find({
+      participants: { $in: [req.params.id] },
+    }).sort({ updatedAt: -1, createdAt: -1 });
+
+    res.status(200).json({
+      sucess: true,
+      conversations,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
 //@desc create new message
 //@route POST /api/v2/conversation/update-last-message.:id
 const updateLastMessage = catchAsyncErrors(async (req, res, next) => {
@@ -75,4 +93,5 @@ module.exports = {
   createConversation,
   getSellerConversation,
   updateLastMessage,
+  getUserConversation,
 };

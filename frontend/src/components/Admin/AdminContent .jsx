@@ -56,23 +56,11 @@ const AdminContent = () => {
     },
 
     {
-      field: " ",
-      flex: 1,
-      minWidth: 150,
-      headerName: "",
+      field: "createdAt",
+      headerName: "Order Date",
       type: "number",
-      sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Link to={`/user/order/${params.id}`}>
-              <Button>
-                <AiOutlineArrowRight size={20} />
-              </Button>
-            </Link>
-          </>
-        );
-      },
+      minWidth: 130,
+      flex: 0.7,
     },
   ];
 
@@ -85,6 +73,7 @@ const AdminContent = () => {
         itemsQty: item.cart.length,
         total: item.totalPrice + "$",
         status: item.status,
+        createdAt: item.createdAt.slice(0, 10),
       });
     });
 

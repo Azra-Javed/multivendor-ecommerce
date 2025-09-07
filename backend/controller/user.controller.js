@@ -364,7 +364,7 @@ const getAdminUsers = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-//@desc: delete user
+//@desc: delete user -> admin
 //@route: DELETe /api/user/v2/delete-user:id
 
 const deleteUser = catchAsyncErrors(async (req, res, next) => {

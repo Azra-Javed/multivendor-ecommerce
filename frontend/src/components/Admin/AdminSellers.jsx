@@ -1,36 +1,37 @@
 import { Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
-import { AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { getAdminUsers } from "../../redux/features/userSlice";
 import Loader from "../Layout/Loader";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { server } from "../../server";
 import styles from "../../styles/style";
 import { RxCross1 } from "react-icons/rx";
+import { getAdminSellers } from "../../redux/features/sellerSlice";
+import { Link } from "react-router-dom";
 
-const AdminUsers = () => {
-  const { adminUsers, isLoading } = useSelector((state) => state.user);
+const adminSellers = () => {
+  const { adminSellers, isLoading } = useSelector((state) => state.seller);
   const [open, setOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAdminUsers());
+    dispatch(getAdminSellers());
   }, [dispatch]);
 
   const handleDelete = async () => {
     setOpen(false);
     axios
-      .delete(`${server}/user/delete-user/${deleteId}`, {
+      .delete(`${server}/shop/delete-seller/${deleteId}`, {
         withCredentials: true,
       })
       .then((res) => {
         toast.success(res.data.message);
-        dispatch(getAdminUsers());
+        dispatch(getAdminSellers());
         setOpen(false);
       })
       .catch((err) => {
@@ -40,7 +41,7 @@ const AdminUsers = () => {
   };
 
   const columns = [
-    { field: "id", headerName: "User ID", minWidth: 150, flex: 0.7 },
+    { field: "id", headerName: "Seller ID", minWidth: 150, flex: 0.7 },
 
     {
       field: "name",
@@ -58,8 +59,8 @@ const AdminUsers = () => {
     },
 
     {
-      field: "role",
-      headerName: "User Role",
+      field: "address",
+      headerName: "Seller Address",
       type: "text",
       minWidth: 130,
       flex: 0.8,
@@ -74,10 +75,30 @@ const AdminUsers = () => {
     },
 
     {
+      field: "  ",
+      flex: 1,
+      minWidth: 150,
+      headerName: "Preview Shop",
+      type: "number",
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <>
+            <Link to={`/shop/preview/${params.id}`}>
+              <Button>
+                <AiOutlineEye size={20} />
+              </Button>
+            </Link>
+          </>
+        );
+      },
+    },
+
+    {
       field: " ",
       flex: 1,
       minWidth: 150,
-      headerName: "Delete User",
+      headerName: "Delete Shop",
       type: "number",
       sortable: false,
       renderCell: (params) => {
@@ -99,13 +120,13 @@ const AdminUsers = () => {
 
   const row = [];
 
-  adminUsers &&
-    adminUsers.forEach((item) => {
+  adminSellers &&
+    adminSellers.forEach((item) => {
       row.push({
         id: item._id,
         name: item.name,
         email: item.email,
-        role: item.role,
+        address: item.address,
         joinedAt: item.createdAt.slice(0, 10),
       });
     });
@@ -119,7 +140,7 @@ const AdminUsers = () => {
           <div className="w-full flex justify-center pt-5">
             <div className="w-[98%]">
               <h3 className="text-[22px] font-family-poppins pb-2">
-                All Users
+                All Sellers
               </h3>
               <div className="w-full  pt-1 mt-10 bg-white rounded">
                 <DataGrid
@@ -128,10 +149,6 @@ const AdminUsers = () => {
                   pageSize={10}
                   disableRowSelectionOnClick
                   style={{ minHeight: "45vh" }}
-                  initialState={{
-                    pagination: { paginationModel: { pageSize: 10, page: 0 } },
-                  }}
-                  pageSizeOptions={[8, 9, 10]}
                 />
               </div>
               {open && (
@@ -145,7 +162,7 @@ const AdminUsers = () => {
                       />
                     </div>
                     <h3 className="text-[25px] text-center py-5 font-family-poppins text-[#363636]">
-                      Are you sure to delete the user?
+                      Are you sure to delete the seller?
                     </h3>
                     <div className="flex items-center justify-center">
                       <div
@@ -172,4 +189,4 @@ const AdminUsers = () => {
   );
 };
 
-export default AdminUsers;
+export default adminSellers;

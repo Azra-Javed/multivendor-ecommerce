@@ -10,18 +10,18 @@ import { AiOutlineSetting } from "react-icons/ai";
 
 const AdminSidebar = ({ active }) => {
   const sidebarItems = [
-    { id: 1, label: "Dashboard", icon: RxDashboard, path: "/dashboard" },
+    { id: 1, label: "Dashboard", icon: RxDashboard, path: "/admin/dashboard" },
     {
       id: 2,
       label: "All Orders",
       icon: FiShoppingBag,
-      path: "/dashboard-orders",
+      path: "/admin/orders",
     },
     {
       id: 3,
       label: "All Sellers",
       icon: GrWorkshop,
-      path: "/admin-sellers",
+      path: "/admin/sellers",
     },
 
     {

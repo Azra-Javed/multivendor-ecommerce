@@ -39,15 +39,17 @@ const sellerSlice = createSliceWithThunks({
         fulfilled: (state, action) => {
           state.isLoading = false;
           state.seller = action.payload.seller;
+          state.isSellerAuthenticated = true;
         },
 
         rejected: (state, action) => {
           state.isLoading = false;
           state.error = action.payload;
+          state.isSellerAuthenticated = false;
         },
       }
     ),
-    // get all sellersfor admin
+    // get all sellers for admin
     getAdminSellers: create.asyncThunk(
       async (_, { rejectWithValue }) => {
         try {

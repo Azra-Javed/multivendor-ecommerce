@@ -272,6 +272,27 @@ const getAdminSellers = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+//@desc: delete seller -> admin
+//@route: DELETe /api/shop/v2/delete-seler:id
+
+const deleteSeller = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const seller = await Shop.findById(req.params.id);
+
+    if (!seller) {
+      return next(new ErrorHandler("Seller not exist!", 404));
+    }
+
+    await Shop.deleteOne({ _id: req.params.id });
+    res.status(200).json({
+      success: true,
+      message: "Seller deleted Successfull!",
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
 module.exports = {
   createShop,
   activateShop,
@@ -282,4 +303,5 @@ module.exports = {
   updateAvatar,
   updateSeller,
   getAdminSellers,
+  deleteSeller,
 };

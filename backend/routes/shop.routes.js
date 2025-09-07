@@ -9,6 +9,7 @@ const {
   updateAvatar,
   updateSeller,
   getAdminSellers,
+  deleteSeller,
 } = require("../controller/shop.controller");
 const {
   isSellerAuthenticated,
@@ -36,6 +37,12 @@ router.get(
   isAuthenticated,
   isAdmin("Admin"),
   getAdminSellers
+);
+router.delete(
+  "/delete-seller/:id",
+  isAuthenticated,
+  isAdmin("Admin"),
+  deleteSeller
 );
 
 module.exports = router;

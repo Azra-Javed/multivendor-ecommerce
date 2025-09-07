@@ -38,7 +38,12 @@ import {
   ShopInboxPage,
 } from "./shopRoutes";
 
-import { AdminDashboardPage, AdminUsersPage } from "./adminRoutes";
+import {
+  AdminDashboardPage,
+  AdminUsersPage,
+  AdminSellersPage,
+  AdminOrdersPage,
+} from "./adminRoutes";
 
 import {
   UserProtectedRoute,
@@ -274,6 +279,22 @@ export const router = (stripeApiKey) =>
       element: (
         <AdminProtectedRoute>
           <AdminUsersPage />
+        </AdminProtectedRoute>
+      ),
+    },
+    {
+      path: "/admin/sellers",
+      element: (
+        <AdminProtectedRoute>
+          <AdminSellersPage />
+        </AdminProtectedRoute>
+      ),
+    },
+    {
+      path: "/admin/orders",
+      element: (
+        <AdminProtectedRoute>
+          <AdminOrdersPage />
         </AdminProtectedRoute>
       ),
     },

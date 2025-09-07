@@ -5,10 +5,15 @@ const {
   updateOrderStatus,
   requestRefund,
   acceptRefund,
+  getAdminOrders,
 } = require("../controller/order.controller");
 
 const express = require("express");
-const { isSellerAuthenticated } = require("../middleware/auth");
+const {
+  isSellerAuthenticated,
+  isAdmin,
+  isAuthenticated,
+} = require("../middleware/auth");
 const router = express.Router();
 
 router.post("/create-order", createOrder);
@@ -21,5 +26,6 @@ router.patch(
 );
 router.put("/order-refund/:id", requestRefund);
 router.patch("/order-refund-success/:id", isSellerAuthenticated, acceptRefund);
+router.get("/admin-orders", isAuthenticated, isAdmin("Admin"), getAdminOrders);
 
 module.exports = router;

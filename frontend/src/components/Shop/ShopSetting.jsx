@@ -5,7 +5,7 @@ import styles from "../../styles/style";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { loadSeller } from "../../redux/actions/seller.actions";
+import { loadSeller } from "../../redux/features/sellerSlice";
 
 const ShopSetting = () => {
   const { seller, error } = useSelector((state) => state.seller);

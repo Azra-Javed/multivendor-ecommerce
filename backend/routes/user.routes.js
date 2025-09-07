@@ -11,8 +11,10 @@ const {
   deleteUserAddress,
   updatePassword,
   getUserInfo,
+  getAdminUsers,
+  deleteUser,
 } = require("../controller/user.controller");
-const { isAuthenticated } = require("../middleware/auth");
+const { isAuthenticated, isAdmin } = require("../middleware/auth");
 const { upload } = require("../config/multer");
 const router = express.Router();
 
@@ -32,5 +34,12 @@ router.put("/update-user-addresses", isAuthenticated, upddateAddress);
 router.delete("/delete-user-address/:id", isAuthenticated, deleteUserAddress);
 router.put("/update-user-password", isAuthenticated, updatePassword);
 router.get("/user-info/:id", getUserInfo);
+router.get("/admin-users", isAuthenticated, isAdmin("Admin"), getAdminUsers);
+router.delete(
+  "/delete-user/:id",
+  isAuthenticated,
+  isAdmin("Admin"),
+  deleteUser
+);
 
 module.exports = router;

@@ -38,9 +38,12 @@ import {
   ShopInboxPage,
 } from "./shopRoutes";
 
+import { AdminDashboardPage, AdminUsersPage } from "./adminRoutes";
+
 import {
   UserProtectedRoute,
   SellerProtectedRoute,
+  AdminProtectedRoute,
 } from "./protectedRoutes/protectedRoutes";
 
 import { Elements } from "@stripe/react-stripe-js";
@@ -254,6 +257,24 @@ export const router = (stripeApiKey) =>
         <SellerProtectedRoute>
           <ShopInboxPage />
         </SellerProtectedRoute>
+      ),
+    },
+
+    // Admin Routes
+    {
+      path: "/admin/dashboard",
+      element: (
+        <AdminProtectedRoute>
+          <AdminDashboardPage />
+        </AdminProtectedRoute>
+      ),
+    },
+    {
+      path: "/admin/users",
+      element: (
+        <AdminProtectedRoute>
+          <AdminUsersPage />
+        </AdminProtectedRoute>
       ),
     },
   ]);

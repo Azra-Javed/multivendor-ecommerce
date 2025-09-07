@@ -184,6 +184,22 @@ const acceptRefund = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+//@desc: get all orders for admin
+//@route: GET /api/v2/order/admin-orders
+
+const getAdminOrders = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const orders = await Order.find().sort({ deliveredAt: -1, createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      orders,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
 module.exports = {
   createOrder,
   getAllOrders,
@@ -191,4 +207,5 @@ module.exports = {
   updateOrderStatus,
   requestRefund,
   acceptRefund,
+  getAdminOrders,
 };

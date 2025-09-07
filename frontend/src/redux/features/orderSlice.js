@@ -4,6 +4,7 @@ import axios from "axios";
 
 const initialState = {
   isLoading: true,
+  adminOrders: [],
 };
 
 const createSliceWithThunks = buildCreateSlice({
@@ -77,8 +78,41 @@ const orderSlice = createSliceWithThunks({
         },
       }
     ),
+
+    // get all orders for admin
+
+    getAdminOrders: create.asyncThunk(
+      async (_, { rejectWithValue }) => {
+        try {
+          const { data } = await axios.get(`${server}/order/admin-orders`, {
+            withCredentials: true,
+          });
+          return data;
+        } catch (error) {
+          return rejectWithValue(
+            error.response?.data?.message || error.message
+          );
+        }
+      },
+      {
+        pending: (state) => {
+          state.isLoading = true;
+        },
+
+        fulfilled: (state, action) => {
+          state.isLoading = false;
+          state.adminOrders = action.payload.orders;
+        },
+
+        rejected: (state, action) => {
+          state.isLoading = false;
+          state.error = action.payload;
+        },
+      }
+    ),
   }),
 });
 
-export const { getAllOrders, getShopAllOrders } = orderSlice.actions;
+export const { getAllOrders, getShopAllOrders, getAdminOrders } =
+  orderSlice.actions;
 export default orderSlice.reducer;

@@ -8,8 +8,13 @@ const {
   getShopInfo,
   updateAvatar,
   updateSeller,
+  getAdminSellers,
 } = require("../controller/shop.controller");
-const { isSellerAuthenticated } = require("../middleware/auth");
+const {
+  isSellerAuthenticated,
+  isAdmin,
+  isAuthenticated,
+} = require("../middleware/auth");
 const { upload } = require("../config/multer");
 const router = express.Router();
 
@@ -26,5 +31,11 @@ router.put(
   updateAvatar
 );
 router.put("/update-shop-info", isSellerAuthenticated, updateSeller);
+router.get(
+  "/admin-sellers",
+  isAuthenticated,
+  isAdmin("Admin"),
+  getAdminSellers
+);
 
 module.exports = router;

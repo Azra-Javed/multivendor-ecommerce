@@ -7,6 +7,7 @@ const initialState = {
   loading: true,
   user: null,
   error: null,
+  adminUsers: [],
 };
 
 const createSliceWithThunks = buildCreateSlice({
@@ -151,6 +152,33 @@ const userSlice = createSliceWithThunks({
         },
       }
     ),
+
+    getAdminUsers: create.asyncThunk(
+      async (_, { rejectWithValue }) => {
+        try {
+          const { data } = await axios.get(`${server}/user/admin-users`, {
+            withCredentials: true,
+          });
+
+          return data;
+        } catch (error) {
+          return rejectWithValue(error?.response?.data?.message);
+        }
+      },
+      {
+        pending: (state) => {
+          state.isLoading = true;
+        },
+        fulfilled: (state, action) => {
+          state.isLoading = false;
+          state.adminUsers = action.payload.users;
+        },
+        rejected: (state, action) => {
+          state.isLoading = false;
+          state.error = action.payload;
+        },
+      }
+    ),
   }),
 });
 
@@ -160,6 +188,7 @@ export const {
   updateUserInformation,
   updateUserAddress,
   deleteUserAddress,
+  getAdminUsers,
 } = userSlice.actions;
 
 export default userSlice.reducer;

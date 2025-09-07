@@ -348,6 +348,42 @@ const getUserInfo = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+//@desc: get all users for admin
+//@route: PUT /api/user/v2/admin-users
+
+const getAdminUsers = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const users = await User.find();
+
+    res.status(200).json({
+      success: true,
+      users,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+//@desc: delete user
+//@route: DELETe /api/user/v2/delete-user:id
+
+const deleteUser = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return next(new ErrorHandler("User not exist!", 404));
+    }
+
+    await User.deleteOne({ _id: req.params.id });
+    res.status(200).json({
+      success: true,
+      message: "User deleted Successfull!",
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
 module.exports = {
   createUser,
   userLogin,
@@ -360,4 +396,6 @@ module.exports = {
   deleteUserAddress,
   updatePassword,
   getUserInfo,
+  getAdminUsers,
+  deleteUser,
 };

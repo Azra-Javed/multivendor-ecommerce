@@ -4,13 +4,14 @@ import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 import Store from "./redux/store";
 import { loadUser } from "./redux/features/userSlice";
-import { loadSeller } from "./redux/actions/seller.actions";
+
 import { router } from "./routes/AppRoutes";
 import { getAllEvents } from "./redux/actions/event.actions";
 import { getAllProducts } from "./redux/actions/product.actions";
 import { server } from "./server";
 import { useState } from "react";
 import axios from "axios";
+import { loadSeller } from "./redux/features/sellerSlice";
 
 const App = () => {
   const [stripeApiKey, setStripeApiKey] = useState("");

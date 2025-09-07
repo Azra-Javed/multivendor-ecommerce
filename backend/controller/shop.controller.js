@@ -229,7 +229,7 @@ const updateAvatar = catchAsyncErrors(async (req, res, next) => {
 });
 
 //@desc: update seller info
-//@route: PUT /api/user/v2/update-user-info
+//@route: PUT /api/shop/v2/update-user-info
 const updateSeller = catchAsyncErrors(async (req, res, next) => {
   try {
     const { name, description, address, phoneNumber, zipCode } = req.body;
@@ -256,6 +256,22 @@ const updateSeller = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+//@desc: get all sellers for admin
+//@route: GET/api/shop/v2/admin-sellers
+
+const getAdminSellers = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const sellers = await Shop.find();
+
+    res.status(200).json({
+      success: true,
+      sellers,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
 module.exports = {
   createShop,
   activateShop,
@@ -265,4 +281,5 @@ module.exports = {
   getShopInfo,
   updateAvatar,
   updateSeller,
+  getAdminSellers,
 };

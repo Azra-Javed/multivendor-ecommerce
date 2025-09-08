@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { categoriesData } from "../../../static/data";
-import { createEvent } from "../../../redux/actions/event.actions";
+import { createEvent } from "../../../redux/features/eventSlice";
 
 const CreateEvent = () => {
   const { seller } = useSelector((state) => state.seller);

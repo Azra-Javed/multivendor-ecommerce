@@ -6,8 +6,8 @@ import Store from "./redux/store";
 import { loadUser } from "./redux/features/userSlice";
 
 import { router } from "./routes/AppRoutes";
-import { getAllEvents } from "./redux/actions/event.actions";
-import { getAllProducts } from "./redux/actions/product.actions";
+import { getAllEvents } from "./redux/features/eventSlice";
+import { getAllProducts } from "./redux/features/productSlice";
 import { server } from "./server";
 import { useState } from "react";
 import axios from "axios";

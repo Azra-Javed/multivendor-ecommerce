@@ -43,6 +43,8 @@ import {
   AdminUsersPage,
   AdminSellersPage,
   AdminOrdersPage,
+  AdminProductsPage,
+  AdminEventsPage,
 } from "./adminRoutes";
 
 import {
@@ -295,6 +297,22 @@ export const router = (stripeApiKey) =>
       element: (
         <AdminProtectedRoute>
           <AdminOrdersPage />
+        </AdminProtectedRoute>
+      ),
+    },
+    {
+      path: "/admin/products",
+      element: (
+        <AdminProtectedRoute>
+          <AdminProductsPage />
+        </AdminProtectedRoute>
+      ),
+    },
+    {
+      path: "/admin/events",
+      element: (
+        <AdminProtectedRoute>
+          <AdminEventsPage />
         </AdminProtectedRoute>
       ),
     },

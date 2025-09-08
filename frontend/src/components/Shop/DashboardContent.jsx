@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import styles from "../../styles/style";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { getAllProductsShop } from "../../redux/actions/product.actions";
+import { getAllProductsShop } from "../../redux/features/productSlice";
 import { getShopAllOrders } from "../../redux/features/orderSlice";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";

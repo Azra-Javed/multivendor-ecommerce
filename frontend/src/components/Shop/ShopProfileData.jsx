@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { getAllProductsShop } from "../../redux/actions/product.actions";
+import { getAllProductsShop } from "../../redux/features/productSlice";
 import styles from "../../styles/style";
 import ProductCard from "../ProductCard/ProductCard";
 import { backend_url } from "../../server";
 import Ratings from "../products/Ratings";
-import { getAllEventsShop } from "../../redux/actions/event.actions";
+import { getAllEventsShop } from "../../redux/features/eventSlice";
 
 const ShopProfileData = ({ isOwner }) => {
   const { products } = useSelector((state) => state.products);

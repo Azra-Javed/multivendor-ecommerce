@@ -1,28 +1,21 @@
+import { Button } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 import { useEffect } from "react";
+import { AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   deleteProduct,
-  getAllProductsShop,
+  getAllProducts,
 } from "../../redux/features/productSlice";
-import { DataGrid } from "@mui/x-data-grid";
-import { Button } from "@mui/material";
-import Loader from "../Layout/Loader";
-import { Link } from "react-router-dom";
-import { AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
 
-const AllProducts = () => {
-  const { products, isLoading } = useSelector((state) => state.products);
-  const { seller } = useSelector((state) => state.seller);
+const AdminProducts = () => {
+  const { allProducts } = useSelector((state) => state.products);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllProductsShop(seller._id));
+    dispatch(getAllProducts());
   }, [dispatch]);
-
-  const handleDelete = (id) => {
-    dispatch(deleteProduct(id));
-    window.location.reload(true);
-  };
 
   const columns = [
     { field: "id", headerName: "Product Id", minWidth: 150, flex: 0.7 },
@@ -57,8 +50,8 @@ const AllProducts = () => {
       field: "Preview",
       flex: 0.8,
       minWidth: 100,
-      headerName: "",
-      type: "number",
+      headerName: "Preview",
+      type: "text",
       sortable: false,
       renderCell: (params) => {
         return (
@@ -72,29 +65,12 @@ const AllProducts = () => {
         );
       },
     },
-    {
-      field: "Delete",
-      flex: 0.8,
-      minWidth: 120,
-      headerName: "",
-      type: "number",
-      sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Button onClick={() => handleDelete(params.id)}>
-              <AiOutlineDelete size={20} />
-            </Button>
-          </>
-        );
-      },
-    },
   ];
 
   const row = [];
 
-  products &&
-    products.forEach((item) => {
+  allProducts &&
+    allProducts.forEach((item) => {
       row.push({
         id: item._id,
         name: item.name,
@@ -106,20 +82,22 @@ const AllProducts = () => {
 
   return (
     <>
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <div className="w-full mx-8 pt-1 mt-10 bg-white">
-          <DataGrid
-            rows={row}
-            columns={columns}
-            pageSize={10}
-            disableRowSelectionOnClick
-          />
-        </div>
-      )}
+      <div className="w-full mx-8 pt-1 mt-10 bg-white">
+        <DataGrid
+          rows={row}
+          columns={columns}
+          pageSize={10}
+          disableRowSelectionOnClick
+          initialState={{
+            pagination: {
+              paginationModel: { pageSize: 10, page: 0 },
+            },
+          }}
+          pageSizeOptions={[10, 15, 20]}
+        />
+      </div>
     </>
   );
 };
 
-export default AllProducts;
+export default AdminProducts;

@@ -35,14 +35,14 @@ const AdminSidebar = ({ active }) => {
       id: 5,
       label: "All Products",
       icon: BsHandbag,
-      path: "/admin-products",
+      path: "/admin/products",
     },
 
     {
       id: 6,
       label: "All Events",
       icon: MdOutlineLocalOffer,
-      path: "/admin-events",
+      path: "/admin/events",
     },
     {
       id: 7,

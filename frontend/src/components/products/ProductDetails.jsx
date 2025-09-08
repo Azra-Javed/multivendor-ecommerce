@@ -4,7 +4,7 @@ import styles from "../../styles/style";
 import { toast } from "react-toastify";
 import { addToCart } from "../../redux/features/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllProductsShop } from "../../redux/actions/product.actions";
+import { getAllProductsShop } from "../../redux/features/productSlice";
 import { backend_url, server } from "../../server";
 import {
   addToWishlist,

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getShopAllOrders } from "../../redux/features/orderSlice";
-import { getAllProductsShop } from "../../redux/actions/product.actions";
+import { getAllProductsShop } from "../../redux/features/productSlice";
 import styles from "../../styles/style";
 
 const WithdrawMoney = () => {

@@ -6,7 +6,7 @@ import Loader from "../Layout/Loader";
 import styles from "../../styles/style";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllProductsShop } from "../../redux/actions/product.actions";
+import { getAllProductsShop } from "../../redux/features/productSlice";
 
 const ShopInfo = ({ isOwner }) => {
   const { products } = useSelector((state) => state.products);

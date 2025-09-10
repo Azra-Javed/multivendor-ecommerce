@@ -13,7 +13,6 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 
 const DashboardContent = () => {
-  const [deliveredOrder, setDeliveredOrder] = useState(null);
   const { seller } = useSelector((state) => state.seller);
   const { products } = useSelector((state) => state.products);
   const { shopOrders } = useSelector((state) => state.order);
@@ -24,21 +23,7 @@ const DashboardContent = () => {
     dispatch(getAllProductsShop(seller._id));
   }, [dispatch, seller._id]);
 
-  useEffect(() => {
-    if (shopOrders) {
-      const orderData = shopOrders.filter(
-        (item) => item.status === "Delivered"
-      );
-      setDeliveredOrder(orderData);
-    }
-  }, [shopOrders]);
-
-  const totalEarningWithoutDiscount = deliveredOrder
-    ? deliveredOrder.reduce((acc, item) => acc + item.totalPrice, 0)
-    : 0;
-
-  const serviceCharge = totalEarningWithoutDiscount * 0.1;
-  const availableBalance = totalEarningWithoutDiscount - serviceCharge;
+  const availableBalance = seller?.availableBalance.toFixed(2);
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },

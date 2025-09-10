@@ -12,6 +12,7 @@ const payment = require("./routes/payment.routes");
 const order = require("./routes/order.routes");
 const conversation = require("./routes/conversation.routes");
 const message = require("./routes/message.routes");
+const withdraw = require("./routes/withdraw.routes");
 
 const app = express();
 app.use(express.json());
@@ -34,6 +35,7 @@ app.use("/api/v2/payment", payment);
 app.use("/api/v2/order", order);
 app.use("/api/v2/conversation", conversation);
 app.use("/api/v2/message", message);
+app.use("/api/v2/withdraw", withdraw);
 
 // error handling
 app.use(ErrorHandler);

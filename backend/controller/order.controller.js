@@ -2,6 +2,7 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const Order = require("../model/order.model");
 const Product = require("../model/product");
 const ErrorHandler = require("../utils/ErrorHandler");
+const Shop = require("../model/shop");
 
 //@desc: create order
 //@route: POST /api/v2/order/create-order
@@ -117,11 +118,19 @@ const updateOrderStatus = catchAsyncErrors(async (req, res, next) => {
     await product.save({ validateBeforeSave: false });
   }
 
+  async function updateSellerInfo(amount) {
+    const seller = await Shop.findById(req.seller._id);
+
+    seller.availableBalance += amount;
+    await seller.save();
+  }
+
   order.status = req.body.status;
 
   if (req.body.status === "Delivered") {
     order.deliveredAt = Date.now();
     order.paymentInfo.status = "Succeeded";
+    await updateSellerInfo(order.totalPrice * 0.9);
   }
 
   await order.save({ validateBeforeSave: false });

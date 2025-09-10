@@ -45,6 +45,7 @@ import {
   AdminOrdersPage,
   AdminProductsPage,
   AdminEventsPage,
+  AdminWithdrawPage,
 } from "./adminRoutes";
 
 import {
@@ -313,6 +314,14 @@ export const router = (stripeApiKey) =>
       element: (
         <AdminProtectedRoute>
           <AdminEventsPage />
+        </AdminProtectedRoute>
+      ),
+    },
+    {
+      path: "/admin-withdraw-request",
+      element: (
+        <AdminProtectedRoute>
+          <AdminWithdrawPage />
         </AdminProtectedRoute>
       ),
     },

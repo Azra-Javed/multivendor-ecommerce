@@ -10,6 +10,8 @@ const {
   updateSeller,
   getAdminSellers,
   deleteSeller,
+  sellerPaymentMethods,
+  deleteWithdraw,
 } = require("../controller/shop.controller");
 const {
   isSellerAuthenticated,
@@ -44,5 +46,13 @@ router.delete(
   isAdmin("Admin"),
   deleteSeller
 );
+
+router.put(
+  "/update-payment-methods",
+  isSellerAuthenticated,
+  sellerPaymentMethods
+);
+
+router.delete("/delete-withdraw-method", isSellerAuthenticated, deleteWithdraw);
 
 module.exports = router;

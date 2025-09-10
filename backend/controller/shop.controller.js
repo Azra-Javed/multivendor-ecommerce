@@ -293,6 +293,49 @@ const deleteSeller = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+//@desc: upate seller withdraw methods --> sellers
+//@route: PUT /api/shop/v2/update-seller-methods
+
+const sellerPaymentMethods = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const { withdrawMethod } = req.body;
+
+    const seller = await Shop.findByIdAndUpdate(req.seller._id, {
+      withdrawMethod,
+    });
+
+    res.status(200).json({
+      success: true,
+      seller,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+//@desc: delete withdraw method --> sellers
+//@route: PUT /api/shop/v2/delete-withdraw-method
+
+const deleteWithdraw = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const seller = await Shop.findById(req.seller._id);
+
+    if (!seller) {
+      return next(new ErrorHandler("Seller not found with this id!", 400));
+    }
+
+    seller.withdrawMethod = null;
+    seller.save();
+
+    res.status(200).json({
+      success: true,
+      seller,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
 module.exports = {
   createShop,
   activateShop,
@@ -304,4 +347,6 @@ module.exports = {
   updateSeller,
   getAdminSellers,
   deleteSeller,
+  sellerPaymentMethods,
+  deleteWithdraw,
 };

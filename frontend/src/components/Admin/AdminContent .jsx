@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { accordionActionsClasses, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect } from "react";
 import { AiOutlineArrowRight, AiOutlineProduct } from "react-icons/ai";
@@ -20,13 +20,17 @@ const AdminContent = () => {
   const { adminSellers } = useSelector((state) => state.seller);
 
   const { adminUsers } = useSelector((state) => state.user);
-  console.log(adminUsers);
 
   useEffect(() => {
     dispatch(getAdminOrders());
     dispatch(getAdminSellers());
     dispatch(getAdminUsers());
   }, [dispatch]);
+
+  const adminEarning =
+    adminOrders &&
+    adminOrders.reduce((acc, item) => acc + item.totalPrice * 0.1, 0);
+
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
 
@@ -99,7 +103,9 @@ const AdminContent = () => {
                 </h3>
               </div>
 
-              <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">${120}</h5>
+              <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">
+                ${adminEarning ? adminEarning.toFixed(2) : 0}
+              </h5>
             </div>
 
             <div className="w-full mb-4 800px:w-[30%] min-h-[20vh] bg-white shadow rounded px-2 py-4">

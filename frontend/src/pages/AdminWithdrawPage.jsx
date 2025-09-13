@@ -1,6 +1,6 @@
 import AdminSidebar from "../components/Admin/Layout/AdminSidebar";
 import AdminHeader from "../components/Layout/AdminHeader";
-
+import AdminAllWithdraw from "../components/Admin/AdminAllWithdraw.jsx";
 const AdminWithdrawPage = () => {
   return (
     <div>
@@ -9,7 +9,7 @@ const AdminWithdrawPage = () => {
         <div className="W-[80px] 800px:w-[330px]">
           <AdminSidebar active={7} />
         </div>
-        {/* <AdminOrders /> */}
+        <AdminAllWithdraw />
       </div>
     </div>
   );

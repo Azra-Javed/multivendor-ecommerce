@@ -8,7 +8,7 @@ const {
 
 const router = express.Router();
 
-router.post("/create-message", upload.array("images"), createMessage);
+router.post("/create-message", upload.single("image"), createMessage);
 router.get("/get-all-messages/:id", getAllMessages);
 
 module.exports = router;

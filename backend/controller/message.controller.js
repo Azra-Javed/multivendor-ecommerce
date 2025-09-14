@@ -2,19 +2,24 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/ErrorHandler");
 const Message = require("../model/messages.model");
 const Conversation = require("../model/conversation.model");
+const path = require("path");
 
 //@desc create new message
 //@route POST /api/v2/message/create-message
 const createMessage = catchAsyncErrors(async (req, res, next) => {
   try {
+    let fileUrl;
     const { conversationId, sender, text } = req.body;
 
-    const images = req.files ? req.files.map((file) => file.name) : [];
+    if (req.file) {
+      const filename = req.file.filename;
+      fileUrl = path.join(filename);
+    }
 
     const message = new Message({
       conversationId,
       sender,
-      images,
+      image: fileUrl || undefined,
       text,
     });
 

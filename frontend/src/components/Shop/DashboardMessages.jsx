@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineArrowRight, AiOutlineSend } from "react-icons/ai";
 import styles from "../../styles/style";
+import { toast } from "react-toastify";
 import { TfiGallery } from "react-icons/tfi";
 import { format } from "timeago.js";
 import socketIO from "socket.io-client";
@@ -24,6 +25,7 @@ const DashboardMessages = () => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [activeStatus, setActiveStatus] = useState(false);
   const [activeChatId, setActiveChatId] = useState(null);
+  const [image, setImage] = useState();
 
   useEffect(() => {
     socket.on("getMessage", (data) => {
@@ -118,7 +120,6 @@ const DashboardMessages = () => {
           lastMessageId: seller._id,
         }
       );
-      console.log(res.data.conversation);
       setNewMessage("");
     } catch (err) {
       console.log(err);
@@ -147,6 +148,58 @@ const DashboardMessages = () => {
     );
     const online = onlineUsers.find((user) => user?.userId === chatMembers);
     return !!online;
+  };
+
+  // handle image upload
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+
+    imageSendingHandler(file);
+  };
+
+  const imageSendingHandler = async (file) => {
+    const formData = new FormData();
+    formData.append("image", file);
+    formData.append("sender", seller._id);
+    formData.append("text", newMessage);
+    formData.append("conversationId", currentChat._id);
+
+    const receiverId = currentChat.participants.find(
+      (member) => member !== seller._id
+    );
+
+    socket.emit("sendMessage", {
+      senderId: seller._id,
+      receiverId,
+      image: file,
+    });
+
+    try {
+      await axios
+        .post(`${server}/message/create-message`, formData)
+        .then((res) => {
+          setImage();
+          setMessages([...messages, res.data.message]);
+          updateLastMessageForImage();
+        });
+    } catch (error) {
+      toast.error(err.response.data.message);
+    }
+  };
+
+  const updateLastMessageForImage = async () => {
+    await axios
+      .put(`${server}/conversation/update-last-message/${currentChat._id}`, {
+        lastMessage: "photo",
+        lastMessageId: seller._id,
+      })
+      .then((res) => {
+        toast.success(res.data.message);
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      });
   };
 
   return (
@@ -186,6 +239,7 @@ const DashboardMessages = () => {
           sellerId={seller._id}
           userData={userData}
           activeStatus={activeStatus}
+          handleImageUpload={handleImageUpload}
         />
       )}
     </div>
@@ -194,11 +248,9 @@ const DashboardMessages = () => {
 
 const MessageList = ({
   data,
-  index,
   setOpen,
   setCurrentChat,
   me,
-  userData,
   setUserData,
   online,
   setActiveStatus,
@@ -274,6 +326,7 @@ const SellerInbox = ({
   sellerId,
   userData,
   activeStatus,
+  handleImageUpload,
 }) => {
   return (
     <div className="w-full min-h-full flex flex-col justify-between">
@@ -318,13 +371,28 @@ const SellerInbox = ({
                   className="w-[40px] h-[40px] rounded-full mr-3"
                 />
               )}
-              <div>
-                <div className="w-max rounded p-2 bg-[#3ed185] text-[#fff] h-min">
-                  <p>{item.text}</p>
-                  <p className="text-[12px] mt-1 text-end text-[#6a6666]">
-                    {format(item.createdAt)}
-                  </p>
-                </div>
+
+              <div
+                className={`max-w-[70%] rounded-2xl px-4 py-2 text-sm leading-5 shadow-md ${
+                  item.sender === sellerId
+                    ? "bg-gray-200 text-gray-800 rounded-br-none"
+                    : "bg-gray-100 text-gray-900 rounded-bl-none"
+                }  ${item.image ? "bg-transparent shadow-none p-0" : ""}`}
+              >
+                {item.text && <p>{item.text}</p>}
+
+                {item.image && (
+                  <img
+                    src={`${backend_url}/${item.image}`}
+                    alt="sent"
+                    className="w-[250px] h-[250px] rounded-lg object-cover mt-1"
+                  />
+                )}
+
+                {/* Time */}
+                <p className={`text-[11px] mt-1  text-gray-500 text-right`}>
+                  {format(item.createdAt)}
+                </p>
               </div>
             </div>
           ))}
@@ -336,13 +404,21 @@ const SellerInbox = ({
         onSubmit={sendMessageHandler}
       >
         <div className="w-[3%]">
-          <TfiGallery className="cursor-pointer" size={20} />
+          <input
+            type="file"
+            id="image"
+            className="hidden"
+            onChange={handleImageUpload}
+          />
+          <label htmlFor="image">
+            <TfiGallery className="cursor-pointer" size={20} />
+          </label>
         </div>
         <div className="w-[97%] ml-3">
           <input
             type="text"
             placeholder="Enter your message..."
-            className={`${styles.input}`}
+            className={`${styles.input} `}
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             required

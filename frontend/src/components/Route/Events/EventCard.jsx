@@ -52,7 +52,7 @@ const EventCard = ({ active, data }) => {
             120 sold
           </span>
         </div>
-        <CountDown />
+        <CountDown data={data} />
         <br />
         <div className="flex items-center">
           <Link to={`/product/${data._id}?isEvent=true`}>

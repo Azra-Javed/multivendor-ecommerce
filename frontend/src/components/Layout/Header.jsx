@@ -256,27 +256,37 @@ const Header = ({ activeHeading }) => {
                   className="relative mr-[20px]"
                   onClick={() => setOpenCart(true)}
                 >
-                  <AiOutlineShoppingCart size={30} />
+                  <AiOutlineShoppingCart size={30} className="cursor-pointer" />
                   <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4  p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
                     {cart && cart.length}
                   </span>
                 </div>
               </div>
+              {/*cart popup */}
+              {openCart ? <Cart setOpenCart={setOpenCart} /> : null}
+
+              {/*whishlist popup */}
+              {openWishlist ? (
+                <Wishlist setOpenWishlist={setOpenWishlist} />
+              ) : null}
             </div>
 
             {/* header sidebar */}
             {open && (
               <div className="fixed w-full bg-[#0000005f] z-20 h-full top-0 left-0">
-                <div className="fixed w-[60%] bg-[#fff] h-screen top-0 left-0 z-10 overflow-y-scroll">
+                <div className="fixed w-[70%] bg-[#fff] h-screen top-0 left-0 z-10 overflow-y-scroll">
                   <div className="w-full justify-between flex pr-3">
                     <div>
-                      <div className="relative mr-[15px]">
+                      <div
+                        className="relative mr-[15px]"
+                        onClick={() => setOpenWishlist(true) || setOpen(false)}
+                      >
                         <AiOutlineHeart
                           size={30}
                           className="mt-5 ml-3 cursor-pointer"
                         />
                         <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4  p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
-                          0
+                          {wishlist && wishlist.length}
                         </span>
                       </div>
                     </div>
@@ -305,7 +315,7 @@ const Header = ({ activeHeading }) => {
                               <Link to={`/product/${i._id}`}>
                                 <div className="w-full flex items-start py-3">
                                   <img
-                                    src={i.image_Url[0].url}
+                                    src={`${backend_url}${i.images[0]}`}
                                     alt=""
                                     className="w-[40px] h-[40px] mr-[10px]"
                                   />

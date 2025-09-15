@@ -67,7 +67,9 @@ const ProductDetails = ({ data }) => {
           userId,
           sellerId,
         })
-        .then((res) => navigate(`/conversation/${res.data.conversation._id}`))
+        .then((res) => {
+          navigate(`/inbox?${res.data.conversation._id}`);
+        })
         .catch((error) => {
           toast.error(error.response.data.message);
         });

@@ -104,9 +104,7 @@ const ShopProfileData = ({ isOwner }) => {
               ))}
           </div>
           {events && events.length === 0 && (
-            <h5 className="w-full text-center py-5 text-[18px]">
-              No Products!
-            </h5>
+            <h5 className="w-full text-center py-5 text-[18px]">No Events!</h5>
           )}
         </>
       )}
@@ -140,9 +138,9 @@ const ShopProfileData = ({ isOwner }) => {
                 </div>
               ))}
           </div>
-          {products && products.length === 0 && (
+          {allReviews && allReviews.length === 0 && (
             <h5 className="w-full text-center py-5 text-[18px]">
-              No Products!
+              No Review Yet!
             </h5>
           )}
         </>

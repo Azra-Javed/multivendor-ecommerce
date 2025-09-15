@@ -121,7 +121,7 @@ const AdminContent = () => {
               <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">
                 {adminSellers && adminSellers.length}
               </h5>
-              <Link to="/dashboard-sellers">
+              <Link to="/admin/sellers">
                 <h5 className="pt-4 pl-2 text-[#077f9c]">View Sellers</h5>
               </Link>
             </div>

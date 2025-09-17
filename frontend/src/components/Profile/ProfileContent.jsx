@@ -1,8 +1,8 @@
+import Address from "../../components/Profile/Address.jsx";
 import AllOrders from "../../components/Profile/AllOrders.jsx";
 import AllRefundOrders from "../../components/Profile/AllRefundOrders";
-import TrackOrder from "../../components/Profile/TrackOrder";
 import ChangePassword from "../../components/Profile/ChangePassword.jsx";
-import Address from "../../components/Profile/Address.jsx";
+import TrackOrder from "../../components/Profile/TrackOrder";
 import UserProfile from "../../components/Profile/UserProfile.jsx";
 
 const ProfileContent = ({ active }) => {
@@ -32,7 +32,7 @@ const ProfileContent = ({ active }) => {
         </div>
       )}
 
-      {/* payment methods */}
+      {/* change password */}
       {active === 6 && (
         <div>
           <ChangePassword />

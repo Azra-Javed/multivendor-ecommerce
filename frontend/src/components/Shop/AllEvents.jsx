@@ -54,13 +54,13 @@ const AllEvents = () => {
       field: "Preview",
       flex: 0.8,
       minWidth: 100,
-      headerName: "",
+      headerName: "Preview",
       type: "number",
       sortable: false,
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/product/${params._id}`}>
+            <Link to={`/product/${params.id}?isEvent=true`}>
               <Button>
                 <AiOutlineEye size={20} />
               </Button>
@@ -73,7 +73,7 @@ const AllEvents = () => {
       field: "Delete",
       flex: 0.8,
       minWidth: 120,
-      headerName: "",
+      headerName: "Delete",
       type: "number",
       sortable: false,
       renderCell: (params) => {

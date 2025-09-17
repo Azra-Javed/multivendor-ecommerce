@@ -12,25 +12,23 @@ const ShopLogin = () => {
   const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    await axios
-      .post(
-        `${server}/shop/shop-login`,
-        {
-          email,
-          password,
-        },
-        { withCredentials: true }
-      )
-      .then((res) => {
+    const handleLogin = async () => {
+      try {
+        const res = await axios.post(
+          `${server}/shop/shop-login`,
+          { email, password },
+          { withCredentials: true }
+        );
+
         toast.success("Login Success!");
         navigate("/dashboard");
-      })
-      .catch((err) => {
-        toast.error(err.response.data.message);
-      });
+      } catch (err) {
+        toast.error(err.response?.data?.message || "Something went wrong");
+      }
+    };
   };
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">

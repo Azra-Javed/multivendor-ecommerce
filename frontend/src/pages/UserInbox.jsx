@@ -210,9 +210,9 @@ const UserInbox = () => {
 
   return (
     <div className="w-full">
-      <Header />
       {!open && (
         <>
+          <Header />
           <h1 className="text-center text-[30px] py-3 font-family-poppins">
             All Messages
           </h1>
@@ -363,7 +363,7 @@ const UserInboxChat = ({
       </div>
 
       {/* messages */}
-      <div className="px-3 h-[65vh] py-1 overflow-y-auto">
+      <div className="px-3 h-[80vh] py-1 overflow-y-auto">
         {messages &&
           messages.map((item, index) => (
             <div
@@ -383,8 +383,8 @@ const UserInboxChat = ({
               <div
                 className={`max-w-[70%] rounded-2xl px-4 py-2 text-sm leading-5 shadow-md ${
                   item.sender === userId
-                    ? "bg-gray-200 text-gray-800 rounded-br-none"
-                    : "bg-gray-100 text-gray-900 rounded-bl-none"
+                    ? "bg-blue-500 text-white rounded-br-none"
+                    : "bg-gray-200 text-black rounded-bl-none"
                 }  ${item.image ? "bg-transparent shadow-none p-0" : ""}`}
               >
                 {item.text && <p>{item.text}</p>}
@@ -398,7 +398,7 @@ const UserInboxChat = ({
                 )}
 
                 {/* Time */}
-                <p className={`text-[11px] mt-1  text-gray-500 text-right`}>
+                <p className={`text-[11px] mt-1  text-gray-600 text-right`}>
                   {format(item.createdAt)}
                 </p>
               </div>

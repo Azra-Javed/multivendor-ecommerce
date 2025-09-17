@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RxCross1 } from "react-icons/rx";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { server } from "../../server";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { getAllProductsShop } from "../../redux/features/productSlice";
 
 const CreateCouponCode = ({ setOpen }) => {
   const { products } = useSelector((state) => state.products);
@@ -13,6 +14,14 @@ const CreateCouponCode = ({ setOpen }) => {
   const [minAmount, setMinAmount] = useState(null);
   const [maxAmount, setMaxAmount] = useState(null);
   const [selectedProducts, setSelectedProducts] = useState(null);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllProductsShop(seller._id));
+  }, [dispatch]);
+
+  console.log(products);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,7 +51,7 @@ const CreateCouponCode = ({ setOpen }) => {
   return (
     <>
       <div className="fixed top-0 left-0 w-full h-screen bg-[#00000062] z-[2000] flex items-center justify-center">
-        <div className="w-[90%] 800px:w-[40%] h-[80vh] bg-white rounded-md shadow">
+        <div className="w-[90%] 800px:w-[40%] h-[80vh] bg-white rounded-md shadow overflow-y-auto ">
           <div className="w-full flex justify-end p-4">
             <RxCross1
               size={30}
@@ -122,7 +131,9 @@ const CreateCouponCode = ({ setOpen }) => {
                 value={selectedProducts}
                 onChange={(e) => setSelectedProducts(e.target.value)}
               >
-                <option value="Choose Your product">Choose your product</option>
+                <option value="Choose Your product" disabled>
+                  Choose your product
+                </option>
                 {products &&
                   products.map((i) => (
                     <option value={i.name} key={i.name}>

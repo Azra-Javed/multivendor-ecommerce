@@ -1,11 +1,10 @@
-const path = require("path");
 const User = require("../model/user");
 const ErrorHandler = require("../utils/ErrorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
-const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
 const sendToken = require("../utils/jwtToken");
+const cloudinary = require("cloudinary");
 
 //activation token
 const createActivationToken = (user) => {
@@ -21,27 +20,25 @@ const createUser = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
     const userEmail = await User.findOne({ email });
+    const file = req.files.file;
 
     if (userEmail) {
-      const filename = req.file.filename;
-      const filePath = `uploads/${filename}`;
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.log(err);
-          res.status(500).json({ message: "Error deleting file" });
-        }
-      });
       return next(new ErrorHandler("User already exists", 400));
     }
 
-    const filename = req.file.filename;
-    const fileUrl = path.join(filename);
+    // Upload avatar to Cloudinary
+    const myCloud = await cloudinary.v2.uploader.upload(file.tempFilePath, {
+      folder: "avatars",
+    });
 
     const user = {
       name: name,
       email: email,
       password: password,
-      avatar: fileUrl,
+      avatar: {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
+      },
     };
 
     const activationToken = createActivationToken(user);
@@ -201,35 +198,37 @@ const updateUser = catchAsyncErrors(async (req, res, next) => {
 //@route: PUT /api/user/v2/update-avatar
 
 const updateAvatar = catchAsyncErrors(async (req, res, next) => {
-  const existUser = await User.findById(req.user.id);
+  try {
+    let user = await User.findById(req.params.id);
 
-  if (existUser.avatar) {
-    const existsAvatarPath = path.join(
-      __dirname,
-      "..",
-      "uploads",
-      existUser.avatar
+    if (!req.files || !req.files.avatar) {
+      return next(new ErrorHandler("No file uploaded", 400));
+    }
+
+    // Delete old avatar from Cloudinary
+    if (user.avatar?.public_id) {
+      await cloudinary.v2.uploader.destroy(user.avatar.public_id);
+    }
+
+    // Upload new one
+    const result = await cloudinary.v2.uploader.upload(
+      req.files.avatar.tempFilePath,
+      {
+        folder: "avatars",
+      }
     );
 
-    if (fs.existsSync(existsAvatarPath)) {
-      fs.unlinkSync(existsAvatarPath);
-    }
-  }
+    user.avatar = {
+      public_id: result.public_id,
+      url: result.secure_url,
+    };
 
-  const fileUrl = req.file.filename;
+    await user.save();
 
-  const user = await User.findByIdAndUpdate(
-    req.user.id,
-    { avatar: fileUrl },
-    { new: true }
-  );
-
-  res.status(200).json({
-    success: true,
-    user,
-  });
-
-  try {
+    res.status(200).json({
+      success: true,
+      user,
+    });
   } catch (error) {
     return next(new ErrorHandler(error.message, 500));
   }
@@ -238,7 +237,7 @@ const updateAvatar = catchAsyncErrors(async (req, res, next) => {
 //@desc: update user addresses
 //@route: PUT /api/user/v2/update-user-addresses
 
-const upddateAddress = catchAsyncErrors(async (req, res, next) => {
+const updateAddress = catchAsyncErrors(async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
 
@@ -392,7 +391,7 @@ module.exports = {
   logoutUser,
   updateUser,
   updateAvatar,
-  upddateAddress,
+  updateAddress,
   deleteUserAddress,
   updatePassword,
   getUserInfo,

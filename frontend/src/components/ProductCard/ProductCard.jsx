@@ -7,7 +7,6 @@ import {
 } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { backend_url } from "../../server";
 import styles from "../../styles/style";
 import ProductDetailsCard from "./productDetailsCard";
 
@@ -71,7 +70,7 @@ const ProductCard = ({ data, isEvent }) => {
           }`}
         >
           <img
-            src={`${backend_url}${data.images && data.images[0]}`}
+            src={data.images && data?.images?.[0]?.url}
             alt=""
             className="w-full h-[170px] object-contain"
           />

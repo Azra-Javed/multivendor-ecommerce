@@ -1,8 +1,7 @@
-const path = require("path");
 const Shop = require("../model/shop");
 const ErrorHandler = require("../utils/ErrorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
-const fs = require("fs");
+const cloudinary = require("cloudinary");
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
 const sendShopToken = require("../utils/shopToken");
@@ -20,45 +19,49 @@ const createActivationToken = (shop) => {
 const createShop = async (req, res, next) => {
   try {
     const { name, email, password, address, phoneNumber, zipCode } = req.body;
-    const sellerEmail = await Shop.findOne({ email });
+    const file = req.files.file;
 
+    // Check if seller already exists
+    const sellerEmail = await Shop.findOne({ email });
     if (sellerEmail) {
-      const filename = req.file.filename;
-      const filePath = `uploads/${filename}`;
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.log(err);
-          res.status(500).json({ message: "Error deleting file" });
-        }
-      });
       return next(new ErrorHandler("Seller already exists", 400));
     }
 
-    const filename = req.file.filename;
-    const fileUrl = path.join(filename);
+    let myCloud;
+    if (file) {
+      // Upload avatar  to Cloudinary
+      myCloud = await cloudinary.v2.uploader.upload(file.tempFilePath, {
+        folder: "shops",
+      });
+    }
 
     const seller = {
-      name: name,
-      email: email,
-      password: password,
-      avatar: fileUrl,
-      address: address,
-      phoneNumber: phoneNumber,
-      zipCode: zipCode,
+      name,
+      email,
+      password,
+      avatar: myCloud
+        ? { public_id: myCloud.public_id, url: myCloud.secure_url }
+        : undefined,
+      address,
+      phoneNumber,
+      zipCode,
     };
 
+    // Create activation token
     const activationToken = createActivationToken(seller);
 
     const activationUrl = `http://localhost:5173/seller/activation/${activationToken}`;
+
     try {
       await sendMail({
         email: seller.email,
         subject: "Activate your Shop account",
         message: `Hello ${seller.name}, please click on the link to activate your shop account: ${activationUrl}`,
       });
+
       res.status(201).json({
         success: true,
-        message: `please check your email:- ${seller.email} to activate your shop account!`,
+        message: `Please check your email: ${seller.email} to activate your shop account!`,
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
@@ -189,43 +192,39 @@ const getShopInfo = catchAsyncErrors(async (req, res, next) => {
 });
 
 //@desc: update shop avatar
-//@route: PUT /api/vs/shop/update-avatar
-
+//@route: PUT /api/vs/shop/update-avatar/:id
 const updateAvatar = catchAsyncErrors(async (req, res, next) => {
-  const existShop = await Shop.findById(req.seller._id);
-  console.log(existShop.avatar);
-  console.log(req.body.image);
+  const shop = await Shop.findById(req.params.id);
+  if (!shop) return next(new ErrorHandler("Shop not found", 404));
 
-  if (existShop.avatar) {
-    const existsAvatarPath = path.join(
-      __dirname,
-      "..",
-      "uploads",
-      existShop.avatar
-    );
-
-    if (fs.existsSync(existsAvatarPath)) {
-      fs.unlinkSync(existsAvatarPath);
-    }
+  if (!req.files || !req.files.avatar) {
+    return next(new ErrorHandler("No file uploaded", 400));
   }
 
-  const fileUrl = req.file.filename;
+  // Delete old avatar from Cloudinary
+  if (shop.avatar?.public_id) {
+    await cloudinary.v2.uploader.destroy(shop.avatar.public_id);
+  }
 
-  const seller = await Shop.findByIdAndUpdate(
-    req.seller._id,
-    { avatar: fileUrl },
-    { new: true }
+  // Upload new one
+  const result = await cloudinary.v2.uploader.upload(
+    req.files.avatar.tempFilePath,
+    {
+      folder: "shops",
+    }
   );
+
+  shop.avatar = {
+    public_id: result.public_id,
+    url: result.secure_url,
+  };
+
+  await shop.save();
 
   res.status(200).json({
     success: true,
-    seller,
+    shop,
   });
-
-  try {
-  } catch (error) {
-    return next(new ErrorHandler(error.message, 500));
-  }
 });
 
 //@desc: update seller info

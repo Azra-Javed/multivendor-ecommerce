@@ -11,18 +11,38 @@ const EventsPage = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div>
+        <div className="min-h-screen bg-gray-100 mb-[50px]">
           <Header activeHeading={4} />
-          {allEvents.length > 0 ? (
-            allEvents &&
-            allEvents.map((event) => <EventCard active={true} data={event} />)
-          ) : (
-            <div className="flex items-center justify-center h-[90vh]">
-              <p className="text-lg font-semibold font-family-poppins">
-                No Event Available!
+
+          <section className="max-w-6xl mx-auto px-4 py-10">
+            <div className="text-center mb-10">
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
+                Upcoming Events
+              </h1>
+              <p className="mt-2 text-gray-600">
+                Stay updated with the latest events happening soon.
               </p>
             </div>
-          )}
+
+            {allEvents.length > 0 ? (
+              <div className="grid gap-6 grid:cols-1">
+                {allEvents.map((event) => (
+                  <EventCard key={event._id} active={true} data={event} />
+                ))}
+              </div>
+            ) : (
+              <div className="flex items-center justify-center h-[50vh]">
+                <div className="text-center">
+                  <p className="text-xl font-semibold text-gray-700">
+                    No Events Available
+                  </p>
+                  <p className="text-gray-500 mt-2">
+                    Check back later for new updates.
+                  </p>
+                </div>
+              </div>
+            )}
+          </section>
         </div>
       )}
     </>

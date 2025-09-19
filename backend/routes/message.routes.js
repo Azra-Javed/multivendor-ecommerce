@@ -1,5 +1,4 @@
 const express = require("express");
-const { upload } = require("../config/multer");
 
 const {
   createMessage,
@@ -8,7 +7,7 @@ const {
 
 const router = express.Router();
 
-router.post("/create-message", upload.single("image"), createMessage);
+router.post("/create-message", createMessage);
 router.get("/get-all-messages/:id", getAllMessages);
 
 module.exports = router;

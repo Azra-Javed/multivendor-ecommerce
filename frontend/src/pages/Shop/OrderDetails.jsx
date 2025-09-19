@@ -1,20 +1,18 @@
-import { BsFillBagFill } from "react-icons/bs";
-import styles from "../../styles/style";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
-import { useEffect } from "react";
-import { getShopAllOrders } from "../../redux/features/orderSlice";
-import { backend_url, server } from "../../server";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { BsFillBagFill } from "react-icons/bs";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { getShopAllOrders } from "../../redux/features/orderSlice";
+import { server } from "../../server";
+import styles from "../../styles/style";
 
 const OrderDetails = () => {
   const { shopOrders } = useSelector((state) => state.order);
   const { seller } = useSelector((state) => state.seller);
   const dispatch = useDispatch();
   const [status, setStatus] = useState();
-  const navigate = useNavigate();
 
   const { id } = useParams();
 
@@ -108,7 +106,7 @@ const OrderDetails = () => {
         data?.cart?.map((item, index) => (
           <div className="w-full flex items-start mb-5">
             <img
-              src={`${backend_url}/${item.images[0]}`}
+              src={item.images?.[0]?.url}
               alt=""
               className="w-[80px] h-[80px]"
             />

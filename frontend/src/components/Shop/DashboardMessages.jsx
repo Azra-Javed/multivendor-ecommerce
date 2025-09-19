@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { backend_url, server } from "../../server";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineArrowRight, AiOutlineSend } from "react-icons/ai";
@@ -10,6 +9,7 @@ import { toast } from "react-toastify";
 import { TfiGallery } from "react-icons/tfi";
 import { format } from "timeago.js";
 import socketIO from "socket.io-client";
+import { server } from "../../server";
 const ENDPOINT = "http://localhost:5000/";
 const socket = socketIO(ENDPOINT, { transports: ["websocket"] });
 
@@ -295,7 +295,7 @@ const MessageList = ({
     >
       <div className="relative">
         <img
-          src={`${backend_url}/${user?.avatar}`}
+          src={user?.avatar?.url}
           alt=""
           className="w-[50px] h-[50px] rounded-full"
         />
@@ -335,9 +335,7 @@ const SellerInbox = ({
         <div className="flex">
           <img
             src={
-              userData?.avatar
-                ? `${backend_url}/${userData.avatar}`
-                : "/default-avatar.png"
+              userData?.avatar ? userData?.avatar?.url : "/default-avatar.png"
             }
             alt="avatar"
             className="w-[60px] h-[60px] rounded-full"
@@ -366,7 +364,7 @@ const SellerInbox = ({
             >
               {item.sender !== sellerId && (
                 <img
-                  src={`${backend_url}/${userData?.avatar}`}
+                  src={userData?.avatar?.url}
                   alt=""
                   className="w-[40px] h-[40px] rounded-full mr-3"
                 />
@@ -383,7 +381,7 @@ const SellerInbox = ({
 
                 {item.image && (
                   <img
-                    src={`${backend_url}/${item.image}`}
+                    src={item?.image?.url}
                     alt="sent"
                     className="w-[250px] h-[250px] rounded-lg object-cover mt-1"
                   />

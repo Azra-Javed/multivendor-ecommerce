@@ -18,21 +18,15 @@ const {
   isAdmin,
   isAuthenticated,
 } = require("../middleware/auth");
-const { upload } = require("../config/multer");
 const router = express.Router();
 
-router.post("/create-shop", upload.single("file"), createShop);
+router.post("/create-shop", createShop);
 router.post("/activation", activateShop);
 router.post("/shop-login", shopLogin);
 router.get("/getSeller", isSellerAuthenticated, getSeller);
 router.get("/logoutShop", logoutShop);
 router.get("/get-shop-info/:id", getShopInfo);
-router.put(
-  "/update-avatar",
-  isSellerAuthenticated,
-  upload.single("image"),
-  updateAvatar
-);
+router.put("/update-avatar/:id", isSellerAuthenticated, updateAvatar);
 router.put("/update-shop-info", isSellerAuthenticated, updateSeller);
 router.get(
   "/admin-sellers",

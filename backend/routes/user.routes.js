@@ -7,7 +7,7 @@ const {
   logoutUser,
   updateUser,
   updateAvatar,
-  upddateAddress,
+  updateAddress,
   deleteUserAddress,
   updatePassword,
   getUserInfo,
@@ -15,22 +15,16 @@ const {
   deleteUser,
 } = require("../controller/user.controller");
 const { isAuthenticated, isAdmin } = require("../middleware/auth");
-const { upload } = require("../config/multer");
 const router = express.Router();
 
-router.post("/create-user", upload.single("file"), createUser);
+router.post("/create-user", createUser);
 router.post("/activation", activateUser);
 router.post("/login-user", userLogin);
 router.get("/getuser", isAuthenticated, getUser);
 router.get("/logoutUser", isAuthenticated, logoutUser);
 router.put("/update-user-info", isAuthenticated, updateUser);
-router.put(
-  "/update-avatar",
-  isAuthenticated,
-  upload.single("image"),
-  updateAvatar
-);
-router.put("/update-user-addresses", isAuthenticated, upddateAddress);
+router.put("/update-avatar/:id", isAuthenticated, updateAvatar);
+router.put("/update-user-addresses", isAuthenticated, updateAddress);
 router.delete("/delete-user-address/:id", isAuthenticated, deleteUserAddress);
 router.put("/update-user-password", isAuthenticated, updatePassword);
 router.get("/user-info/:id", getUserInfo);

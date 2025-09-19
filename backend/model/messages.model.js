@@ -16,7 +16,14 @@ const messageSchema = new mongoose.Schema(
       type: String,
     },
     image: {
-      type: String,
+      public_id: {
+        type: String,
+        default: null,
+      },
+      url: {
+        type: String,
+        default: null,
+      },
     },
   },
   { timestamps: true }

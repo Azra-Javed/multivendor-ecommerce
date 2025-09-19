@@ -1,6 +1,5 @@
 import styles from "../../../styles/style.js";
 import CountDown from "./CountDown.jsx";
-import { backend_url } from "../../../server.js";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../../redux/features/cartSlice.js";
@@ -28,12 +27,12 @@ const EventCard = ({ active, data }) => {
 
   return (
     <div
-      className={`w-full block bg-white rounded-lg ${
+      className={`w-full block bg-white shadow rounded-lg ${
         active ? "unset" : "mb-12"
       } lg:flex p-2`}
     >
       <div className="w-full lg:w-[50%] m-auto">
-        <img src={`${backend_url}${data.images[0]}`} alt="" />
+        <img src={data?.images?.[0]?.url} alt="" />
       </div>
       <div className="w-full lg:w-[50%] flex flex-col justify-center">
         <h2 className={`${styles.productTitle}`}>{data.name}</h2>

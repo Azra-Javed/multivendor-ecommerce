@@ -1,26 +1,32 @@
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/ErrorHandler");
 const Message = require("../model/messages.model");
-const Conversation = require("../model/conversation.model");
-const path = require("path");
+const cloudinary = require("cloudinary");
 
 //@desc create new message
 //@route POST /api/v2/message/create-message
 const createMessage = catchAsyncErrors(async (req, res, next) => {
   try {
-    let fileUrl;
+    let imageData;
     const { conversationId, sender, text } = req.body;
 
-    if (req.file) {
-      const filename = req.file.filename;
-      fileUrl = path.join(filename);
+    const image = req.files?.image;
+    if (image) {
+      const result = await cloudinary.v2.uploader.upload(image.tempFilePath, {
+        folder: "messages",
+      });
+
+      imageData = {
+        public_id: result.public_id,
+        url: result.secure_url,
+      };
     }
 
     const message = new Message({
       conversationId,
       sender,
-      image: fileUrl || undefined,
       text,
+      image: imageData,
     });
 
     await message.save();

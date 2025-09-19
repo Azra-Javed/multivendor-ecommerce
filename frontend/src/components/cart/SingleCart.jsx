@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { HiOutlineMinus, HiPlus } from "react-icons/hi";
-import { backend_url } from "../../server";
+import { RxCross1 } from "react-icons/rx";
 import { toast } from "react-toastify";
 import styles from "../../styles/style";
-import { RxCross1 } from "react-icons/rx";
 
 const SingleCart = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
   const [value, setValue] = useState(data.qty);
@@ -47,8 +46,8 @@ const SingleCart = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
         </div>
 
         <img
-          src={`${backend_url}${data?.images[0]}`}
-          alt=""
+          src={data?.images[0]?.url}
+          alt="product"
           className="w-[130px] h-min ml-2 mr-2 rounded-[5px]"
         />
         <div className="pl-[5px]">

@@ -1,5 +1,4 @@
 const express = require("express");
-const { upload } = require("../config/multer");
 const {
   createProduct,
   getProducts,
@@ -13,7 +12,7 @@ const {
   isAuthenticated,
 } = require("../middleware/auth");
 
-router.post("/create-product", upload.array("images"), createProduct);
+router.post("/create-product", createProduct);
 router.get("/get-all-products-shop/:id", getProducts);
 router.get("/get-all-products", getAllProducts);
 router.delete("/delete-shop-product/:id", isSellerAuthenticated, deleteProduct);

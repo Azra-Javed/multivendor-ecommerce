@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { backend_url, server } from "../../server";
 import Loader from "../Layout/Loader";
 import styles from "../../styles/style";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProductsShop } from "../../redux/features/productSlice";
+import { server } from "../../server";
 
 const ShopInfo = ({ isOwner }) => {
   const { products } = useSelector((state) => state.products);
@@ -61,7 +61,7 @@ const ShopInfo = ({ isOwner }) => {
           <div className="w-full py-5">
             <div className="w-full flex item-center justify-center">
               <img
-                src={`${backend_url}/${data.avatar}`}
+                src={data?.avatar?.url}
                 alt=""
                 className="w-[150px] h-[150px] object-cover rounded-full"
               />

@@ -4,11 +4,11 @@ import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getAllOrders } from "../../redux/features/orderSlice";
-import { backend_url, server } from "../../server";
 import { RxCross1 } from "react-icons/rx";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { server } from "../../server";
 
 const UserOrderDetails = () => {
   const { orders } = useSelector((state) => state.order);
@@ -53,7 +53,6 @@ const UserOrderDetails = () => {
   };
 
   const refundHandler = async () => {
-    console.log("button clidke");
     await axios
       .put(`${server}/order/order-refund/${id}`, {
         status: "Processing refund",
@@ -87,7 +86,7 @@ const UserOrderDetails = () => {
         data?.cart?.map((item, index) => (
           <div className="w-full flex items-start mb-5">
             <img
-              src={`${backend_url}/${item.images[0]}`}
+              src={item?.images?.[0]?.url}
               alt=""
               className="w-[80px] h-[80px]"
             />
@@ -128,7 +127,7 @@ const UserOrderDetails = () => {
                   <br />
                   <div className="w-full flex">
                     <img
-                      src={`${backend_url}/${selectedItem?.images[0]}`}
+                      src={selectedItem?.images?.[0]?.url}
                       alt=""
                       className="w-[80px] h-[80px]"
                     />
@@ -236,7 +235,7 @@ const UserOrderDetails = () => {
           )}
         </div>
       </div>
-      <Link className="/">
+      <Link to="/">
         <div className={`${styles.button} text-white`}>Send Message</div>
       </Link>
 

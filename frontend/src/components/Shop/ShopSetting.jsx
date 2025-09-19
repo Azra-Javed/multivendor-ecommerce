@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
-import { backend_url, server } from "../../server";
 import { AiOutlineCamera } from "react-icons/ai";
 import styles from "../../styles/style";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { loadSeller } from "../../redux/features/sellerSlice";
+import { server } from "../../server";
 
 const ShopSetting = () => {
   const { seller, error } = useSelector((state) => state.seller);
@@ -30,10 +30,10 @@ const ShopSetting = () => {
 
     const formData = new FormData();
 
-    formData.append("image", e.target.files[0]);
+    formData.append("avatar", e.target.files[0]);
 
     await axios
-      .put(`${server}/shop/update-avatar`, formData, {
+      .put(`${server}/shop/update-avatar/${seller._id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -77,11 +77,7 @@ const ShopSetting = () => {
         <div className="flex justify-center w-full">
           <div className="relative">
             <img
-              src={
-                avatar
-                  ? URL.createObjectURL(avatar)
-                  : `${backend_url}/${seller?.avatar}`
-              }
+              src={avatar ? URL.createObjectURL(avatar) : seller?.avatar?.url}
               alt=""
               className="w-[150px] h-[150px] rounded-full object-cover"
             />

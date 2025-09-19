@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { RxCross1 } from "react-icons/rx";
 import styles from "../../styles/style";
 import { Link } from "react-router-dom";
-import { backend_url } from "../../server";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { addToCart } from "../../redux/features/cartSlice";
@@ -24,7 +23,6 @@ const ProductDetailsCard = ({ setOpen, data }) => {
   const dispatch = useDispatch();
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
-  //const [select, setSelect] = useState(false);
 
   const handleMessageSubmit = () => {};
 
@@ -85,14 +83,11 @@ const ProductDetailsCard = ({ setOpen, data }) => {
             <div className="block w-full 800px:flex">
               {/* left side */}
               <div className="w-full 800px:w-[50%]">
-                <img
-                  src={`${backend_url}${data.images && data.images[0]}`}
-                  alt=""
-                />
+                <img src={data?.images?.[0]?.url} alt="" />
                 <div className="flex">
                   <Link to={`/shop/preview/${data.shop._id}`} className="flex">
                     <img
-                      src={`${backend_url}${data?.shop?.avatar}`}
+                      src={data?.shop?.avatar?.url}
                       alt=""
                       className="w-[50px] h-[50px] rounded-full mr-2"
                     />
@@ -114,7 +109,9 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                   </span>
                 </div>
 
-                <h5 className="text-[16px] text-[red] mt-5">(50) Sold out</h5>
+                <h5 className="text-[16px] text-[red] mt-5">
+                  {data?.sold_out} Sold out
+                </h5>
               </div>
               {/* right side */}
               <div className="w-full 800px:w-[50%] pt-5 pl-[5px] pr-[5px]">

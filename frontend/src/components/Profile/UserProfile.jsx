@@ -1,5 +1,4 @@
 import { AiOutlineCamera } from "react-icons/ai";
-import { backend_url, server } from "../../server";
 import styles from "../../styles/style";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,13 +8,15 @@ import {
 } from "../../redux/features/userSlice";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { server } from "../../server";
+
 const UserProfile = () => {
   const { user, error } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  const [name, setName] = useState(user && user.name);
-  const [email, setEmail] = useState(user && user.email);
-  const [phoneNumber, setPhoneNumber] = useState(user && user.phoneNumber);
+  const [name, setName] = useState(user?.name);
+  const [email, setEmail] = useState(user?.email);
+  const [phoneNumber, setPhoneNumber] = useState(user?.phoneNumber);
   const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState(null);
 
@@ -24,6 +25,20 @@ const UserProfile = () => {
       toast.error(error);
     }
   }, [error]);
+
+  useEffect(() => {
+    dispatch(loadUser());
+  }, [dispatch]);
+
+  console.log(user);
+
+  useEffect(() => {
+    if (user) {
+      setName(user.name);
+      setEmail(user.email);
+      setPhoneNumber(user.phoneNumber);
+    }
+  }, [user]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -36,10 +51,10 @@ const UserProfile = () => {
 
     const formData = new FormData();
 
-    formData.append("image", e.target.files[0]);
+    formData.append("avatar", e.target.files[0]);
 
     await axios
-      .put(`${server}/user/update-avatar`, formData, {
+      .put(`${server}/user/update-avatar/${user._id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -59,11 +74,7 @@ const UserProfile = () => {
       <div className="flex justify-center w-full">
         <div className="relative">
           <img
-            src={
-              avatar
-                ? URL.createObjectURL(avatar)
-                : `${backend_url}${user?.avatar}`
-            }
+            src={avatar ? URL.createObjectURL(avatar) : user?.avatar?.url}
             alt=""
             className="w-[150px] h-[150px] rounded-full object-cover border-[3px] border-[#3ad132]"
           />

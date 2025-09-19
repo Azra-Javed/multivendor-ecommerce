@@ -2,7 +2,7 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/ErrorHandler");
 const Shop = require("../model/shop");
 const Product = require("../model/product");
-const fs = require("fs");
+const cloudinary = require("cloudinary");
 const Order = require("../model/order.model");
 
 //@desc: Create product
@@ -10,27 +10,53 @@ const Order = require("../model/order.model");
 const createProduct = catchAsyncErrors(async (req, res, next) => {
   try {
     const shopId = req.body.shopId;
-
     const shop = await Shop.findById(shopId);
 
     if (!shop) {
       return next(new ErrorHandler("Shop Id is invalid", 400));
-    } else {
-      const files = req.files;
-      const imageUrls = files.map((file) => `${file.filename}`);
-      const productData = req.body;
-      productData.images = imageUrls;
-      productData.shop = shop;
-
-      const product = await Product.create(productData);
-
-      res.status(201).json({
-        success: true,
-        product,
-      });
     }
+
+    const imageFiles = req.files?.images;
+    let images = [];
+
+    if (imageFiles) {
+      // if single file uploaded
+      if (!Array.isArray(imageFiles)) {
+        const result = await cloudinary.v2.uploader.upload(
+          imageFiles.tempFilePath,
+          {
+            folder: "products",
+          }
+        );
+        images.push({ public_id: result.public_id, url: result.secure_url });
+      } else {
+        // multiple files
+        for (let file of imageFiles) {
+          const result = await cloudinary.v2.uploader.upload(
+            file.tempFilePath,
+            {
+              folder: "products",
+            }
+          );
+          images.push({ public_id: result.public_id, url: result.secure_url });
+        }
+      }
+    }
+
+    const productData = {
+      ...req.body,
+      images,
+      shop,
+    };
+
+    const product = await Product.create(productData);
+
+    res.status(201).json({
+      success: true,
+      product,
+    });
   } catch (error) {
-    return next(new ErrorHandler(error, 400));
+    return next(new ErrorHandler(error.message || error, 400));
   }
 });
 
@@ -69,23 +95,19 @@ const getAllProducts = catchAsyncErrors(async (req, res, next) => {
 
 const deleteProduct = catchAsyncErrors(async (req, res, next) => {
   try {
-    const productData = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id);
 
-    productData.images.forEach((imageUrl) => {
-      const filename = imageUrl;
-      const filePath = `uploads/${filename}`;
-
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.log(err);
-        }
-      });
-    });
-
-    const product = await Product.findByIdAndDelete(req.params.id);
     if (!product) {
       return next(new ErrorHandler("Product not found", 404));
     }
+
+    // Delete images from Cloudinary
+    for (const image of product.images) {
+      await cloudinary.uploader.destroy(image.public_id);
+    }
+
+    // Delete product from DB
+    await product.deleteOne();
 
     res.status(200).json({
       success: true,

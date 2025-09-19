@@ -2,7 +2,7 @@ const Shop = require("../model/shop");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/ErrorHandler");
 const Event = require("../model/events.model");
-const fs = require("fs");
+const cloudinary = require("cloudinary");
 
 //@desc: Create event
 //@route: POST /api/vs/event/create-event
@@ -14,22 +14,49 @@ const createEvent = catchAsyncErrors(async (req, res, next) => {
 
     if (!shop) {
       return next(new ErrorHandler("Shop Id is invalid", 400));
-    } else {
-      const files = req.files;
-      const imageUrls = files.map((file) => `${file.filename}`);
-      const eventData = req.body;
-      eventData.images = imageUrls;
-      eventData.shop = shop;
-
-      const event = await Event.create(eventData);
-
-      res.status(201).json({
-        success: true,
-        event,
-      });
     }
+
+    const imageFiles = req.files?.images;
+    let images = [];
+
+    if (imageFiles) {
+      // if single file uploaded
+      if (!Array.isArray(imageFiles)) {
+        const result = await cloudinary.v2.uploader.upload(
+          imageFiles.tempFilePath,
+          {
+            folder: "events",
+          }
+        );
+        images.push({ public_id: result.public_id, url: result.secure_url });
+      } else {
+        // multiple files
+        for (let file of imageFiles) {
+          const result = await cloudinary.v2.uploader.upload(
+            file.tempFilePath,
+            {
+              folder: "products",
+            }
+          );
+          images.push({ public_id: result.public_id, url: result.secure_url });
+        }
+      }
+    }
+
+    const eventData = {
+      ...req.body,
+      images,
+      shop,
+    };
+
+    const event = await Event.create(eventData);
+
+    res.status(201).json({
+      success: true,
+      event,
+    });
   } catch (error) {
-    return next(new ErrorHandler(error, 400));
+    return next(new ErrorHandler(error.message, 400));
   }
 });
 
@@ -68,24 +95,17 @@ const getAllEvents = async (req, res, next) => {
 
 const deleteEvent = catchAsyncErrors(async (req, res, next) => {
   try {
-    const eventData = await Event.findById(req.params.id);
-
-    eventData.images.forEach((imageUrl) => {
-      const filename = imageUrl;
-      const filePath = `uploads/${filename}`;
-
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.log(err);
-        }
-      });
-    });
-
-    const event = await Event.findByIdAndDelete(req.params.id);
+    const event = await Event.findById(req.params.id);
 
     if (!event) {
       return next(new ErrorHandler("Event not found", 404));
     }
+
+    for (const image of event.images) {
+      await cloudinary.uploader.destroy(image.public_id);
+    }
+
+    await event.deleteOne();
 
     res.status(200).json({
       success: true,

@@ -3,12 +3,12 @@ import Header from "../components/Layout/Header";
 import { useSelector } from "react-redux";
 import { format } from "timeago.js";
 import socketIO from "socket.io-client";
-import { backend_url, server } from "../server";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineArrowRight, AiOutlineSend } from "react-icons/ai";
 import { TfiGallery } from "react-icons/tfi";
+import { server } from "../server";
 const ENDPOINT = "http://localhost:5000/";
 const socket = socketIO(ENDPOINT, { transports: ["websocket"] });
 
@@ -302,7 +302,7 @@ const MessageList = ({
     >
       <div className="relative">
         <img
-          src={`${backend_url}${user?.avatar}`}
+          src={user?.avatar?.url}
           alt=""
           className="w-[50px] h-[50px] rounded-full"
         />
@@ -343,8 +343,8 @@ const UserInboxChat = ({
         <div className="flex">
           <img
             src={
-              userData?.avatar
-                ? `${backend_url}/${userData.avatar}`
+              userData?.avatar?.url
+                ? userData.avatar.url
                 : "/default-avatar.png"
             }
             alt="avatar"
@@ -374,7 +374,7 @@ const UserInboxChat = ({
             >
               {item.sender !== userId && (
                 <img
-                  src={`${backend_url}/${userData?.avatar}`}
+                  src={userData?.avatar?.url}
                   alt=""
                   className="w-[40px] h-[40px] rounded-full mr-3"
                 />
@@ -391,7 +391,7 @@ const UserInboxChat = ({
 
                 {item.image && (
                   <img
-                    src={`${backend_url}/${item.image}`}
+                    src={item.image.url}
                     alt="sent"
                     className="w-[250px] h-[250px] rounded-lg object-cover mt-1"
                   />

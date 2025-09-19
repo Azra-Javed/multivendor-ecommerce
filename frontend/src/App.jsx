@@ -4,7 +4,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 import Store from "./redux/store";
 import { loadUser } from "./redux/features/userSlice";
-
 import { router } from "./routes/AppRoutes";
 import { getAllEvents } from "./redux/features/eventSlice";
 import { getAllProducts } from "./redux/features/productSlice";

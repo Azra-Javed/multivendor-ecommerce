@@ -1,6 +1,6 @@
 // 1. Load environment variables first
 if (process.env.NODE_ENV !== "PRODUCTION") {
-  require("dotenv").config({ path: "backend/config/.env" });
+  require("dotenv").config({ path: "config/.env" });
 }
 
 // 2. Import packages

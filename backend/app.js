@@ -28,6 +28,10 @@ app.use("/", express.static("uploads"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(fileUpload({ useTempFiles: true }));
 
+app.use("/", (req, res) => {
+  res.send("Hello World!");
+});
+
 app.use("/api/v2/user", user);
 app.use("/api/v2/shop", shop);
 app.use("/api/v2/product", product);

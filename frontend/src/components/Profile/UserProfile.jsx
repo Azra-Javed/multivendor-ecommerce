@@ -30,8 +30,6 @@ const UserProfile = () => {
     dispatch(loadUser());
   }, [dispatch]);
 
-  console.log(user);
-
   useEffect(() => {
     if (user) {
       setName(user.name);

@@ -1,6 +1,6 @@
 import { BsFillBagFill } from "react-icons/bs";
 import styles from "../../styles/style";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getAllOrders } from "../../redux/features/orderSlice";
@@ -12,13 +12,14 @@ import { server } from "../../server";
 
 const UserOrderDetails = () => {
   const { orders } = useSelector((state) => state.order);
-  const { user } = useSelector((state) => state.user);
+  const { user, isAuthenticated } = useSelector((state) => state.user);
   const [open, setOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(1);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
@@ -38,9 +39,7 @@ const UserOrderDetails = () => {
           productId: selectedItem._id,
           orderId: id,
         },
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       )
       .then((res) => {
         toast.success(res.data.message);
@@ -64,183 +63,224 @@ const UserOrderDetails = () => {
       .catch((error) => toast.error(error.response.data.message));
   };
 
+  const handleMessageSubmit = async (data) => {
+    if (isAuthenticated) {
+      const groupTitle = data?._id + user._id;
+      const userId = user._id;
+      const sellerId = data.shop._id;
+
+      await axios
+        .post(`${server}/conversation/create-conversation`, {
+          groupTitle,
+          userId,
+          sellerId,
+        })
+        .then((res) => {
+          navigate(`/inbox?${res.data.conversation._id}`);
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+        });
+    } else {
+      toast.error("Please login to start conversation");
+    }
+  };
+
   return (
-    <div className={`py-4 min-h-screen ${styles.section}`}>
-      <div className="w-full flex items-center justify-between">
-        <div className="flex items-center">
-          <BsFillBagFill size={30} color="crimson" />
-          <h1 className="pl-2 text-[25px]">Order Details</h1>
-        </div>
+    <div className={`py-6 min-h-screen ${styles.section}`}>
+      {/* Header */}
+      <div className="flex items-center gap-2 border-b pb-4">
+        <BsFillBagFill size={32} className="text-[#E94560]" />
+        <h1 className="text-2xl font-semibold text-gray-800">Order Details</h1>
       </div>
-      <div className="w-full flex items-center justify-between pt-6">
-        <h5 className="text-[#00000084]">
-          Order ID: <span>#{data?._id?.slice(0, 8)}</span>
+
+      {/* Order info */}
+      <div className="flex items-center justify-between mt-6 text-gray-600">
+        <h5>
+          Order ID:{" "}
+          <span className="font-medium text-gray-800">
+            #{data?._id?.slice(0, 8)}
+          </span>
         </h5>
-        <h5 className="text-[#00000084]">
-          Placed on: <span>{data?.createdAt?.slice(0, 10)}</span>
+        <h5>
+          Placed on:{" "}
+          <span className="font-medium text-gray-800">
+            {data?.createdAt?.slice(0, 10)}
+          </span>
         </h5>
       </div>
-      <br />
-      <br />
-      {data &&
-        data?.cart?.map((item, index) => (
-          <div className="w-full flex items-start mb-5">
-            <img
-              src={item?.images?.[0]?.url}
-              alt=""
-              className="w-[80px] h-[80px]"
-            />
-            <div className="w-full">
-              <h5 className="pl-3 text-[20px]">{item.name}</h5>
-              <h5 className="pl-3 text-[20px] text-[#00000091]">
-                US${item.discountPrice} x {item.qty}
-              </h5>
-            </div>
 
-            {!item.isReviewed && data?.status === "Delivered" && (
-              <div
-                className={`${styles.button} text-white`}
-                onClick={() => {
-                  setOpen(true);
-                  setSelectedItem(item);
-                }}
-              >
-                Write a review
-              </div>
-            )}
-
-            {/* review popup */}
-            {open && (
-              <div className="w-full fixed top-0 left-0 h-screen bg-[#0005] z-50 flex items-center justify-center">
-                <div className="w-[50%] h-min bg-white shadow rounded-md p-3">
-                  <div className="w-full flex justify-end p-3">
-                    <RxCross1
-                      className="cursor-pointer"
-                      size={30}
-                      onClick={() => setOpen(false)}
-                    />
-                  </div>
-
-                  <h2 className="text-[30px] font-[500] font-family-poppins text-center">
-                    Give a Review
-                  </h2>
-                  <br />
-                  <div className="w-full flex">
-                    <img
-                      src={selectedItem?.images?.[0]?.url}
-                      alt=""
-                      className="w-[80px] h-[80px]"
-                    />
-                    <div>
-                      <div className="pl-3 text-[20px]">
-                        {selectedItem?.name}
-                      </div>
-                      <h4 className="pl-3 text-[20px]">
-                        US${selectedItem?.discountPrice} x {selectedItem?.qty}
-                      </h4>
-                    </div>
-                  </div>
-
-                  {/* ratings */}
-                  <h5 className="pl-3 text-[20px] font-[500]">
-                    Give Rating <span className="text-red-500">*</span>
+      {/* Cart items */}
+      <div className="mt-6 space-y-4">
+        {data &&
+          data?.cart?.map((item, index) => (
+            <div
+              key={index}
+              className="flex items-start justify-between gap-4 bg-white shadow-sm rounded-md p-4"
+            >
+              <div className="flex gap-3">
+                <img
+                  src={item?.images?.[0]?.url}
+                  alt=""
+                  className="w-[80px] h-[80px] object-cover rounded-md"
+                />
+                <div>
+                  <h5 className="text-lg font-semibold text-gray-800">
+                    {item.name}
                   </h5>
-                  <div className="flex w-full ml-2 pt-1">
-                    {[1, 2, 3, 4, 5].map((i) =>
-                      rating >= i ? (
-                        <AiFillStar
-                          key={i}
-                          className="mr-1 cursor-pointer"
-                          color="rgb(246,186,0)"
-                          size={25}
-                          onClick={() => setRating(i)}
-                        />
-                      ) : (
-                        <AiOutlineStar
-                          key={i}
-                          className="mr-1 cursor-pointer"
-                          color="rgb(246,186,0)"
-                          size={25}
-                          onClick={() => setRating(i)}
-                        />
-                      )
-                    )}
-                  </div>
-                  <br />
-                  <div className="w-full ml-3">
-                    <label className="block text-[20px] font-[500]">
-                      Write a Comment{" "}
-                      <span className="font-[400] text-[16px] text-[#00000052]">
-                        (optional)
-                      </span>
-                    </label>
-                    <textarea
-                      rows="5"
-                      cols="20"
-                      className="mt-2 w-[95%] border p-2 outline"
-                      name="comment"
-                      placeholder="How was your product? write your expression about it"
-                      value={comment}
-                      onChange={(e) => setComment(e.target.value)}
-                    />
-                  </div>
-
-                  <div
-                    className={`${styles.button} text-white font-20px] ml-3`}
-                    onClick={rating > 1 && reviewHandler}
-                  >
-                    Submit
-                  </div>
+                  <p className="text-gray-600">
+                    US${item.discountPrice} x {item.qty}
+                  </p>
                 </div>
               </div>
-            )}
-          </div>
-        ))}
 
-      <div className="border-t w-full text-right">
-        <h5 className="pt-3 text-[18px]">
-          Total Price <strong>US$ {data?.totalPrice}</strong>
+              {!item.isReviewed && data?.status === "Delivered" && (
+                <button
+                  className="px-4 py-2 bg-[#E94560] text-white rounded-md hover:bg-[#c9304d] transition"
+                  onClick={() => {
+                    setOpen(true);
+                    setSelectedItem(item);
+                  }}
+                >
+                  Write a Review
+                </button>
+              )}
+            </div>
+          ))}
+      </div>
+
+      {/* Review popup */}
+      {open && (
+        <div className="fixed inset-0 bg-[#85838396] bg-opacity-50 z-50 flex items-center justify-center">
+          <div className="w-[90%] md:w-[50%] bg-white shadow-lg rounded-lg p-6 relative">
+            <button
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+              onClick={() => setOpen(false)}
+            >
+              <RxCross1 size={28} />
+            </button>
+
+            <h2 className="text-2xl font-semibold text-center mb-6">
+              Give a Review
+            </h2>
+
+            {/* Product info */}
+            <div className="flex items-center gap-4 mb-4">
+              <img
+                src={selectedItem?.images?.[0]?.url}
+                alt=""
+                className="w-[80px] h-[80px] rounded-md object-cover"
+              />
+              <div>
+                <h3 className="text-lg font-medium">{selectedItem?.name}</h3>
+                <p className="text-gray-600">
+                  US${selectedItem?.discountPrice} x {selectedItem?.qty}
+                </p>
+              </div>
+            </div>
+
+            {/* Ratings */}
+            <h5 className="text-lg font-medium mb-2">
+              Give Rating <span className="text-red-500">*</span>
+            </h5>
+            <div className="flex gap-1 mb-4">
+              {[1, 2, 3, 4, 5].map((i) =>
+                rating >= i ? (
+                  <AiFillStar
+                    key={i}
+                    className="cursor-pointer"
+                    color="rgb(246,186,0)"
+                    size={28}
+                    onClick={() => setRating(i)}
+                  />
+                ) : (
+                  <AiOutlineStar
+                    key={i}
+                    className="cursor-pointer"
+                    color="rgb(246,186,0)"
+                    size={28}
+                    onClick={() => setRating(i)}
+                  />
+                )
+              )}
+            </div>
+
+            {/* Comment */}
+            <div className="mb-4">
+              <label className="block text-lg font-medium mb-2">
+                Write a Comment{" "}
+                <span className="text-sm text-gray-500">(optional)</span>
+              </label>
+              <textarea
+                rows="5"
+                className="w-full border rounded-md p-3 outline-none focus:ring-2 focus:ring-[#E94560]"
+                placeholder="How was your product? Share your experience..."
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+              />
+            </div>
+
+            <button
+              className="w-full py-2 bg-[#E94560] text-white rounded-md hover:bg-[#c9304d] transition"
+              onClick={rating > 1 && reviewHandler}
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Total */}
+      <div className="border-t mt-6 pt-4 text-right">
+        <h5 className="text-lg font-semibold">
+          Total Price:{" "}
+          <span className="text-[#E94560]">
+            US$ {data?.totalPrice.toFixed(2)}
+          </span>
         </h5>
       </div>
 
-      <br />
-      <br />
-
-      <div className="w-full 800px:flex items-center">
-        <div className="w-full 800px:w-[60%]">
-          <h4 className="pt-3 text-[20px] font-[600]">Shipping Address:</h4>
-          <h4>
-            {data?.shippingAddress.address1 +
-              " " +
-              data?.shippingAddress.address2}
-          </h4>
-          <h4 className="text-[20px]">{data?.shippingAddress?.country}</h4>
-          <h4 className="text-[20px]">{data?.shippingAddress?.city}</h4>
-          <h4 className="text-[20px]">{data?.user?.phoneNumber}</h4>
+      {/* Shipping + Payment */}
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-white p-5 rounded-md shadow-sm">
+          <h4 className="text-xl font-semibold mb-2">Shipping Address</h4>
+          <p>
+            {data?.shippingAddress.address1} {data?.shippingAddress.address2}
+          </p>
+          <p>{data?.shippingAddress?.country}</p>
+          <p>{data?.shippingAddress?.city}</p>
+          <p>{data?.user?.phoneNumber}</p>
         </div>
-        <div className="w-full 800px:w-[40%]">
-          <h4 className="pt-3 text-[20px]">Payment Info:</h4>
-          <h4>
+        <div className="bg-white p-5 rounded-md shadow-sm">
+          <h4 className="text-xl font-semibold mb-2">Payment Info</h4>
+          <p>
             Status:{" "}
-            {data?.paymentInfo?.status ? data?.paymentInfo.status : "Not Paid"}
-          </h4>
-          <br />
+            <span className="font-medium text-gray-800">
+              {data?.paymentInfo?.status
+                ? data?.paymentInfo.status
+                : "Not Paid"}
+            </span>
+          </p>
           {data?.status === "Delivered" && (
-            <div
-              className={`${styles.button} text-white`}
+            <button
+              className="mt-4 px-4 py-2 bg-[#E94560] text-white rounded-md hover:bg-[#c9304d] transition"
               onClick={refundHandler}
             >
-              Give a Refund
-            </div>
+              Request Refund
+            </button>
           )}
         </div>
       </div>
-      <Link to="/">
-        <div className={`${styles.button} text-white`}>Send Message</div>
-      </Link>
 
-      <br />
-      <br />
+      {/* Message Button */}
+      <div className="mt-6">
+        <button
+          className="px-6 py-2 bg-[#E94560] text-white rounded-md hover:bg-[#c9304d] transition"
+          onClick={() => handleMessageSubmit(data.cart[0])}
+        >
+          Send Message
+        </button>
+      </div>
     </div>
   );
 };

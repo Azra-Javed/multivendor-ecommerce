@@ -37,7 +37,7 @@ const Footer = () => {
 
       <div>
         <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-6 sm:px-8 px-5 py-16 sm:text-center">
-          <ul className="px-5 text-center sm:text-start flex sm:block flex-col items-center">
+          <ul className="px-5 text-center sm:text-start flex hidden md:block flex-col items-center">
             <img
               src="https://shopo.quomodothemes.website/assets/images/logo.svg"
               alt=""
@@ -98,15 +98,8 @@ const Footer = () => {
             ))}
           </ul>
         </div>{" "}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 text-center pt-2 text-gray-400 text-sm pb-8">
+        <div className="text-center text-gray-400 text-sm pb-8">
           <span>© 2020 Becodemy. All rights reserved.</span>
-          <span>Terms · Privacy Policy</span>
-          <div className="sm:block flex items-center justify-center w-full">
-            <img
-              src="https://hamart-shop.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ffooter-payment.a37c49ac.png&w=640&q=75"
-              alt=""
-            />
-          </div>
         </div>
       </div>
     </div>

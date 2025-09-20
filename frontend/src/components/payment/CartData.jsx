@@ -1,5 +1,3 @@
-import styles from "../../styles/style";
-
 const CartData = ({ orderData }) => {
   return (
     <>
@@ -9,7 +7,7 @@ const CartData = ({ orderData }) => {
             Subtotal:
           </h3>
           <h5 className="text-[18px] font-[600]">
-            ${orderData?.subTotalPrice}
+            ${orderData?.subTotalPrice?.toFixed(2)}
           </h5>
         </div>
 
@@ -30,7 +28,7 @@ const CartData = ({ orderData }) => {
         </div>
 
         <div className="text-[18px] font-[600] text-end pt-3">
-          {orderData?.totalPrice}
+          {orderData?.totalPrice?.toFixed(2)}
         </div>
       </div>
     </>

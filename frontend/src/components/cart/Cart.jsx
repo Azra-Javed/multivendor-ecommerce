@@ -77,7 +77,7 @@ const Cart = ({ setOpenCart }) => {
                   className={`h-[45px] flex items-center justify-center w-[100%] bg-[#e44343] rounded-[5px]`}
                 >
                   <h1 className="text-white text-[18px] font-[600]">
-                    Checkout Now (USD${totalPrice})
+                    Checkout Now (USD${totalPrice?.toFixed(2)})
                   </h1>
                 </div>
               </Link>

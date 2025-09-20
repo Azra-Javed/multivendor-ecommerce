@@ -119,72 +119,15 @@ const ProductDetails = ({ data }) => {
   const averageRatings = totalRatings / totalReviewsLength || 0;
 
   return (
-    <div className="bg-white ">
+    <div>
       {data ? (
         <>
-          <div className={`unset ${styles.section} w-[90%] 800px:w-[80%] `}>
+          <div className={`unset ${styles.section} w-[90%] 800px:w-[80%]`}>
             <div className="w-full py-5">
-              <div className="block w-full 800px:flex">
-                <div className="w-full 800px:w-[50%]">
-                  <img
-                    src={data?.images?.[select]?.url}
-                    alt=""
-                    className="w-[80%]"
-                  />
-                  <div className="w-full flex">
-                    {data &&
-                      data.images?.map((image, index) => (
-                        <div
-                          className={`${
-                            select === index ? "border" : ""
-                          }cursor-pointer`}
-                        >
-                          <img
-                            src={image?.url}
-                            alt=""
-                            className="h-[200px] overflow-hidden mr-3 mt-3"
-                            onClick={() => setSelect(index)}
-                          />
-                        </div>
-                      ))}
-
-                    <div
-                      className={`${
-                        select === 1 ? "border" : ""
-                      }cursor-pointer`}
-                    ></div>
-                  </div>
-                </div>
-                <div className="w-full 800px:w-[50%] pt-5">
-                  <h1 className={`${styles.productTitle}`}>{data.name}</h1>
-                  <p>{data.description}</p>
-                  <div className="flex pt-3">
-                    <h4 className={`${styles.productDiscountPrice}`}>
-                      {data.discountPrice}$
-                    </h4>
-                    <h3 className={`${styles.price}`}>
-                      {data.originalPrice ? data.originalPrice + "$" : null}
-                    </h3>
-                  </div>
-                  <div className="flex items-center mt-12 justify-between pr-3">
-                    <div>
-                      <button
-                        className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out cursor-pointer"
-                        onClick={decrementCount}
-                      >
-                        -
-                      </button>
-                      <span className="bg-gray-200 text-gray-800 font-medium px-4 py-[11px]">
-                        {count}
-                      </span>
-                      <button
-                        className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-r px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out cursor-pointer"
-                        onClick={incrementCount}
-                      >
-                        +
-                      </button>
-                    </div>
-
+              <div className="block w-full flex  flex-col-reverse 800px:flex-row justify-between gap-10 py-6">
+                <div className="w-full 800px:w-[50%] pt-5 ">
+                  <div className="flex justify-between text-center">
+                    <h1 className={`${styles.productTitle}`}>{data.name}</h1>
                     {click ? (
                       <AiFillHeart
                         size={30}
@@ -203,47 +146,101 @@ const ProductDetails = ({ data }) => {
                       />
                     )}
                   </div>
-                  <div
-                    className={`${styles.button} !mt-6 !rounded !h-11 flex items-center `}
-                    onClick={() => addToCartHandler(data._id)}
-                  >
-                    <span className="text-white flex items-center">
-                      Add to cart <AiOutlineShoppingCart className="ml-1" />
-                    </span>
+
+                  <p className="h-[200px] overflow-hidden line-clamp-[8]">
+                    {data.description}
+                  </p>
+                  <div className="flex pt-3 justify-end">
+                    <h4 className={`${styles.productDiscountPrice}`}>
+                      {data.discountPrice}$
+                    </h4>
+                    <h3 className={`${styles.price}`}>
+                      {data.originalPrice ? data.originalPrice + "$" : null}
+                    </h3>
                   </div>
 
-                  <div className="flex items-center pt-8">
-                    <Link to={`/shop/preview/${data?.shop._id}`}>
-                      <img
-                        src={data?.shop?.avatar?.url}
-                        alt=""
-                        className="w-[50px] h-[50px] rounded-full mr-2"
-                      />{" "}
-                    </Link>
-
-                    <div className="flex">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center pt-8">
                       <Link to={`/shop/preview/${data?.shop._id}`}>
-                        <div className="pr-8">
-                          <h3 className={`${styles.shop_name} pb-1 pt-1`}>
-                            {data.shop.name}
-                          </h3>
-                          <h5 className="pb-3 text-[15px]">(4/5) Ratings</h5>
-                        </div>
+                        <img
+                          src={data?.shop?.avatar?.url}
+                          alt=""
+                          className="w-[50px] h-[50px] rounded-full mr-2"
+                        />{" "}
                       </Link>
 
-                      <div
-                        className={`${styles.button} !bg-[#6443d1] mt-4 !rounded !h-11 `}
-                        onClick={handleMessageSubmit}
-                      >
-                        <span className="text-white flex items-center">
-                          send Message <AiOutlineMessage className="ml-1" />
-                        </span>
+                      <div className="flex">
+                        <Link to={`/shop/preview/${data?.shop._id}`}>
+                          <div className="pr-8">
+                            <h3 className={`${styles.shop_name} pb-1 pt-1`}>
+                              {data.shop.name}
+                            </h3>
+                            <h5 className="pb-3 text-[15px]">(4/5) Ratings</h5>
+                          </div>
+                        </Link>
                       </div>
+                    </div>
+                    <div
+                      className={`${styles.button} !mt-[30px] !rounded !h-11 flex items-center `}
+                      onClick={() => addToCartHandler(data._id)}
+                    >
+                      <span className="text-white flex items-center">
+                        Add to cart <AiOutlineShoppingCart className="ml-1" />
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 text-center">
+                    <div>
+                      <button
+                        className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out cursor-pointer"
+                        onClick={decrementCount}
+                      >
+                        -
+                      </button>
+                      <span className="text-gray-800 bg-gray-100 font-bold px-4 py-[11px]">
+                        {count}
+                      </span>
+                      <button
+                        className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-r px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out cursor-pointer"
+                        onClick={incrementCount}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full 800px:w-[50%]">
+                  <div className="w-full flex flex-col items-center">
+                    <img
+                      src={data?.images?.[select]?.url}
+                      alt=""
+                      className="w-[300px] h-[300px] object-contain rounded-2xl"
+                    />
+                    <div className="w-full flex justify-center">
+                      {data &&
+                        data.images?.map((image, index) => (
+                          <div
+                            className={`${
+                              select === index
+                                ? "border border-blue-900 rounded-2xl"
+                                : ""
+                            } cursor-pointer mt-5 mr-3`}
+                          >
+                            <img
+                              src={image?.url}
+                              alt=""
+                              className="h-[120px] w-[120px] object-contain overflow-hidden rounded-2xl"
+                              onClick={() => setSelect(index)}
+                            />
+                          </div>
+                        ))}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+
             <ProductDetailsInfo
               data={data}
               products={products}
@@ -337,7 +334,7 @@ const ProductDetailsInfo = ({
                 </div>
               ))}
             <div
-              className=" 
+              className="
             flex !items-center justify-center"
             >
               {data && data?.reviews?.length === 0 && <h5>No reviews yet</h5>}

@@ -83,9 +83,16 @@ const ProductDetailsCard = ({ setOpen, data }) => {
             <div className="block w-full 800px:flex">
               {/* left side */}
               <div className="w-full 800px:w-[50%]">
-                <img src={data?.images?.[0]?.url} alt="" />
+                <img
+                  src={data?.images?.[0]?.url}
+                  alt=""
+                  className="h-[300px] w-[400px] object-contain"
+                />
                 <div className="flex">
-                  <Link to={`/shop/preview/${data.shop._id}`} className="flex">
+                  <Link
+                    to={`/shop/preview/${data.shop._id}`}
+                    className="flex items-center"
+                  >
                     <img
                       src={data?.shop?.avatar?.url}
                       alt=""
@@ -101,24 +108,25 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                 </div>
 
                 <div
-                  className={`${styles.button} text-[15px] bg-[#000] mt-4 rounded-[4px] h-11`}
-                  onClick={handleMessageSubmit}
+                  className={`${styles.button} mt-6 rounded-[4px] h-11 flex items-center`}
+                  onClick={() => addToCartHandler(data._id)}
                 >
-                  <span className="text-white flex items-center">
-                    Send Message <AiOutlineMessage className="ml-1" />
+                  <span className="text-white flex items-center text-[16px]">
+                    Add to Cart
+                    <AiOutlineShoppingCart
+                      size={25}
+                      className="ml-1"
+                      title="Add to cart"
+                    />
                   </span>
                 </div>
-
-                <h5 className="text-[16px] text-[red] mt-5">
-                  {data?.sold_out} Sold out
-                </h5>
               </div>
               {/* right side */}
-              <div className="w-full 800px:w-[50%] pt-5 pl-[5px] pr-[5px]">
+              <div className="w-full 800px:w-[50%] pt-5 pl-[5px] pr-[5px] order-2 800px:order-1">
                 <h1 className={`${styles.productTitle} text-[20px]`}>
                   {data.name}
                 </h1>
-                <p className="py-2 text-[18px] leading-8  whitespace-pre-line">
+                <p className="py-2 text-[18px] leading-8  whitespace-pre-line  max-h-[400px] overflow-hidden line-clamp-6">
                   {data.description}
                 </p>
                 <div className="flex pt-3">
@@ -166,20 +174,6 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                       title="Add to wishlist"
                     />
                   )}
-                </div>
-
-                <div
-                  className={`${styles.button} mt-6 rounded-[4px] h-11 flex items-center`}
-                  onClick={() => addToCartHandler(data._id)}
-                >
-                  <span className="text-white flex items-center text-[16px]">
-                    Add to Cart
-                    <AiOutlineShoppingCart
-                      size={25}
-                      className="ml-1"
-                      title="Add to cart"
-                    />
-                  </span>
                 </div>
               </div>
             </div>

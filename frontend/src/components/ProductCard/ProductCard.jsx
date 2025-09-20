@@ -7,7 +7,6 @@ import {
 } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import styles from "../../styles/style";
 import ProductDetailsCard from "./productDetailsCard";
 
 import { toast } from "react-toastify";
@@ -61,7 +60,7 @@ const ProductCard = ({ data, isEvent }) => {
 
   return (
     <>
-      <div className="w-full bg-white rounded-lg shadow-sm relative cursor-pointer p-3 ">
+      <div className="w-full bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 relative cursor-pointer p-4">
         <Link
           to={`${
             isEvent === true
@@ -75,9 +74,6 @@ const ProductCard = ({ data, isEvent }) => {
             className="w-full h-[170px] object-contain"
           />
         </Link>
-        <Link to={`/shop/preview/${data?.shop._id}`}>
-          <h5 className={`${styles.shop_name}`}>{data.shop.name}</h5>
-        </Link>
         <Link
           to={`${
             isEvent === true
@@ -85,30 +81,34 @@ const ProductCard = ({ data, isEvent }) => {
               : `/product/${data._id}`
           }`}
         >
-          <h4 className="pb-3 font-[500]">
-            {data.name.length > 40 ? data.name.slice(0, 40) + "..." : data.name}
+          {/* Product Name */}
+          <h4 className="mt-3 mb-4 text-lg font-semibold text-gray-800 group-hover:text-teal-600 line-clamp-2">
+            {data.name.length > 20 ? data.name.slice(0, 20) + "..." : data.name}
           </h4>
 
-          <div className="flex">
-            <Ratings rating={data?.ratings} />
-          </div>
-
-          <div className="py-2 flex items-center justify-between">
-            <div className="flex">
-              <h5 className={`${styles.productDiscountPrice}`}>
+          {/* Price & Sold Info */}
+          <div className="flex justify-between items-center mb-3">
+            <div className="flex items-baseline gap-2">
+              <h5 className="text-xl font-bold text-teal-600">
                 {data.originalPrice === 0
                   ? data.originalPrice
                   : data.discountPrice}
                 $
               </h5>
+              {data.originalPrice ? (
+                <h4 className="text-sm line-through text-gray-400">
+                  {data.originalPrice}$
+                </h4>
+              ) : null}
+            </div>
+            <div className="text-sm font-medium text-green-600 bg-green-100 px-2 py-1 rounded-lg">
+              {data.sold_out} Sold
+            </div>
+          </div>
 
-              <h4 className={`${styles.price}`}>
-                {data.originalPrice ? data.originalPrice + "$" : null}
-              </h4>
-            </div>
-            <div className="font-[400] text-[17px] text-[#68d284]">
-              <span>{data.sold_out} Sold</span>
-            </div>
+          {/* Ratings */}
+          <div className="flex justify-center mt-5">
+            <Ratings rating={data?.ratings} />
           </div>
         </Link>
 

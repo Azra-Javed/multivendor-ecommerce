@@ -81,7 +81,7 @@ const DashboardContent = () => {
       row.push({
         id: item._id,
         itemsQty: item.cart.length,
-        total: "USS " + item.totalPrice,
+        total: "USS " + item.totalPrice.toFixed(2),
         status: item.status,
       });
     });

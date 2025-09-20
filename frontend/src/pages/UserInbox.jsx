@@ -60,7 +60,7 @@ const UserInbox = () => {
     if (user?._id) {
       getConversation();
     }
-  }, [user, messages]);
+  }, [user]);
 
   // Get all messages
   useEffect(() => {
@@ -380,28 +380,33 @@ const UserInboxChat = ({
                 />
               )}
 
-              <div
-                className={`max-w-[70%] rounded-2xl px-4 py-2 text-sm leading-5 shadow-md ${
-                  item.sender === userId
-                    ? "bg-blue-500 text-white rounded-br-none"
-                    : "bg-gray-200 text-black rounded-bl-none"
-                }  ${item.image ? "bg-transparent shadow-none p-0" : ""}`}
-              >
-                {item.text && <p>{item.text}</p>}
+              {item.text !== "" && (
+                <div
+                  className={`max-w-[70%] rounded-2xl px-4 py-2 text-sm leading-5 shadow-md ${
+                    item.sender === userId
+                      ? "bg-blue-500 text-white rounded-br-none"
+                      : "bg-gray-200 text-black rounded-bl-none"
+                  }`}
+                >
+                  <p>{item.text}</p>
+                  <p className="text-[11px] mt-1 text-gray-600 text-right">
+                    {format(item.createdAt)}
+                  </p>
+                </div>
+              )}
 
-                {item.image && (
+              {item.image.url != null && (
+                <div className="max-w-[70%]">
                   <img
-                    src={item.image.url}
+                    src={item?.image?.url}
                     alt="sent"
-                    className="w-[250px] h-[250px] rounded-lg object-cover mt-1"
+                    className="w-[250px] h-[250px] rounded-lg object-cover"
                   />
-                )}
-
-                {/* Time */}
-                <p className={`text-[11px] mt-1  text-gray-600 text-right`}>
-                  {format(item.createdAt)}
-                </p>
-              </div>
+                  <p className="text-[11px] mt-1 text-gray-600 text-right">
+                    {format(item.createdAt)}
+                  </p>
+                </div>
+              )}
             </div>
           ))}
       </div>

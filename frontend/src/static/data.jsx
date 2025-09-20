@@ -229,13 +229,14 @@ export const categoriesData = [
     title: "Gifts",
     subTitle: "",
     image_Url:
-      "https://securecdn.pymnts.com/wp-content/uploads/2014/11/Gifts-Photo-700x489.jpg",
+      "https://www.rubytuesday.com/wp-content/uploads/2024/06/Wedding-Gift-Ideas-scaled.jpeg",
   },
   {
     id: 7,
     title: "Pet Care",
     subTitle: "",
-    image_Url: "https://cdn.openpr.com/T/c/Tc15444071_g.jpg",
+    image_Url:
+      "https://www.1800whiskers.com/wp-content/uploads/2022/05/web-hero-pets-primary.png",
   },
   {
     id: 8,

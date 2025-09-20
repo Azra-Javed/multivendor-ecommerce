@@ -56,7 +56,7 @@ const SingleCart = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
             ${data.discountPrice} x {value}
           </h4>
           <h4 className="font-[600] text-[17px] pt-[3px] text-[#d02222] font-family-Roboto">
-            US${totalPrice}
+            US${totalPrice?.toFixed(2)}
           </h4>
         </div>
         <RxCross1

@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://multivendor-ecommerce-l46n.vercel.app/",
     credentials: true,
   })
 );

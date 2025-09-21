@@ -6,7 +6,7 @@ const Events = () => {
   const { allEvents, isLoading } = useSelector((state) => state.events);
   return (
     <>
-      {!isLoading && (
+      {allEvents?.length > 0 && (
         <div className={`${styles.section}`}>
           <div className={`${styles.heading}`}>
             <h1>Popular Events</h1>
@@ -14,7 +14,6 @@ const Events = () => {
 
           <div className="w-full grid">
             {allEvents?.length > 0 && <EventCard data={allEvents[0]} />}
-            {allEvents?.length === 0 && <h4>No event available!</h4>}
           </div>
         </div>
       )}

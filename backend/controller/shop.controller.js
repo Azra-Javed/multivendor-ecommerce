@@ -50,7 +50,7 @@ const createShop = async (req, res, next) => {
     // Create activation token
     const activationToken = createActivationToken(seller);
 
-    const activationUrl = `http://localhost:5173/seller/activation/${activationToken}`;
+    const activationUrl = `https://multivendor-ecommerce-l46n.vercel.app/activation/${activationToken}`;
 
     try {
       await sendMail({

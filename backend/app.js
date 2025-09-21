@@ -1,5 +1,6 @@
 const express = require("express");
 const fileUpload = require("express-fileupload");
+const path = require("path");
 const ErrorHandler = require("./middleware/error");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
@@ -20,15 +21,15 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://multivendor-ecommerce-l46n.vercel.app/",
+    origin: "https://multivendor-ecommerce-l46n.vercel.app",
     credentials: true,
   })
 );
-app.use("/", express.static("uploads"));
+app.use("/", express.static(path.join(__dirname, "./uploads")));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(fileUpload({ useTempFiles: true }));
+app.use(fileUpload({ useTempFiles: true, tempFileDir: "/uploads" }));
 
-app.use("/", (req, res) => {
+app.use("/test", (req, res) => {
   res.send("Hello World!");
 });
 

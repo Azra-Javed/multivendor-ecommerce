@@ -1,1 +1,1 @@
-export const server = "https://multivendor-ecommerce-orpin.vercel.app//api/v2";
+export const server = "https://multivendor-ecommerce-orpin.vercel.app/api/v2";

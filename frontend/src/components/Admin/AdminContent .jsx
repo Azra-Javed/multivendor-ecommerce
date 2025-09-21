@@ -75,7 +75,7 @@ const AdminContent = () => {
       row.push({
         id: item._id,
         itemsQty: item.cart.length,
-        total: item.totalPrice + "$",
+        total: item.totalPrice.toFixed(2) + "$",
         status: item.status,
         createdAt: item.createdAt.slice(0, 10),
       });

@@ -91,7 +91,7 @@ const CartSingle = ({ data, removeFromWishlistHandler, addToCartHandler }) => {
         <div className="pl-[5px]">
           <h1>{data.name}</h1>
           <h4 className="font-[600] text-[17px] text-[#d02222] pt-3 800px:pt-[3px] font-family-Roboto">
-            USD${totalPrice}
+            USD${totalPrice.toFixed(2)}
           </h4>
         </div>
 

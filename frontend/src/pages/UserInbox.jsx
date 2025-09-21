@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { AiOutlineArrowRight, AiOutlineSend } from "react-icons/ai";
 import { TfiGallery } from "react-icons/tfi";
 import { server } from "../server";
-const ENDPOINT = "http://localhost:5000/";
+const ENDPOINT = "https://socket-server-1-8lpl.onrender.com/";
 const socket = socketIO(ENDPOINT, { transports: ["websocket"] });
 
 const UserInbox = () => {

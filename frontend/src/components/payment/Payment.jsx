@@ -75,7 +75,7 @@ const Payment = () => {
     cart: orderData?.cart,
     shippingAddress: orderData?.shippingAddress,
     user: user && user,
-    totalPrice: orderData?.totalPrice.toFixed(2),
+    totalPrice: orderData?.totalPrice?.toFixed(2),
   };
 
   const paymentHandler = async (e) => {

@@ -22,6 +22,7 @@ const ShopLogin = () => {
       );
       toast.success("Login Success!");
       navigate("/dashboard");
+      window.location.reload();
     } catch (err) {
       toast.error(err.response?.data?.message || "Something went wrong");
     }

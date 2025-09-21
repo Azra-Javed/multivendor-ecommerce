@@ -27,7 +27,7 @@ app.use(
 );
 app.use("/", express.static(path.join(__dirname, "./uploads")));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(fileUpload({ useTempFiles: true }));
+app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp/" }));
 
 app.use("/test", (req, res) => {
   res.send("Hello World!");

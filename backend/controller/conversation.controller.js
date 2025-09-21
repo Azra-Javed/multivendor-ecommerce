@@ -7,20 +7,22 @@ const ErrorHandler = require("../utils/ErrorHandler");
 
 const createConversation = catchAsyncErrors(async (req, res, next) => {
   try {
-    const { groupTitle, userId, sellerId } = req.body;
-    const isConversationExist = await Conversation.findOne({ groupTitle });
+    const { userId, sellerId } = req.body;
+
+    const isConversationExist = await Conversation.findOne({
+      participants: { $all: [userId, sellerId] },
+    });
 
     if (isConversationExist) {
       const conversation = isConversationExist;
 
       res.status(200).json({
         success: true,
-        conversation,
+        conversation: isConversationExist,
       });
     } else {
       const conversation = await Conversation.create({
         participants: [userId, sellerId],
-        groupTitle: groupTitle,
       });
 
       res.status(201).json({

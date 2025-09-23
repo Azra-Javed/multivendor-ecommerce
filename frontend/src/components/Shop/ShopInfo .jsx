@@ -46,10 +46,16 @@ const ShopInfo = ({ isOwner }) => {
   }, []);
 
   const logoutHandler = async () => {
-    axios.get(`${server}/shop/logoutShop`, {
-      withCredentials: true,
-    });
-    window.location.reload();
+    try {
+      const res = await axios.get(`${server}/shop/logoutShop`, {
+        withCredentials: true,
+      });
+
+      toast.success(res.data.message || "Logged out successfully");
+      window.location.href = "/shop-login";
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Logout failed");
+    }
   };
 
   return (

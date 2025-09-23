@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { useState } from "react";
@@ -70,7 +70,7 @@ const DashboardMessages = () => {
     if (seller?._id && currentChat) {
       getMessage();
     }
-  }, [currentChat, seller?._id]);
+  }, [currentChat, messages]);
 
   // Create new message
   const sendMessageHandler = async (e) => {
@@ -203,7 +203,7 @@ const DashboardMessages = () => {
   };
 
   return (
-    <div className="w-[90%] bg-white m-5 h-[85vh] overflow-y-auto rounded">
+    <div className="w-[90%] bg-white m-5 h-[85vh] rounded">
       {!open && (
         <>
           <h1 className="text-center text-[30px] py-3 font-family-poppins">
@@ -328,6 +328,12 @@ const SellerInbox = ({
   activeStatus,
   handleImageUpload,
 }) => {
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [messages]);
+
   return (
     <div className="w-full min-h-full flex flex-col justify-between">
       {/* message header */}
@@ -342,7 +348,9 @@ const SellerInbox = ({
           />
           <div className="pl-3">
             <h1 className="text-[18px] font-[600]">{userData?.name}</h1>
-            <h1>{activeStatus ? "Active Now" : ""}</h1>
+            <h1 className="text-sm text-green-700 font-bold mt-2">
+              {activeStatus ? "Online" : ""}
+            </h1>
           </div>
         </div>
         <AiOutlineArrowRight
@@ -385,7 +393,7 @@ const SellerInbox = ({
                 </div>
               )}
 
-              {item.image.url != null && (
+              {item.image?.url != null && (
                 <div className="max-w-[70%]">
                   <img
                     src={item?.image?.url}
@@ -399,6 +407,7 @@ const SellerInbox = ({
               )}
             </div>
           ))}
+        <div ref={scrollRef} />
       </div>
 
       {/* send message input */}

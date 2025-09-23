@@ -78,7 +78,7 @@ const UserInbox = () => {
     if (user?._id && currentChat) {
       getMessage();
     }
-  }, [currentChat, user?._id]);
+  }, [currentChat, messages]);
 
   // Create new message
   const sendMessageHandler = async (e) => {
@@ -336,6 +336,11 @@ const UserInboxChat = ({
   activeStatus,
   handleImageUpload,
 }) => {
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [messages]);
   return (
     <div className="w-full min-h-full flex flex-col justify-between">
       {/* message header */}
@@ -344,7 +349,7 @@ const UserInboxChat = ({
           <img
             src={
               userData?.avatar?.url
-                ? userData.avatar.url
+                ? userData.avatar?.url
                 : "/default-avatar.png"
             }
             alt="avatar"
@@ -352,7 +357,9 @@ const UserInboxChat = ({
           />
           <div className="pl-3">
             <h1 className="text-[18px] font-[600]">{userData?.name}</h1>
-            <h1>{activeStatus ? "Active Now" : ""}</h1>
+            <h1 className="text-sm text-green-700 font-bold mt-2">
+              {activeStatus ? "Online" : ""}
+            </h1>
           </div>
         </div>
         <AiOutlineArrowRight
@@ -409,6 +416,7 @@ const UserInboxChat = ({
               )}
             </div>
           ))}
+        <div ref={scrollRef} />
       </div>
 
       {/* send message input */}

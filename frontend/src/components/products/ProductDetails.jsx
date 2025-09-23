@@ -121,136 +121,141 @@ const ProductDetails = ({ data }) => {
   return (
     <div>
       {data ? (
-        <>
-          <div className={`unset ${styles.section} w-[90%] 800px:w-[80%]`}>
-            <div className="w-full py-5">
-              <div className="block w-full flex  flex-col-reverse 800px:flex-row justify-between gap-10 py-6">
-                <div className="w-full 800px:w-[50%] pt-5 ">
-                  <div className="flex justify-between text-center">
-                    <h1 className={`${styles.productTitle}`}>{data.name}</h1>
-                    {click ? (
-                      <AiFillHeart
-                        size={30}
-                        className="cursor-pointer"
-                        onClick={() => removeFromWishlistHandler(data)}
-                        color={click ? "red" : "#333"}
-                        title="Remove from wishlist"
+        <div
+          className={`unset ${styles.section} w-[90%] max-w-[80rem] mx-auto`}
+        >
+          <div className="w-full py-6">
+            <div className="flex flex-col-reverse lg:flex-row justify-between gap-10 py-6">
+              {/* LEFT SIDE */}
+              <div className="w-full lg:w-1/2 pt-5">
+                {/* Title + Wishlist */}
+                <div className="flex justify-between items-start">
+                  <h1 className={`${styles.productTitle}`}>{data.name}</h1>
+                  {click ? (
+                    <AiFillHeart
+                      size="1.8rem"
+                      className="cursor-pointer"
+                      onClick={() => removeFromWishlistHandler(data)}
+                      color="red"
+                      title="Remove from wishlist"
+                    />
+                  ) : (
+                    <AiOutlineHeart
+                      size="1.8rem"
+                      className="cursor-pointer"
+                      onClick={() => addToWishlistHandler(data)}
+                      color="#333"
+                      title="Add to wishlist"
+                    />
+                  )}
+                </div>
+
+                {/* Description */}
+                <p className="max-h-[12rem] overflow-hidden line-clamp-6 text-base leading-relaxed mt-3">
+                  {data.description}
+                </p>
+
+                {/* Prices */}
+                <div className="flex justify-end pt-4">
+                  <h4 className={`${styles.productDiscountPrice}`}>
+                    {data.discountPrice}$
+                  </h4>
+                  {data.originalPrice && (
+                    <h3 className={`${styles.price}`}>{data.originalPrice}$</h3>
+                  )}
+                </div>
+
+                {/* Shop Info + Cart Btn */}
+                <div className="flex items-center justify-between mt-6">
+                  <div className="flex items-center">
+                    <Link to={`/shop/preview/${data?.shop._id}`}>
+                      <img
+                        src={data?.shop?.avatar?.url}
+                        alt="shop avatar"
+                        className="w-12 h-12 rounded-full mr-3"
                       />
-                    ) : (
-                      <AiOutlineHeart
-                        size={30}
-                        className="cursor-pointer"
-                        onClick={() => addToWishlistHandler(data)}
-                        color={click ? "red" : "#333"}
-                        title="Add to wishlist"
-                      />
-                    )}
-                  </div>
-
-                  <p className="h-[200px] overflow-hidden line-clamp-[8]">
-                    {data.description}
-                  </p>
-                  <div className="flex pt-3 justify-end">
-                    <h4 className={`${styles.productDiscountPrice}`}>
-                      {data.discountPrice}$
-                    </h4>
-                    <h3 className={`${styles.price}`}>
-                      {data.originalPrice ? data.originalPrice + "$" : null}
-                    </h3>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center pt-8">
-                      <Link to={`/shop/preview/${data?.shop._id}`}>
-                        <img
-                          src={data?.shop?.avatar?.url}
-                          alt=""
-                          className="w-[50px] h-[50px] rounded-full mr-2"
-                        />{" "}
-                      </Link>
-
-                      <div className="flex">
-                        <Link to={`/shop/preview/${data?.shop._id}`}>
-                          <div className="pr-8">
-                            <h3 className={`${styles.shop_name} pb-1 pt-1`}>
-                              {data.shop.name}
-                            </h3>
-                            <h5 className="pb-3 text-[15px]">(4/5) Ratings</h5>
-                          </div>
-                        </Link>
+                    </Link>
+                    <Link to={`/shop/preview/${data?.shop._id}`}>
+                      <div>
+                        <h3 className={`${styles.shop_name} leading-snug`}>
+                          {data.shop.name}
+                        </h3>
+                        <h5 className="text-sm text-gray-500">(4/5) Ratings</h5>
                       </div>
-                    </div>
-                    <div
-                      className={`${styles.button} !mt-[30px] !rounded !h-11 flex items-center `}
-                      onClick={() => addToCartHandler(data._id)}
-                    >
-                      <span className="text-white flex items-center">
-                        Add to cart <AiOutlineShoppingCart className="ml-1" />
-                      </span>
-                    </div>
+                    </Link>
                   </div>
 
-                  <div className="mt-5 text-center">
-                    <div>
-                      <button
-                        className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out cursor-pointer"
-                        onClick={decrementCount}
-                      >
-                        -
-                      </button>
-                      <span className="text-gray-800 bg-gray-100 font-bold px-4 py-[11px]">
-                        {count}
-                      </span>
-                      <button
-                        className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-r px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out cursor-pointer"
-                        onClick={incrementCount}
-                      >
-                        +
-                      </button>
-                    </div>
+                  <button
+                    className={`${styles.button} mt-4 rounded-lg h-11 px-6 flex items-center`}
+                    onClick={() => addToCartHandler(data._id)}
+                  >
+                    <span className="text-white flex items-center text-sm font-medium">
+                      Add to cart <AiOutlineShoppingCart className="ml-2" />
+                    </span>
+                  </button>
+                </div>
+
+                {/* Quantity Controls */}
+                <div className="mt-6 text-center">
+                  <div className="inline-flex items-center shadow-lg rounded-lg overflow-hidden">
+                    <button
+                      className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold px-4 py-2 hover:opacity-80 transition"
+                      onClick={decrementCount}
+                    >
+                      -
+                    </button>
+                    <span className="text-gray-800 bg-gray-100 font-bold px-6 py-2 text-base">
+                      {count}
+                    </span>
+                    <button
+                      className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold px-4 py-2 hover:opacity-80 transition"
+                      onClick={incrementCount}
+                    >
+                      +
+                    </button>
                   </div>
                 </div>
-                <div className="w-full 800px:w-[50%]">
-                  <div className="w-full flex flex-col items-center">
-                    <img
-                      src={data?.images?.[select]?.url}
-                      alt=""
-                      className="w-[300px] h-[300px] object-contain rounded-2xl"
-                    />
-                    <div className="w-full flex justify-center">
-                      {data &&
-                        data.images?.map((image, index) => (
-                          <div
-                            className={`${
-                              select === index
-                                ? "border border-blue-900 rounded-2xl"
-                                : ""
-                            } cursor-pointer mt-5 mr-3`}
-                          >
-                            <img
-                              src={image?.url}
-                              alt=""
-                              className="h-[120px] w-[120px] object-contain overflow-hidden rounded-2xl"
-                              onClick={() => setSelect(index)}
-                            />
-                          </div>
-                        ))}
-                    </div>
+              </div>
+              {/* RIGHT SIDE */}
+              <div className="w-full lg:w-1/2">
+                <div className="flex flex-col items-center">
+                  <img
+                    src={data?.images?.[select]?.url}
+                    alt="product"
+                    className="w-[90%] max-w-[28rem] h-auto object-contain rounded-2xl"
+                  />
+                  <div className="flex flex-wrap justify-center gap-4 mt-6">
+                    {data?.images?.map((image, index) => (
+                      <div
+                        key={index}
+                        className={`${
+                          select === index
+                            ? "border-2 border-blue-900 rounded-2xl"
+                            : ""
+                        } cursor-pointer`}
+                      >
+                        <img
+                          src={image?.url}
+                          alt=""
+                          className="h-28 w-28 object-contain rounded-2xl"
+                          onClick={() => setSelect(index)}
+                        />
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
             </div>
-
-            <ProductDetailsInfo
-              data={data}
-              products={products}
-              totalReviewsLength={totalReviewsLength}
-              averageRatings={averageRatings}
-            />
-            <br />
-            <br />
           </div>
-        </>
+
+          {/* Product details info */}
+          <ProductDetailsInfo
+            data={data}
+            products={products}
+            totalReviewsLength={totalReviewsLength}
+            averageRatings={averageRatings}
+          />
+        </div>
       ) : null}
     </div>
   );

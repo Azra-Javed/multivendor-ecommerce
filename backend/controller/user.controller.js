@@ -1,4 +1,5 @@
 const User = require("../model/user");
+const Product = require("../model/product");
 const ErrorHandler = require("../utils/ErrorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const jwt = require("jsonwebtoken");
@@ -146,9 +147,11 @@ const getUser = catchAsyncErrors(async (req, res, next) => {
 //@route: Delete /api/user/v2/logout
 const logoutUser = catchAsyncErrors(async (req, res, next) => {
   try {
-    res.cookie("token", null, {
-      expires: new Date(Date.now()),
+    res.cookie("token", "", {
       httpOnly: true,
+      expires: new Date(0),
+      sameSite: "none",
+      secure: true,
     });
 
     res.status(200).json({
@@ -224,6 +227,13 @@ const updateAvatar = catchAsyncErrors(async (req, res, next) => {
     };
 
     await user.save();
+
+    //update reviews avatar
+    const updated = await Product.updateMany(
+      { "reviews.user._id": user._id.toString() },
+      { $set: { "reviews.$[r].user.avatar": user.avatar } },
+      { arrayFilters: [{ "r.user._id": user._id.toString() }] }
+    );
 
     res.status(200).json({
       success: true,

@@ -19,13 +19,11 @@ const ShopProfileData = ({ isOwner }) => {
 
   useEffect(() => {
     dispatch(getAllProductsShop(id));
-    dispatch(getAllEventsShop(seller._id));
-  }, [dispatch]);
+    dispatch(getAllEventsShop(seller?._id));
+  }, [dispatch, seller]);
 
   const allReviews =
     products && products.map((product) => product.reviews).flat();
-
-  console.log(events);
 
   return (
     <div className="w-full">
@@ -125,12 +123,12 @@ const ShopProfileData = ({ isOwner }) => {
                       <h1 className="font-[600]">{item.user.name}</h1>
                       <Ratings rating={item.rating} />
                     </div>{" "}
-                    <p className="font-[400] text-[#343232]">{item?.comment}</p>
-                    <p>
+                    <p className="font-[400] text-gray-700">{item?.comment}</p>
+                    <p className="text-sm text-gray-500 text-end">
                       {Math.floor(
                         (new Date() - new Date(item.createdAt)) /
                           (1000 * 60 * 60 * 24)
-                      )}{" "}
+                      )}
                       days ago
                     </p>
                   </div>

@@ -1,4 +1,6 @@
 const Shop = require("../model/shop");
+const Product = require("../model/product");
+const Event = require("../model/events.model");
 const ErrorHandler = require("../utils/ErrorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const cloudinary = require("cloudinary");
@@ -162,9 +164,11 @@ const getSeller = catchAsyncErrors(async (req, res, next) => {
 //@route: Delete /api/v2/shop/logoutShop
 const logoutShop = catchAsyncErrors(async (req, res, next) => {
   try {
-    res.cookie("seller_token", null, {
-      expires: new Date(Date.now()),
+    res.cookie("seller_token", "", {
       httpOnly: true,
+      expires: new Date(0),
+      sameSite: "none",
+      secure: true,
     });
 
     res.status(200).json({
@@ -206,13 +210,15 @@ const updateAvatar = catchAsyncErrors(async (req, res, next) => {
     await cloudinary.v2.uploader.destroy(shop.avatar.public_id);
   }
 
-  // Upload new one
+  // Upload new avatar
   const result = await cloudinary.v2.uploader.upload(
     req.files.avatar.tempFilePath,
-    {
-      folder: "shops",
-    }
+    { folder: "shops" }
   );
+
+  // Remove temp file
+  const fs = require("fs");
+  fs.unlinkSync(req.files.avatar.tempFilePath);
 
   shop.avatar = {
     public_id: result.public_id,
@@ -220,6 +226,18 @@ const updateAvatar = catchAsyncErrors(async (req, res, next) => {
   };
 
   await shop.save();
+
+  // Update avatar in all products of this shop
+  await Product.updateMany(
+    { shopId: shop._id },
+    { $set: { "shop.avatar": shop.avatar } }
+  );
+
+  // Update all events of this shop
+  await Event.updateMany(
+    { shopId: shop._id },
+    { $set: { "shop.avatar": shop.avatar } }
+  );
 
   res.status(200).json({
     success: true,

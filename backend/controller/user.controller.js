@@ -147,9 +147,9 @@ const getUser = catchAsyncErrors(async (req, res, next) => {
 //@route: Delete /api/user/v2/logout
 const logoutUser = catchAsyncErrors(async (req, res, next) => {
   try {
-    res.cookie("token", "", {
+    res.cookie("token", null, {
+      expires: new Date(Date.now()),
       httpOnly: true,
-      expires: new Date(0),
       sameSite: "none",
       secure: true,
     });

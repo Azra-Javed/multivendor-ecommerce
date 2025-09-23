@@ -164,9 +164,9 @@ const getSeller = catchAsyncErrors(async (req, res, next) => {
 //@route: Delete /api/v2/shop/logoutShop
 const logoutShop = catchAsyncErrors(async (req, res, next) => {
   try {
-    res.cookie("seller_token", "", {
+    res.cookie("seller_token", null, {
+      expires: new Date(Date.now()),
       httpOnly: true,
-      expires: new Date(0),
       sameSite: "none",
       secure: true,
     });

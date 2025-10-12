@@ -3,63 +3,70 @@ import styles from "../../styles/style";
 const CheckoutSteps = ({ active }) => {
   return (
     <div className="w-full flex justify-center">
-      <div className="w-[90%] 800px:w-[50%] flex items-center flex-wrap">
+      <div className="w-[90%] 800px:w-[50%] flex items-center flex-wrap justify-center">
+        {/* Step 1 */}
         <div className={`${styles.noramlFlex}`}>
-          <div className={`${styles.cart_button}`}>
-            <span className={`${styles.cart_button_text}`}>1.Shipping</span>
+          <div
+            className={`${styles.cart_button} ${
+              active >= 1 ? "bg-[#2D6A4F]" : "bg-[#FFF7CC]"
+            }`}
+          >
+            <span
+              className={`${styles.cart_button_text} ${
+                active >= 1 ? "text-white" : "text-[#2D6A4F]"
+              }`}
+            >
+              1. Shipping
+            </span>
           </div>
+
           <div
             className={`${
               active > 1
-                ? "w-[30px] 800px:w-[70px] h-[4px] !bg-[#f63b60]"
-                : "w-[30px] 800px:w-[70px] h-[4px] !bg-[#FDE1E6]"
+                ? "w-[35px] 800px:w-[70px] h-[3px] bg-[#2D6A4F]"
+                : "w-[35px] 800px:w-[70px] h-[3px] bg-[#E5E7EB]"
             }`}
           />
         </div>
 
+        {/* Step 2 */}
         <div className={`${styles.noramlFlex}`}>
           <div
-            className={`${
-              active > 1
-                ? `${styles.cart_button}`
-                : `${styles.cart_button} !bg-[#FDE1E6]`
+            className={`${styles.cart_button} ${
+              active >= 2 ? "bg-[#2D6A4F]" : "bg-[#FFF7CC]"
             }`}
           >
             <span
-              className={`${
-                active > 1
-                  ? `${styles.cart_button_text}`
-                  : `${styles.cart_button_text} !text-[#f63b60]`
+              className={`${styles.cart_button_text} ${
+                active >= 2 ? "text-white" : "text-[#2D6A4F]"
               }`}
             >
-              2.Payment
+              2. Payment
             </span>
           </div>
         </div>
 
+        {/* Step 3 */}
         <div className={`${styles.noramlFlex}`}>
           <div
             className={`${
-              active > 3
-                ? "w-[30px] 800px:w-[70px] h-[4px] !bg-[#f63b60]"
-                : "w-[30px] 800px:w-[70px] h-[4px] !bg-[#FDE1E6]"
+              active > 2
+                ? "w-[35px] 800px:w-[70px] h-[3px] bg-[#2D6A4F]"
+                : "w-[35px] 800px:w-[70px] h-[3px] bg-[#E5E7EB]"
             }`}
           />
+
           <div
-            className={`${
-              active > 2
-                ? `${styles.cart_button}`
-                : `${styles.cart_button} !bg-[#FDE1E6]`
+            className={`${styles.cart_button} ${
+              active >= 3 ? "bg-[#2D6A4F]" : "bg-[#FFF7CC]"
             }`}
           >
             <span
-              className={`${
-                active > 2
-                  ? `${styles.cart_button_text}`
-                  : `${styles.cart_button_text} !text-[#f63b60]`
+              className={`${styles.cart_button_text} ${
+                active >= 3 ? "text-white" : "text-[#2D6A4F]"
               }`}
             >
-              3.Success
+              3. Success
             </span>
           </div>
         </div>

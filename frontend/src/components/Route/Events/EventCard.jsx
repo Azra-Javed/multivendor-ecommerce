@@ -16,7 +16,7 @@ const EventCard = ({ active, data }) => {
       toast.error("Item already in cart");
     } else {
       if (data.stock < 1) {
-        toast.error("product stock limited");
+        toast.error("Product stock limited");
       } else {
         const cartData = { ...data, qty: 1 };
         dispatch(addToCart(cartData));
@@ -27,47 +27,75 @@ const EventCard = ({ active, data }) => {
 
   return (
     <div
-      className={`w-full block bg-white shadow rounded-lg ${
+      className={`w-full block bg-white shadow shadow-gray-300 hover:shadow-xl transition-shadow duration-300 rounded-xl overflow-hidden ${
         active ? "unset" : "mb-12"
-      } lg:flex p-2`}
+      } lg:flex p-4`}
     >
-      <div className="w-full lg:w-[50%] m-auto">
+      {/* Product Image */}
+      <div className="w-full lg:w-[50%] flex justify-center items-center relative">
+        {/* SALE Badge */}
+        {data.discountPrice && (
+          <span className="absolute top-4 left-4 bg-[#FFD166] text-[#2D6A4F] z-99 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+            SALE
+          </span>
+        )}
         <img
           src={data?.images?.[0]?.url}
-          alt=""
-          className="w-[90%] h-[400px] rounded-2xl"
+          alt={data.name}
+          className="w-[90%] h-[380px] object-cover rounded-2xl shadow-sm hover:scale-[1.02] transition-transform duration-300"
         />
       </div>
-      <div className="w-full lg:w-[50%] flex flex-col justify-center">
-        <h2 className={`${styles.productTitle}`}>{data.name}</h2>
-        <p>{data.description}</p>
-        <div className="flex py-2 justify-between">
-          <div className="flex">
-            <h5 className="font-[500] text-[18px] text-[#d55b45] pr-3 line-through">
-              {data.originalPrice}$
-            </h5>
 
-            <h5 className="font-bold text-[20px] text-[#333] font-family-Roboto">
-              {data.discountPrice}$
+      {/* Product Info */}
+      <div className="w-full lg:w-[50%] flex flex-col justify-center px-4 py-3">
+        {/* Title */}
+        <h2 className={`${styles.productTitle} mb-2 text-[#2D6A4F] capitalize`}>
+          {data.name}
+        </h2>
+
+        {/* Description */}
+        <p className="text-gray-600 text-[15px] leading-relaxed mb-4 line-clamp-3">
+          {data.description}
+        </p>
+
+        {/* Pricing and Sold Info */}
+        <div className="flex py-2 justify-between items-center">
+          <div className="flex items-center">
+            {data.originalPrice && (
+              <h5 className="text-[16px] text-gray-400 line-through pr-3 font-poppins">
+                ${data.originalPrice}
+              </h5>
+            )}
+            <h5 className="text-[20px] font-bold text-[#2D6A4F] font-poppins">
+              ${data.discountPrice}
             </h5>
           </div>
-          <span className="pr-3 font-[400] text-[17px] text-[#44a55e]">
+
+          <span className="pr-3 font-[500] text-[16px] text-[#3BC177]">
             {data.sold_out} sold
           </span>
         </div>
-        <CountDown data={data} />
-        <br />
-        <div className="flex items-center">
+
+        {/* Countdown Timer */}
+        <div className="mt-2">
+          <CountDown data={data} />
+        </div>
+
+        {/* Buttons */}
+        <div className="flex items-center mt-4">
           <Link to={`/product/${data._id}?isEvent=true`}>
-            <div className={`${styles.button} text-white mr-5`}>
+            <div
+              className={`${styles.button} bg-[#3BC177] hover:bg-[#2D6A4F] text-white font-[600] mr-4 transition-all duration-300`}
+            >
               See Details
             </div>
           </Link>
+
           <div
-            className={`${styles.button} text-white`}
+            className={`${styles.button} bg-[#2D6A4F] hover:bg-[#3BC177] text-white font-[600] transition-all duration-300`}
             onClick={() => addToCartHandler(data._id)}
           >
-            Add to cart
+            Add to Cart
           </div>
         </div>
       </div>

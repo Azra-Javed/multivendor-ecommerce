@@ -53,7 +53,7 @@ const CountDown = ({ data }) => {
     if (timeLeft[interval] === undefined) return null;
 
     return (
-      <span key={interval} className="text-[25px] text-[#475ad2] mx-1">
+      <span key={interval} className="text-[25px] !text-[#FFD166]  mx-1">
         {timeLeft[interval]} {interval}
       </span>
     );

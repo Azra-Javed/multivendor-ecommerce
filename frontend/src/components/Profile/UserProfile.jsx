@@ -21,9 +21,7 @@ const UserProfile = () => {
   const [avatar, setAvatar] = useState(null);
 
   useEffect(() => {
-    if (error) {
-      toast.error(error);
-    }
+    if (error) toast.error(error);
   }, [error]);
 
   useEffect(() => {
@@ -48,107 +46,107 @@ const UserProfile = () => {
     setAvatar(file);
 
     const formData = new FormData();
+    formData.append("avatar", file);
 
-    formData.append("avatar", e.target.files[0]);
-
-    await axios
-      .put(`${server}/user/update-avatar/${user._id}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+    try {
+      await axios.put(`${server}/user/update-avatar/${user._id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
-      })
-      .then((res) => {
-        dispatch(loadUser());
-        toast.success("avatar updated successfully!");
-      })
-      .catch((error) => {
-        toast.error(error);
       });
+      dispatch(loadUser());
+      toast.success("Avatar updated successfully!");
+    } catch (err) {
+      toast.error(err);
+    }
   };
 
   return (
-    <>
-      <div className="flex justify-center w-full">
-        <div className="relative">
-          <img
-            src={avatar ? URL.createObjectURL(avatar) : user?.avatar?.url}
-            alt=""
-            className="w-[150px] h-[150px] rounded-full object-cover border-[3px] border-[#3ad132]"
+    <div className="flex flex-col items-center w-full px-4 sm:px-6 md:px-10">
+      {/* Avatar */}
+      <div className="relative mb-6">
+        <img
+          src={avatar ? URL.createObjectURL(avatar) : user?.avatar?.url}
+          alt="Avatar"
+          className="w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] rounded-full object-cover border-2 border-[#3ad132]"
+        />
+        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-2 right-2">
+          <input
+            type="file"
+            id="image"
+            className="hidden"
+            onChange={handleImage}
           />
-          <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[5px] right-[5px]">
-            <input
-              type="file"
-              id="image"
-              className="hidden"
-              onChange={handleImage}
-            />
-            <label htmlFor="image">
-              {" "}
-              <AiOutlineCamera />
-            </label>
-          </div>
+          <label htmlFor="image">
+            <AiOutlineCamera size={18} />
+          </label>
         </div>
       </div>
-      <br />
-      <br />
-      <div className="w-full px-5">
-        <form onSubmit={handleSubmit} aria-required={true}>
-          <div className="w-full  block 800px:flex pb-3">
-            <div className="w-[100%] 800px:w-[50%]">
-              <label className="block pb-2">Full Name</label>
-              <input
-                type="text"
-                className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
 
-            <div className="w-[100%] 800px:w-[50%]">
-              <label className="block pb-2">Email Address</label>
-              <input
-                type="email"
-                className={`${styles.input} !w-[95%] mb-1 800px:mb-0`}
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="w-full max-w-2xl">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4">
+          <div className="flex-1">
+            <label className="block mb-1 font-medium text-gray-700 text-sm sm:text-base">
+              Full Name
+            </label>
+            <input
+              type="text"
+              required
+              className={`${styles.input} w-full`}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
           </div>
-          <div className="w-full  block 800px:flex pb-3">
-            <div className="w-[100%] 800px:w-[50%]">
-              <label className="block pb-2">Phone Number</label>
-              <input
-                type="number"
-                className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
-                required
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-              />
-            </div>
-
-            <div className="w-[100%] 800px:w-[50%]">
-              <label className="block pb-2">Password</label>
-              <input
-                type="password"
-                className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
+          <div className="flex-1">
+            <label className="block mb-1 font-medium text-gray-700 text-sm sm:text-base">
+              Email Address
+            </label>
+            <input
+              type="email"
+              required
+              className={`${styles.input} w-full`}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
+        </div>
 
-          <input
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4">
+          <div className="flex-1">
+            <label className="block mb-1 font-medium text-gray-700 text-sm sm:text-base">
+              Phone Number
+            </label>
+            <input
+              type="number"
+              required
+              className={`${styles.input} w-full`}
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
+          </div>
+          <div className="flex-1">
+            <label className="block mb-1 font-medium text-gray-700 text-sm sm:text-base">
+              Password
+            </label>
+            <input
+              type="password"
+              className={`${styles.input} w-full`}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="flex justify-center">
+          <button
             type="submit"
-            className={`w-[250px] h-[40px] border border-[#3a24db] text-center text-[#3a24db] rounded-[3px] mt-8 cursor-pointer`}
-            value="Update"
-          />
-        </form>
-      </div>
-    </>
+            className="w-[180px] sm:w-[220px] h-10 bg-white border border-[#3a24db] text-[#3a24db] font-medium rounded-md hover:bg-[#f0f0ff] transition"
+          >
+            Update
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 

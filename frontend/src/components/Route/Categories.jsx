@@ -9,7 +9,7 @@ const Categories = () => {
     <>
       <section className={`${styles.section} hidden sm:block`}>
         <div
-          className={`branding my-12 flex justify-between w-full shadow-sm bg-white p-5 rounded-md`}
+          className={`branding my-12 mt-0 flex justify-between w-full shadow-sm bg-gray-50 p-5 rounded-md`}
         >
           {brandingData &&
             brandingData.map((i, index) => (
@@ -26,7 +26,9 @@ const Categories = () => {
 
       {/* categories section */}
 
-      <section className={`${styles.section} bg-white p-6 rounded-lg mb-12`}>
+      <section
+        className={`${styles.section} bg-gray-50 shadow shadow-gray-400 p-6 rounded-lg mb-12`}
+      >
         <div className="grid grid-cols-1 gap-[5px] md:grid-cols-2 lg:grid-cols-4 lg:gap-[20px] xl:grid-cols-5 xl:gap-[30px]">
           {categoriesData &&
             categoriesData.map((i) => {

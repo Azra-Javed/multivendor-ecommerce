@@ -19,7 +19,7 @@ const Faq = () => {
         {/* single Faq */}
         <div className="border-b border-gray-200 pb-4">
           <button
-            className="flex items-center justify-between w-full"
+            className="flex items-center justify-between w-full cursor-pointer"
             onClick={() => toggleTab(2)}
           >
             <span className="text-lg font-medium text-gray-900">
@@ -69,7 +69,7 @@ const Faq = () => {
 
         <div className="border-b border-gray-200 pb-4">
           <button
-            className="flex items-center justify-between w-full"
+            className="flex items-center justify-between w-full cursor-pointer"
             onClick={() => toggleTab(3)}
           >
             <span className="text-lg font-medium text-gray-900">
@@ -118,7 +118,7 @@ const Faq = () => {
 
         <div className="border-b border-gray-200 pb-4">
           <button
-            className="flex items-center justify-between w-full"
+            className="flex items-center justify-between w-full cursor-pointer"
             onClick={() => toggleTab(4)}
           >
             <span className="text-lg font-medium text-gray-900">
@@ -167,7 +167,7 @@ const Faq = () => {
 
         <div className="border-b border-gray-200 pb-4">
           <button
-            className="flex items-center justify-between w-full"
+            className="flex items-center justify-between w-full cursor-pointer"
             onClick={() => toggleTab(5)}
           >
             <span className="text-lg font-medium text-gray-900">
@@ -217,7 +217,7 @@ const Faq = () => {
 
         <div className="border-b border-gray-200 pb-4">
           <button
-            className="flex items-center justify-between w-full"
+            className="flex items-center justify-between w-full cursor-pointer"
             onClick={() => toggleTab(6)}
           >
             <span className="text-lg font-medium text-gray-900">
@@ -264,7 +264,7 @@ const Faq = () => {
 
         <div className="border-b border-gray-200 pb-4">
           <button
-            className="flex items-center justify-between w-full"
+            className="flex items-center justify-between w-full cursor-pointer"
             onClick={() => toggleTab(7)}
           >
             <span className="text-lg font-medium text-gray-900">

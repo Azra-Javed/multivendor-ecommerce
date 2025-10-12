@@ -65,34 +65,35 @@ const DashboardSidebar = ({ active }) => {
       icon: HiOutlineReceiptRefund,
       path: "/dashboard-refunds",
     },
-    {
-      id: 11,
-      label: "Settings",
-      icon: CiSettings,
-      path: "/settings",
-    },
+    { id: 11, label: "Settings", icon: CiSettings, path: "/settings" },
   ];
 
   return (
-    <div className="w-full h-[89vh] bg-white shadow-sm overflow-y-scroll sticky top-0 left-0 z-10">
-      {sidebarItems.map(({ id, label, icon: Icon, path }) => (
-        <div key={id} className="w-full flex items-center p-4 ">
-          <Link to={path} className="w-full flex items-center">
-            <Icon
-              size={30}
-              color={active === id ? "crimson" : "#555"}
-              title={label}
-            />
-            <h5
-              className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-                active === id ? "text-[crimson]" : "text-[#555]"
+    <div className="w-20 sm:w-64 h-[89vh] bg-[#f9fafb] shadow-sm overflow-y-auto sticky top-0 left-0 z-10 rounded-lg py-2">
+      {sidebarItems.map(({ id, label, icon: Icon, path }) => {
+        const isActive = active === id;
+        return (
+          <Link
+            to={path}
+            key={id}
+            className={`flex items-center justify-center sm:justify-start px-2 sm:px-4 py-2 my-1 rounded-lg transition-all duration-200
+              ${
+                isActive
+                  ? "bg-[#E3F2E1] text-[#2D6A4F]"
+                  : "text-gray-600 hover:bg-[#FFD166]/30 hover:text-[#2D6A4F]"
               }`}
-            >
+            title={label}
+          >
+            <Icon
+              size={24}
+              className={`${isActive ? "text-[#2D6A4F]" : "text-gray-600"}`}
+            />
+            <span className="hidden sm:inline ml-2 text-sm font-medium">
               {label}
-            </h5>
+            </span>
           </Link>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };

@@ -10,151 +10,139 @@ const CreateCouponCode = ({ setOpen }) => {
   const { products } = useSelector((state) => state.products);
   const { seller } = useSelector((state) => state.seller);
   const [name, setName] = useState("");
-  const [value, setValue] = useState(null);
-  const [minAmount, setMinAmount] = useState(null);
-  const [maxAmount, setMaxAmount] = useState(null);
-  const [selectedProducts, setSelectedProducts] = useState(null);
+  const [value, setValue] = useState("");
+  const [minAmount, setMinAmount] = useState("");
+  const [maxAmount, setMaxAmount] = useState("");
+  const [selectedProducts, setSelectedProducts] = useState("");
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllProductsShop(seller._id));
-  }, [dispatch]);
-
-  console.log(products);
+    if (seller?._id) dispatch(getAllProductsShop(seller._id));
+  }, [dispatch, seller?._id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    await axios
-      .post(
+    try {
+      await axios.post(
         `${server}/coupon/create-coupon-code`,
         {
           name,
+          value,
           minAmount,
           maxAmount,
           selectedProducts,
-          value,
           shopId: seller._id,
         },
         { withCredentials: true }
-      )
-      .then((res) => {
-        toast.success("Coupon code created successfully!");
-        setOpen(false);
-        window.location.reload();
-      })
-      .catch((error) => {
-        toast.error(error.response?.data?.message);
-      });
+      );
+      toast.success("Coupon code created successfully!");
+      setOpen(false);
+      window.location.reload();
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Something went wrong");
+    }
   };
+
+  const inputClass =
+    "mt-1 block w-full px-3 h-9 border border-gray-300 rounded-sm text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#2D6A4F] focus:border-[#2D6A4F]";
+
   return (
-    <>
-      <div className="fixed top-0 left-0 w-full h-screen bg-[#00000062] z-[2000] flex items-center justify-center">
-        <div className="w-[90%] 800px:w-[40%] h-[80vh] bg-white rounded-md shadow overflow-y-auto ">
-          <div className="w-full flex justify-end p-4">
-            <RxCross1
-              size={30}
-              className="cursor-pointer"
-              onClick={() => setOpen(false)}
+    <div className="fixed top-0 left-0 w-full h-screen bg-[#00000062] z-[2000] flex items-center justify-center">
+      <div className="w-[90%] 800px:w-[40%] bg-white rounded-lg shadow p-4 overflow-y-auto max-h-[80vh]">
+        <div className="flex justify-end mb-4">
+          <RxCross1
+            size={28}
+            className="cursor-pointer"
+            onClick={() => setOpen(false)}
+          />
+        </div>
+
+        <h2 className="text-2xl font-semibold text-center mb-4">
+          Create Coupon Code
+        </h2>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium">
+              Name <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={name}
+              required
+              onChange={(e) => setName(e.target.value)}
+              className={inputClass}
+              placeholder="Enter coupon code name..."
             />
           </div>
-          <h5 className="text-[30px] font-family-poppins text-center">
-            Create Coupon Code
-          </h5>
-          <form onSubmit={handleSubmit} className="p-4" aria-required>
-            <br />
-            <div>
-              <label className="pb-2">
-                Name <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={name}
-                required
-                onChange={(e) => setName(e.target.value)}
-                className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none  focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                placeholder="Enter Your coupon code name..."
-              />
-            </div>
 
-            <br />
+          <div>
+            <label className="block text-sm font-medium">
+              Discount Percentage <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="number"
+              value={value}
+              required
+              onChange={(e) => setValue(e.target.value)}
+              className={inputClass}
+              placeholder="Enter coupon discount value..."
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="pb-2">
-                Discount Percentage <span className="text-red-500">*</span>
-              </label>
+              <label className="block text-sm font-medium">Min Amount</label>
               <input
                 type="number"
-                name="value"
-                value={value}
-                required
-                onChange={(e) => setValue(e.target.value)}
-                className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none  focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                placeholder="Enter Your coupon code value..."
-              />
-            </div>
-
-            <br />
-            <div>
-              <label className="pb-2">Minimum Amount</label>
-              <input
-                type="number"
-                name="minAmount"
                 value={minAmount}
                 onChange={(e) => setMinAmount(e.target.value)}
-                className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none  focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                placeholder="Enter Your coupon code MIn amount..."
+                className={inputClass}
+                placeholder="Minimum amount..."
               />
             </div>
-
-            <br />
             <div>
-              <label className="pb-2">Maximum Amount</label>
+              <label className="block text-sm font-medium">Max Amount</label>
               <input
                 type="number"
-                name="maxAmount"
                 value={maxAmount}
                 onChange={(e) => setMaxAmount(e.target.value)}
-                className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none  focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                placeholder="Enter Your coupon code max amount..."
+                className={inputClass}
+                placeholder="Maximum amount..."
               />
             </div>
+          </div>
 
-            <br />
-            <div>
-              <label className="pb-2">
-                Selected Product <span className="text-red-500">*</span>
-              </label>
-              <select
-                className="w-full mt-2 border h-[35px] rounded-[5px] cursor-pointer"
-                value={selectedProducts}
-                onChange={(e) => setSelectedProducts(e.target.value)}
-              >
-                <option value="Choose Your product" disabled>
-                  Choose your product
+          <div>
+            <label className="block text-sm font-medium">
+              Select Product <span className="text-red-500">*</span>
+            </label>
+            <select
+              value={selectedProducts}
+              onChange={(e) => setSelectedProducts(e.target.value)}
+              className={inputClass + " cursor-pointer"}
+            >
+              <option value="" disabled>
+                Choose your product
+              </option>
+              {products?.map((p) => (
+                <option key={p._id} value={p.name}>
+                  {p.name}
                 </option>
-                {products &&
-                  products.map((i) => (
-                    <option value={i.name} key={i.name}>
-                      {i.name}
-                    </option>
-                  ))}
-              </select>
-            </div>
+              ))}
+            </select>
+          </div>
 
-            <br />
-            <div>
-              <input
-                type="submit"
-                value="Create"
-                className="mt-2 cursor-pointer appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] "
-              />
-            </div>
-          </form>
-        </div>
+          <button
+            type="submit"
+            className="w-full bg-[#2D6A4F] text-white py-2 rounded-sm text-sm font-medium hover:bg-[#1f5239] transition-colors"
+          >
+            Create Coupon
+          </button>
+        </form>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -2,68 +2,75 @@ import { useState } from "react";
 import { HiOutlineMinus, HiPlus } from "react-icons/hi";
 import { RxCross1 } from "react-icons/rx";
 import { toast } from "react-toastify";
-import styles from "../../styles/style";
 
 const SingleCart = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
   const [value, setValue] = useState(data.qty);
   const totalPrice = data.discountPrice * value;
 
-  const increment = (data) => {
-    if (data.stock <= value) {
-      toast.error("product stock limited");
+  const increment = (item) => {
+    if (item.stock <= value) {
+      toast.error("Product stock limited");
     } else {
-      setValue(value + 1);
-      const updateCartData = { ...data, qty: value + 1 };
-      quantityChangeHandler(updateCartData);
+      const newQty = value + 1;
+      setValue(newQty);
+      quantityChangeHandler({ ...item, qty: newQty });
     }
   };
 
-  const decrement = (data) => {
-    setValue(value === 1 ? 1 : value - 1);
-    const updateCartData = { ...data, qty: value === 1 ? 1 : value - 1 };
-    quantityChangeHandler(updateCartData);
+  const decrement = (item) => {
+    const newQty = value === 1 ? 1 : value - 1;
+    setValue(newQty);
+    quantityChangeHandler({ ...item, qty: newQty });
   };
 
   return (
-    <div className="border-b !border-[#cfcece] p-4">
-      <div className="w-full flex items-center">
-        <div>
-          <div
-            className={`bg-[#e44343] border border-[#e4434373] rounded-full w-[25px] h-[25px] ${styles.noramlFlex} justify-center cursor-pointer`}
-            onClick={() => {
-              increment(data);
-            }}
-          >
-            <HiPlus size={18} color="#fff" />
-          </div>
-          <span className="pl-[10px]">{data.qty}</span>
-          <div
-            className="bg-[#a7abb14f] rounded-full w-[25px] h-[25px] flex items-center justify-center cursor-pointer"
-            onClick={() => decrement(data)}
-          >
-            <HiOutlineMinus size={16} color="#7d879c" />
-          </div>
-        </div>
+    <div className="flex items-center justify-between border-b border-[#E6F0E6] py-3">
+      {/* Quantity Controls */}
+      <div className="flex flex-col items-center mr-3">
+        <button
+          onClick={() => increment(data)}
+          className="bg-[#B7E4C7] hover:bg-[#95D5B2] text-[#1B4332] rounded-full w-[26px] h-[26px] flex items-center justify-center transition"
+        >
+          <HiPlus size={16} />
+        </button>
 
-        <img
-          src={data?.images[0]?.url}
-          alt="product"
-          className="w-[130px] h-min ml-2 mr-2 rounded-[5px]"
-        />
-        <div className="pl-[5px]">
-          <h1>{data.name}</h1>
-          <h4 className="font-[400] text-[15px] text-[#00000082]">
-            ${data.discountPrice} x {value}
-          </h4>
-          <h4 className="font-[600] text-[17px] pt-[3px] text-[#d02222] font-family-Roboto">
-            US${totalPrice?.toFixed(2)}
-          </h4>
-        </div>
-        <RxCross1
-          className="cursor-pointer ml-auto"
-          onClick={() => removeFromCartHandler(data)}
-        />
+        <span className="text-[14px] font-semibold my-1 text-[#1B4332]">
+          {value}
+        </span>
+
+        <button
+          onClick={() => decrement(data)}
+          className="bg-[#E9F5E9] hover:bg-[#CDEAD3] text-[#1B4332] rounded-full w-[26px] h-[26px] flex items-center justify-center transition"
+        >
+          <HiOutlineMinus size={15} />
+        </button>
       </div>
+      {/* Image */}
+      <img
+        src={data?.images?.[0]?.url}
+        alt={data.name}
+        className="w-[70px] h-[70px] object-cover rounded-md border border-[#E6F0E6]"
+      />
+
+      {/* Product Info */}
+      <div className="flex flex-col flex-1 ml-3">
+        <h4 className="text-[#1B4332] text-[15px] font-semibold leading-tight">
+          {data.name}
+        </h4>
+        <span className="text-[14px] text-[#5B7058]">
+          ${data.discountPrice} × {value}
+        </span>
+        <span className="text-[15px] font-bold text-[#2D6A4F] mt-1">
+          ${totalPrice.toFixed(2)}
+        </span>
+      </div>
+
+      {/* Remove Button */}
+      <RxCross1
+        className="cursor-pointer ml-3 text-gray-400 hover:text-[#2D6A4F] transition"
+        size={18}
+        onClick={() => removeFromCartHandler(data)}
+      />
     </div>
   );
 };

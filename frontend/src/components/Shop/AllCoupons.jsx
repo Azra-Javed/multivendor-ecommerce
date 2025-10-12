@@ -1,15 +1,13 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import Loader from "../Layout/Loader";
 import { AiOutlineDelete } from "react-icons/ai";
-import styles from "../../styles/style";
-import { useState } from "react";
 import CreateCouponCode from "./CreateCouponCode.jsx";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { server } from "../../server.js";
+import { useSelector } from "react-redux";
 
 const AllCoupons = () => {
   const [open, setOpen] = useState(false);
@@ -33,13 +31,11 @@ const AllCoupons = () => {
         setIsLoading(false);
         toast.error(error.response?.data?.message || "Failed to fetch coupons");
       });
-  }, [seller, seller._id]);
+  }, [seller]);
 
   const handleDelete = (id) => {
     axios
-      .delete(`${server}/coupon/delete-coupon/${id}`, {
-        withCredentials: true,
-      })
+      .delete(`${server}/coupon/delete-coupon/${id}`, { withCredentials: true })
       .then((res) => {
         toast.success(res.data.message);
         window.location.reload(true);
@@ -56,65 +52,94 @@ const AllCoupons = () => {
       headerName: "Name",
       minWidth: 180,
       flex: 1.4,
+      renderCell: (params) => (
+        <span
+          style={{
+            backgroundColor: "#FFF4CC",
+            color: "#856404",
+            padding: "3px 8px",
+            borderRadius: "6px",
+            fontWeight: 500,
+            fontSize: "13px",
+          }}
+        >
+          {params.value}
+        </span>
+      ),
     },
     {
       field: "price",
-      headerName: "Price",
+      headerName: "Value",
       minWidth: 100,
       flex: 0.6,
     },
-
     {
       field: "Delete",
       flex: 0.8,
       minWidth: 120,
       headerName: "",
-      type: "number",
       sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Button onClick={() => handleDelete(params.row.id)}>
-              <AiOutlineDelete size={20} />
-            </Button>
-          </>
-        );
-      },
+      renderCell: (params) => (
+        <Button
+          sx={{ color: "#D00000", minWidth: 0 }}
+          onClick={() => handleDelete(params.row.id)}
+        >
+          <AiOutlineDelete size={20} />
+        </Button>
+      ),
     },
   ];
 
-  const row = [];
-
-  coupons &&
-    coupons.forEach((item) => {
-      row.push({
-        id: item._id,
-        name: item.name,
-        price: item.value + "%",
-      });
-    });
+  const rows =
+    coupons?.map((item) => ({
+      id: item._id,
+      name: item.name,
+      price: item.value + "%",
+    })) || [];
 
   return (
     <>
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="w-full mx-8 pt-1 mt-10 bg-white">
-          <div className="w-full flex justify-end">
-            <div
-              className={`${styles.button} !w-max !h-[45px] px-3 !rounded-[5px] mr-3 mb-3`}
+        <div className="w-full mx-8 pt-1 mt-10 bg-white rounded-lg shadow-sm p-4">
+          <div className="w-full flex justify-end mb-3">
+            <button
               onClick={() => setOpen(true)}
+              className="bg-[#2D6A4F] text-white py-2 px-4 rounded-sm text-sm font-medium hover:bg-[#1f5239] transition-colors"
             >
-              <span className="text-white">Create Coupon Code</span>
-            </div>
+              Create Coupon Code
+            </button>
           </div>
+
           <DataGrid
-            rows={row}
+            rows={rows}
             columns={columns}
             pageSize={10}
             disableRowSelectionOnClick
             autoHeight
+            density="compact"
+            initialState={{
+              pagination: { paginationModel: { pageSize: 10, page: 0 } },
+            }}
+            pageSizeOptions={[8, 9, 10]}
+            sx={{
+              fontSize: "13px",
+              "& .MuiDataGrid-columnHeaders": {
+                fontSize: "14px",
+                fontWeight: 600,
+                backgroundColor: "#E6F4EA",
+                color: "#2D6A4F",
+              },
+              "& .MuiDataGrid-cell": {
+                borderBottom: "1px solid #f0f0f0",
+              },
+              "& .MuiDataGrid-row:hover": {
+                backgroundColor: "#E9F8E5",
+              },
+            }}
           />
+
           {open && <CreateCouponCode setOpen={setOpen} />}
         </div>
       )}

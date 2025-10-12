@@ -1,10 +1,7 @@
 import { DataGrid } from "@mui/x-data-grid";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
 import { getAdminOrders } from "../../redux/features/orderSlice";
-import { server } from "../../server";
 import Loader from "../Layout/Loader";
 
 const AdminOrders = () => {
@@ -16,77 +13,93 @@ const AdminOrders = () => {
   }, [dispatch]);
 
   const columns = [
-    { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
-
+    { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.8 },
     {
       field: "status",
       headerName: "Status",
-      minWidth: 130,
-      flex: 0.7,
-      cellClassName: (params) => {
-        return params.row.status === "Delivered" ? "greenColor" : "redColor";
+      minWidth: 120,
+      flex: 0.5,
+      renderCell: (params) => {
+        let bg = "#FFF8E1";
+        let color = "#856404";
+
+        if (params.row.status === "Delivered") {
+          bg = "#E9F8E5";
+          color = "#2D6A4F";
+        } else if (params.row.status === "Processing refund") {
+          bg = "#FFECEC";
+          color = "#C53030";
+        }
+        return (
+          <span
+            style={{
+              backgroundColor: bg,
+              color,
+              padding: "4px 12px",
+              borderRadius: "20px",
+              fontSize: "12px",
+              fontWeight: 600,
+              letterSpacing: "0.2px",
+              textTransform: "capitalize",
+            }}
+          >
+            {params.row.status}
+          </span>
+        );
       },
     },
     {
       field: "itemsQty",
-      headerName: "Items Qty",
+      headerName: "Items",
       type: "number",
-      minWidth: 130,
-      flex: 0.7,
+      minWidth: 80,
+      flex: 0.4,
     },
     {
       field: "total",
       headerName: "Total",
       type: "number",
-      minWidth: 130,
-      flex: 0.8,
+      minWidth: 80,
+      flex: 0.4,
     },
     {
       field: "createdAt",
-      headerName: "Order Date",
-      type: "number",
-      minWidth: 130,
-      flex: 0.7,
+      headerName: "Date",
+      minWidth: 120,
+      flex: 0.6,
     },
   ];
 
-  const row = [];
-
-  adminOrders &&
-    adminOrders.forEach((item) => {
-      row.push({
-        id: item._id,
-        itemsQty: item.cart.length,
-        total: item.totalPrice.toFixed(2) + "$",
-        status: item.status,
-        createdAt: item.createdAt.slice(0, 10),
-      });
-    });
+  const rows =
+    adminOrders?.map((item) => ({
+      id: item._id,
+      itemsQty: item.cart.length,
+      total: `$${item.totalPrice.toFixed(2)}`,
+      status: item.status,
+      createdAt: item.createdAt.slice(0, 10),
+    })) || [];
 
   return (
     <>
       {isLoading ? (
         <Loader />
       ) : (
-        <>
-          <div className="w-full min-h-[45vh] flex justify-center rounded">
-            <div className="w-[98%] flex justify-center mt-2 ">
-              <DataGrid
-                rows={row}
-                columns={columns}
-                pageSize={10}
-                disableRowSelectionOnClick
-                style={{ minHeight: "45vh" }}
-                initialState={{
-                  pagination: {
-                    paginationModel: { pageSize: 10, page: 0 },
-                  },
-                }}
-                pageSizeOptions={[8, 9, 10]}
-              />
-            </div>
+        <div className="w-full min-h-[45vh] flex justify-center">
+          <div className="w-[98%] mt-3">
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              pageSize={8}
+              disableRowSelectionOnClick
+              autoHeight
+              initialState={{
+                pagination: { paginationModel: { pageSize: 12, page: 0 } },
+              }}
+              pageSizeOptions={[12, 14, 18]}
+              density="compact"
+            />
           </div>
-        </>
+        </div>
       )}
     </>
   );

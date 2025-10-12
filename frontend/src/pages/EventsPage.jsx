@@ -15,15 +15,6 @@ const EventsPage = () => {
           <Header activeHeading={4} />
 
           <section className="max-w-6xl mx-auto px-4 py-10">
-            <div className="text-center mb-10">
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
-                Upcoming Events
-              </h1>
-              <p className="mt-2 text-gray-600">
-                Stay updated with the latest events happening soon.
-              </p>
-            </div>
-
             {allEvents.length > 0 ? (
               <div className="grid gap-6 grid:cols-1">
                 {allEvents.map((event) => (

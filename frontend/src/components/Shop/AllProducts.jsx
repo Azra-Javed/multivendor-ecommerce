@@ -16,8 +16,10 @@ const AllProducts = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllProductsShop(seller._id));
-  }, [dispatch]);
+    if (seller?._id) {
+      dispatch(getAllProductsShop(seller._id));
+    }
+  }, [dispatch, seller?._id]);
 
   const handleDelete = (id) => {
     dispatch(deleteProduct(id));
@@ -31,13 +33,22 @@ const AllProducts = () => {
       headerName: "Name",
       minWidth: 180,
       flex: 1.4,
+      renderCell: (params) => (
+        <span
+          style={{
+            backgroundColor: "#FFF4CC",
+            color: "#856404",
+            padding: "3px 8px",
+            borderRadius: "6px",
+            fontWeight: 500,
+            fontSize: "13px",
+          }}
+        >
+          {params.value}
+        </span>
+      ),
     },
-    {
-      field: "price",
-      headerName: "Price",
-      minWidth: 100,
-      flex: 0.6,
-    },
+    { field: "price", headerName: "Price", minWidth: 100, flex: 0.6 },
     {
       field: "Stock",
       headerName: "Stock",
@@ -45,81 +56,96 @@ const AllProducts = () => {
       minWidth: 80,
       flex: 0.5,
     },
-
     {
       field: "sold",
       headerName: "Sold out",
       type: "number",
-      minWidth: 130,
+      minWidth: 120,
       flex: 0.6,
     },
     {
       field: "Preview",
-      flex: 0.8,
-      minWidth: 100,
       headerName: "Preview",
-      type: "number",
+      minWidth: 100,
+      flex: 0.6,
       sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Link to={`/product/${params.id}`}>
-              <Button>
-                <AiOutlineEye size={20} />
-              </Button>
-            </Link>
-          </>
-        );
-      },
+      renderCell: (params) => (
+        <Link to={`/product/${params.id}`}>
+          <Button>
+            <AiOutlineEye size={20} className="text-[#2D6A4F]" />
+          </Button>
+        </Link>
+      ),
     },
     {
       field: "Delete",
-      flex: 0.8,
-      minWidth: 120,
       headerName: "Delete",
-      type: "number",
+      minWidth: 120,
+      flex: 0.6,
       sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Button onClick={() => handleDelete(params.id)}>
-              <AiOutlineDelete size={20} />
-            </Button>
-          </>
-        );
-      },
+      renderCell: (params) => (
+        <Button onClick={() => handleDelete(params.id)}>
+          <AiOutlineDelete size={20} className="text-[#C53030]" />
+        </Button>
+      ),
     },
   ];
 
-  const row = [];
+  const rows =
+    products?.map((item) => ({
+      id: item._id,
+      name: item.name,
+      price: "US$ " + item.discountPrice,
+      Stock: item.stock,
+      sold: 10,
+    })) || [];
 
-  products &&
-    products.forEach((item) => {
-      row.push({
-        id: item._id,
-        name: item.name,
-        price: "US$ " + item.discountPrice,
-        Stock: item.stock,
-        sold: 10,
-      });
-    });
+  if (isLoading) return <Loader />;
 
   return (
-    <>
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <div className="w-full mx-8 pt-1 mt-10 bg-white">
+    <div className="w-full p-4 md:p-6 bg-[#f9fafb] min-h-screen">
+      <div className="bg-white shadow-sm rounded-lg border border-gray-100 p-4">
+        <h4 className="text-[16px] font-medium text-gray-700 mb-2">
+          All Products
+        </h4>
+        <div className="overflow-x-auto">
           <DataGrid
-            rows={row}
+            rows={rows}
             columns={columns}
-            pageSize={10}
-            disableRowSelectionOnClick
+            initialState={{ pagination: { paginationModel: { pageSize: 10 } } }}
+            pageSizeOptions={[7, 10, 15]}
+            disableSelectionOnClick
             autoHeight
+            density="compact"
+            sx={{
+              border: "1px solid #e5e7eb",
+              borderRadius: "10px",
+              backgroundColor: "#fff",
+              fontSize: "13px",
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: "#E3F2E1",
+                color: "#2D6A4F",
+                fontWeight: 600,
+                fontSize: "13px",
+              },
+              "& .MuiDataGrid-cell": {
+                padding: "6px 8px",
+                color: "#333",
+                borderBottom: "1px solid #f0f0f0",
+              },
+              "& .MuiDataGrid-row:hover": {
+                backgroundColor: "rgba(45, 106, 79, 0.08)",
+              },
+              "& .MuiDataGrid-footerContainer": {
+                borderTop: "1px solid #eee",
+                backgroundColor: "#fafafa",
+                color: "#2D6A4F",
+              },
+            }}
           />
         </div>
-      )}
-    </>
+      </div>
+    </div>
   );
 };
 

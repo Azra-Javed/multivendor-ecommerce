@@ -1,11 +1,10 @@
 import { BsFillBagFill } from "react-icons/bs";
-import styles from "../../styles/style";
+import { AiOutlineArrowLeft, AiFillStar, AiOutlineStar } from "react-icons/ai";
+import { RxCross1 } from "react-icons/rx";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getAllOrders } from "../../redux/features/orderSlice";
-import { RxCross1 } from "react-icons/rx";
-import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { server } from "../../server";
@@ -87,62 +86,61 @@ const UserOrderDetails = () => {
   };
 
   return (
-    <div className={`py-6 min-h-screen ${styles.section}`}>
+    <div className="min-h-screen bg-white py-6 px-4">
       {/* Header */}
-      <div className="flex items-center gap-2 border-b pb-4">
-        <BsFillBagFill size={32} className="text-[#E94560]" />
-        <h1 className="text-2xl font-semibold text-gray-800">Order Details</h1>
+      <div className="flex items-center gap-3 border-b pb-3">
+        <AiOutlineArrowLeft
+          size={26}
+          className="cursor-pointer text-[#2D6A4F] hover:text-[#FFD166]"
+          onClick={() => navigate(-1)}
+        />
+        <BsFillBagFill size={26} className="text-[#FFD166]" />
+        <h1 className="text-xl font-semibold text-gray-800">Order Details</h1>
       </div>
 
       {/* Order info */}
-      <div className="flex items-center justify-between mt-6 text-gray-600">
-        <h5>
-          Order ID:{" "}
-          <span className="font-medium text-gray-800">
-            #{data?._id?.slice(0, 8)}
-          </span>
-        </h5>
-        <h5>
-          Placed on:{" "}
-          <span className="font-medium text-gray-800">
-            {data?.createdAt?.slice(0, 10)}
-          </span>
-        </h5>
+      <div className="mt-4 text-sm text-gray-700 flex flex-wrap justify-between">
+        <p>
+          <span className="font-medium">Order ID:</span> #
+          {data?._id?.slice(0, 8)}
+        </p>
+        <p>
+          <span className="font-medium">Placed on:</span>{" "}
+          {data?.createdAt?.slice(0, 10)}
+        </p>
       </div>
 
-      {/* Cart items */}
-      <div className="mt-6 space-y-4">
+      {/* Items */}
+      <div className="mt-5 space-y-3">
         {data &&
           data?.cart?.map((item, index) => (
             <div
               key={index}
-              className="flex items-start justify-between gap-4 bg-white shadow-sm rounded-md p-4"
+              className="flex justify-between items-center border rounded-lg p-3 hover:shadow-sm transition bg-[#f9f9f9]"
             >
-              <div className="flex gap-3">
+              <div className="flex items-center gap-3">
                 <img
                   src={item?.images?.[0]?.url}
                   alt=""
-                  className="w-[80px] h-[80px] object-cover rounded-md"
+                  className="w-[65px] h-[65px] rounded-md object-cover"
                 />
                 <div>
-                  <h5 className="text-lg font-semibold text-gray-800">
-                    {item.name}
-                  </h5>
-                  <p className="text-gray-600">
-                    US${item.discountPrice} x {item.qty}
+                  <h5 className="font-medium text-gray-800">{item.name}</h5>
+                  <p className="text-gray-600 text-sm">
+                    ${item.discountPrice} x {item.qty}
                   </p>
                 </div>
               </div>
 
               {!item.isReviewed && data?.status === "Delivered" && (
                 <button
-                  className="px-4 py-2 bg-[#E94560] text-white rounded-md hover:bg-[#c9304d] transition"
                   onClick={() => {
                     setOpen(true);
                     setSelectedItem(item);
                   }}
+                  className="px-3 py-1.5 text-sm rounded-md bg-[#2D6A4F] text-white hover:bg-[#1b4a32]"
                 >
-                  Write a Review
+                  Review
                 </button>
               )}
             </div>
@@ -151,77 +149,65 @@ const UserOrderDetails = () => {
 
       {/* Review popup */}
       {open && (
-        <div className="fixed inset-0 bg-[#85838396] bg-opacity-50 z-50 flex items-center justify-center">
-          <div className="w-[90%] md:w-[50%] bg-white shadow-lg rounded-lg p-6 relative">
-            <button
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="w-[90%] md:w-[400px] bg-white rounded-lg p-5 relative shadow-lg">
+            <RxCross1
+              size={24}
               onClick={() => setOpen(false)}
-            >
-              <RxCross1 size={28} />
-            </button>
-
-            <h2 className="text-2xl font-semibold text-center mb-6">
-              Give a Review
+              className="absolute top-4 right-4 text-gray-500 cursor-pointer hover:text-gray-700"
+            />
+            <h2 className="text-lg font-semibold mb-4 text-center">
+              Write a Review
             </h2>
 
-            {/* Product info */}
-            <div className="flex items-center gap-4 mb-4">
+            <div className="flex items-center gap-3 mb-3">
               <img
                 src={selectedItem?.images?.[0]?.url}
                 alt=""
-                className="w-[80px] h-[80px] rounded-md object-cover"
+                className="w-[60px] h-[60px] object-cover rounded-md"
               />
               <div>
-                <h3 className="text-lg font-medium">{selectedItem?.name}</h3>
-                <p className="text-gray-600">
-                  US${selectedItem?.discountPrice} x {selectedItem?.qty}
+                <h3 className="text-sm font-medium">{selectedItem?.name}</h3>
+                <p className="text-xs text-gray-500">
+                  ${selectedItem?.discountPrice} x {selectedItem?.qty}
                 </p>
               </div>
             </div>
 
-            {/* Ratings */}
-            <h5 className="text-lg font-medium mb-2">
-              Give Rating <span className="text-red-500">*</span>
-            </h5>
-            <div className="flex gap-1 mb-4">
+            {/* Rating */}
+            <div className="flex gap-1 mb-3 justify-center">
               {[1, 2, 3, 4, 5].map((i) =>
                 rating >= i ? (
                   <AiFillStar
                     key={i}
-                    className="cursor-pointer"
-                    color="rgb(246,186,0)"
-                    size={28}
+                    color="#FFD166"
+                    size={22}
                     onClick={() => setRating(i)}
+                    className="cursor-pointer"
                   />
                 ) : (
                   <AiOutlineStar
                     key={i}
-                    className="cursor-pointer"
-                    color="rgb(246,186,0)"
-                    size={28}
+                    color="#FFD166"
+                    size={22}
                     onClick={() => setRating(i)}
+                    className="cursor-pointer"
                   />
                 )
               )}
             </div>
 
             {/* Comment */}
-            <div className="mb-4">
-              <label className="block text-lg font-medium mb-2">
-                Write a Comment{" "}
-                <span className="text-sm text-gray-500">(optional)</span>
-              </label>
-              <textarea
-                rows="5"
-                className="w-full border rounded-md p-3 outline-none focus:ring-2 focus:ring-[#E94560]"
-                placeholder="How was your product? Share your experience..."
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-              />
-            </div>
+            <textarea
+              rows="3"
+              placeholder="Share your experience..."
+              className="w-full text-sm border rounded-md p-2 focus:ring-2 focus:ring-[#FFD166] outline-none"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
 
             <button
-              className="w-full py-2 bg-[#E94560] text-white rounded-md hover:bg-[#c9304d] transition"
+              className="w-full mt-3 bg-[#2D6A4F] text-white py-2 rounded-md hover:bg-[#1b4a32]"
               onClick={rating > 1 && reviewHandler}
             >
               Submit
@@ -231,39 +217,37 @@ const UserOrderDetails = () => {
       )}
 
       {/* Total */}
-      <div className="border-t mt-6 pt-4 text-right">
-        <h5 className="text-lg font-semibold">
-          Total Price:{" "}
-          <span className="text-[#E94560]">
-            US$ {data?.totalPrice.toFixed(2)}
-          </span>
-        </h5>
+      <div className="mt-5 text-right text-gray-700 text-sm">
+        <span className="font-medium">Total:</span>{" "}
+        <span className="text-[#2D6A4F] font-semibold">
+          ${data?.totalPrice?.toFixed(2)}
+        </span>
       </div>
 
       {/* Shipping + Payment */}
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white p-5 rounded-md shadow-sm">
-          <h4 className="text-xl font-semibold mb-2">Shipping Address</h4>
-          <p>
-            {data?.shippingAddress.address1} {data?.shippingAddress.address2}
+      <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="p-4 border rounded-md bg-[#f9f9f9]">
+          <h4 className="font-semibold mb-2 text-[#2D6A4F]">
+            Shipping Address
+          </h4>
+          <p className="text-sm text-gray-600">
+            {data?.shippingAddress.address1}, {data?.shippingAddress.city},{" "}
+            {data?.shippingAddress.country}
           </p>
-          <p>{data?.shippingAddress?.country}</p>
-          <p>{data?.shippingAddress?.city}</p>
-          <p>{data?.user?.phoneNumber}</p>
+          <p className="text-sm text-gray-600">{data?.user?.phoneNumber}</p>
         </div>
-        <div className="bg-white p-5 rounded-md shadow-sm">
-          <h4 className="text-xl font-semibold mb-2">Payment Info</h4>
-          <p>
+
+        <div className="p-4 border rounded-md bg-[#f9f9f9]">
+          <h4 className="font-semibold mb-2 text-[#2D6A4F]">Payment Info</h4>
+          <p className="text-sm">
             Status:{" "}
-            <span className="font-medium text-gray-800">
-              {data?.paymentInfo?.status
-                ? data?.paymentInfo.status
-                : "Not Paid"}
+            <span className="font-medium">
+              {data?.paymentInfo?.status || "Not Paid"}
             </span>
           </p>
           {data?.status === "Delivered" && (
             <button
-              className="mt-4 px-4 py-2 bg-[#E94560] text-white rounded-md hover:bg-[#c9304d] transition"
+              className="mt-3 px-4 py-1.5 bg-[#FFD166] text-gray-800 text-sm rounded-md hover:bg-[#f5c14e]"
               onClick={refundHandler}
             >
               Request Refund
@@ -273,10 +257,10 @@ const UserOrderDetails = () => {
       </div>
 
       {/* Message Button */}
-      <div className="mt-6">
+      <div className="mt-6 text-center">
         <button
-          className="px-6 py-2 bg-[#E94560] text-white rounded-md hover:bg-[#c9304d] transition"
           onClick={() => handleMessageSubmit(data.cart[0])}
+          className="px-6 py-2 bg-[#2D6A4F] text-white rounded-md hover:bg-[#1b4a32]"
         >
           Send Message
         </button>

@@ -1,5 +1,4 @@
 import { RxCross1 } from "react-icons/rx";
-import styles from "../../styles/style";
 import { useState } from "react";
 import { BsCartPlus } from "react-icons/bs";
 import { AiOutlineHeart } from "react-icons/ai";
@@ -22,41 +21,49 @@ const Wishlist = ({ setOpenWishlist }) => {
   };
 
   return (
-    <div className="fixed top-0 left-0 w-full bg-[#0000004b] h-screen z-10">
-      <div className="fixed top-0 right-0 h-screen w-[80%] 800px:w-[25%] bg-white flex flex-col shadow-sm overflow-y-auto">
+    <div className="fixed inset-0 bg-[#0000004b]  z-40 flex justify-end">
+      <div
+        className="w-[90%] sm:w-[60%] md:w-[40%] lg:w-[28%] h-full bg-gradient-to-b 
+        from-white to-[#f8fff8] shadow-2xl flex flex-col  border-l border-[#E3F1E5]
+        transition-all duration-300 overflow-y-auto overflow-x-hidden"
+      >
         {wishlist && wishlist.length === 0 ? (
-          <div className="w-full h-screen flex items-center justify-center">
-            <div className=" flex-full justify-end pt-5 pr-5 fixed top-3 right-3">
-              <RxCross1
-                size={25}
-                className="cursor-pointer "
-                onClick={() => setOpenWishlist(false)}
-              />
-            </div>
-            <h5>Wishlist is empty!</h5>
+          <div className="flex flex-col items-center justify-center h-full text-[#1B4332]">
+            <button
+              className="absolute top-5 right-5 text-gray-500 hover:text-[#2D6A4F] transition"
+              onClick={() => setOpenWishlist(false)}
+            >
+              <RxCross1 size={25} />
+            </button>
+            <AiOutlineHeart size={60} className="text-[#2D6A4F] mb-3" />
+            <h5 className="text-lg font-semibold">Your wishlist is empty</h5>
+            <p className="text-sm text-gray-400 mt-1">Add items you love 💚</p>
           </div>
         ) : (
-          <div>
-            <div className="flex w-full justify-end pt-5 pr-5">
+          <>
+            {/* Header */}
+            <div className="flex items-center justify-between p-5 border-b border-[#E3F1E5] bg-[#F3FFF5] rounded-tl-2xl">
+              <div className="flex items-center">
+                <AiOutlineHeart size={25} className="text-[#2D6A4F]" />
+                <h5 className="pl-2 text-[18px] font-semibold text-[#1B4332]">
+                  {wishlist.length} {wishlist.length > 1 ? "Items" : "Item"}
+                </h5>
+              </div>
               <RxCross1
                 size={25}
-                className="cursor-pointer"
+                className="cursor-pointer text-gray-500 hover:text-[#2D6A4F] transition"
                 onClick={() => setOpenWishlist(false)}
               />
             </div>
-            {/* item length */}
-            <div className={`${styles.noramlFlex} p-4`}>
-              <AiOutlineHeart size={25} />
-              <h5 className="pl-2 text-[20px] font-[500]">
-                {wishlist.length} {wishlist.length > 1 ? "Items" : "Item"}
-              </h5>
-            </div>
 
-            {/* wishlist single items */}
-            <br />
-            <div className="w-full border-t">
+            {/* Wishlist Items */}
+            <div
+              className={`flex-1 px-4 py-3 ${
+                wishlist.length > 2 ? "overflow-y-auto" : ""
+              } overflow-x-hidden`}
+            >
               {wishlist.map((i, index) => (
-                <CartSingle
+                <WishlistSingle
                   key={index}
                   data={i}
                   removeFromWishlistHandler={removeFromWishlistHandler}
@@ -64,45 +71,58 @@ const Wishlist = ({ setOpenWishlist }) => {
                 />
               ))}
             </div>
-          </div>
+          </>
         )}
       </div>
     </div>
   );
 };
 
-const CartSingle = ({ data, removeFromWishlistHandler, addToCartHandler }) => {
-  const [value, setValue] = useState(1);
+const WishlistSingle = ({
+  data,
+  removeFromWishlistHandler,
+  addToCartHandler,
+}) => {
+  const [value] = useState(1);
   const totalPrice = data.discountPrice * value;
 
   return (
-    <div className="border-b !border-[#cfcece] p-4">
-      <div className="w-full 800px:flex  items-center">
-        <RxCross1
-          className="cursor-pointer 800px:mb-['unset'] 800px:ml-['unset'] mb-2 ml-2"
-          onClick={() => removeFromWishlistHandler(data)}
-        />
-        <img
-          src={data?.images?.[0]?.url}
-          alt=""
-          className="w-[130px] h-min ml-2 mr-2 rounded-[5px]"
-        />
+    <div className="flex items-center justify-between border-b border-[#E6F0E6] py-3 px-2 rounded-lg hover:bg-[#F9FFF9] transition-all">
+      {/* Remove Button */}
+      <button
+        onClick={() => removeFromWishlistHandler(data)}
+        className="text-gray-400 hover:text-[#2D6A4F] transition flex-shrink-0"
+      >
+        <RxCross1 size={18} />
+      </button>
 
-        <div className="pl-[5px]">
-          <h1>{data.name}</h1>
-          <h4 className="font-[600] text-[17px] text-[#d02222] pt-3 800px:pt-[3px] font-family-Roboto">
-            USD${totalPrice.toFixed(2)}
-          </h4>
-        </div>
+      {/* Product Image */}
+      <img
+        src={data?.images?.[0]?.url}
+        alt={data.name}
+        className="w-[70px] h-[70px] object-cover rounded-md border border-[#E6F0E6] shadow-sm mx-3 flex-shrink-0"
+      />
 
-        <BsCartPlus
-          size={20}
-          className="cursor-pointer ml-auto"
-          title="Add to cart"
-          onClick={() => addToCartHandler(data)}
-        />
+      {/* Product Info */}
+      <div className="flex flex-col flex-1 min-w-0">
+        <h4 className="text-[#1B4332] text-[15px] font-semibold leading-tight truncate">
+          {data.name}
+        </h4>
+        <span className="text-[15px] font-bold text-[#2D6A4F] mt-1">
+          ${totalPrice.toFixed(2)}
+        </span>
       </div>
+
+      {/* Add to Cart Button */}
+      <button
+        onClick={() => addToCartHandler(data)}
+        title="Add to cart"
+        className="text-[#1B4332] hover:text-[#2D6A4F] transition ml-3 flex-shrink-0"
+      >
+        <BsCartPlus size={20} />
+      </button>
     </div>
   );
 };
+
 export default Wishlist;

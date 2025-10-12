@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineCamera } from "react-icons/ai";
-import styles from "../../styles/style";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -11,17 +10,15 @@ const ShopSetting = () => {
   const { seller, error } = useSelector((state) => state.seller);
   const dispatch = useDispatch();
 
-  const [name, setName] = useState(seller?.name);
-  const [description, setDescription] = useState(seller?.description);
-  const [address, setAddress] = useState(seller?.address);
-  const [phoneNumber, setPhoneNumber] = useState(seller?.phoneNumber);
-  const [zipCode, setZipCode] = useState(seller?.zipCode);
+  const [name, setName] = useState(seller?.name || "");
+  const [description, setDescription] = useState(seller?.description || "");
+  const [address, setAddress] = useState(seller?.address || "");
+  const [phoneNumber, setPhoneNumber] = useState(seller?.phoneNumber || "");
+  const [zipCode, setZipCode] = useState(seller?.zipCode || "");
   const [avatar, setAvatar] = useState(null);
 
   useEffect(() => {
-    if (error) {
-      toast.error(error);
-    }
+    if (error) toast.error(error);
   }, [error]);
 
   const handleImage = async (e) => {
@@ -29,149 +26,137 @@ const ShopSetting = () => {
     setAvatar(file);
 
     const formData = new FormData();
+    formData.append("avatar", file);
 
-    formData.append("avatar", e.target.files[0]);
-
-    await axios
-      .put(`${server}/shop/update-avatar/${seller._id}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+    try {
+      await axios.put(`${server}/shop/update-avatar/${seller._id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
-      })
-      .then((res) => {
-        dispatch(loadSeller());
-        toast.success("avatar updated successfully!");
-      })
-      .catch((error) => {
-        toast.error(error?.response?.data?.message);
       });
+      dispatch(loadSeller());
+      toast.success("Avatar updated successfully!");
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Failed to update avatar");
+    }
   };
 
-  const updateHandler = (e) => {
+  const updateHandler = async (e) => {
     e.preventDefault();
-    axios
-      .put(
+    try {
+      await axios.put(
         `${server}/shop/update-shop-info`,
-        {
-          name,
-          address,
-          description,
-          phoneNumber,
-          zipCode,
-        },
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        toast.success("Seller updated successfully!");
-        dispatch(loadSeller());
-      })
-      .catch((error) => console.log(error?.response?.data?.message));
+        { name, address, description, phoneNumber, zipCode },
+        { withCredentials: true }
+      );
+      toast.success("Shop updated successfully!");
+      dispatch(loadSeller());
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Failed to update shop info");
+    }
   };
+
+  const inputClass =
+    "mt-2 block w-full px-3 h-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#2D6A4F] focus:border-[#2D6A4F] text-sm";
 
   return (
-    <div className="w-full min-h-screen flex flex-col items-center">
-      <div className="flex w-full 800px:w-[80%] flex-col justify-center my-5">
-        <div className="flex justify-center w-full">
-          <div className="relative">
-            <img
-              src={avatar ? URL.createObjectURL(avatar) : seller?.avatar?.url}
-              alt=""
-              className="w-[150px] h-[150px] rounded-full object-cover"
+    <div className="w-full min-h-screen flex justify-center bg-gray-100 py-10">
+      <div className="w-[95%] md:w-[70%] lg:w-[50%] bg-white rounded-lg shadow p-6 flex flex-col items-center">
+        {/* Avatar */}
+        <div className="relative mb-6">
+          <img
+            src={avatar ? URL.createObjectURL(avatar) : seller?.avatar?.url}
+            alt="avatar"
+            className="w-32 h-32 md:w-36 md:h-36 rounded-full object-cover"
+          />
+          <div className="w-8 h-8 md:w-10 md:h-10 bg-gray-200 rounded-full flex items-center justify-center cursor-pointer absolute bottom-1 right-1">
+            <input
+              type="file"
+              id="image"
+              className="hidden"
+              onChange={handleImage}
             />
-            <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[5px] right-[5px]">
-              <input
-                type="file"
-                id="image"
-                className="hidden"
-                onChange={handleImage}
-              />
-              <label htmlFor="image">
-                {" "}
-                <AiOutlineCamera />
-              </label>
-            </div>
+            <label htmlFor="image">
+              <AiOutlineCamera className="text-gray-600" size={20} />
+            </label>
           </div>
         </div>
 
-        {/* shop info */}
-
+        {/* Shop Form */}
         <form
-          className="flex flex-col items-center p-5"
+          className="w-full flex flex-col items-center"
           onSubmit={updateHandler}
         >
-          <div className="w-[100%] 800px:w-[50%] mt-5">
-            <label className="block pb-2">Shop Name</label>
+          <div className="w-full mb-4">
+            <label className="block text-sm font-medium mb-1">Shop Name</label>
             <input
               type="text"
-              className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
+              className={inputClass}
               required
-              placeholder={`${seller?.name}`}
               value={name}
               onChange={(e) => setName(e.target.value)}
+              placeholder="Enter shop name"
             />
           </div>
 
-          <div className="w-[100%] 800px:w-[50%] mt-5">
-            <label className="block pb-2">Shop Description</label>
+          <div className="w-full mb-4">
+            <label className="block text-sm font-medium mb-1">
+              Shop Description
+            </label>
             <input
               type="text"
-              className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
-              placeholder={`${
-                seller?.description ? seller.description : "Enter description"
-              } `}
+              className={inputClass}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              placeholder="Enter shop description"
             />
           </div>
 
-          <div className="w-[100%] 800px:w-[50%] mt-5">
-            <label className="block pb-2">Shop Address</label>
+          <div className="w-full mb-4">
+            <label className="block text-sm font-medium mb-1">
+              Shop Address
+            </label>
             <input
               type="text"
-              className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
+              className={inputClass}
               required
-              placeholder={seller?.address}
               value={address}
               onChange={(e) => setAddress(e.target.value)}
+              placeholder="Enter shop address"
             />
           </div>
 
-          <div className="w-[100%] 800px:w-[50%] mt-5">
-            <label className="block pb-2">Shop Contact</label>
+          <div className="w-full mb-4">
+            <label className="block text-sm font-medium mb-1">
+              Contact Number
+            </label>
             <input
-              type="number"
-              className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
+              type="tel"
+              className={inputClass}
               required
-              placeholder={seller?.phoneNumber}
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
+              placeholder="Enter contact number"
             />
           </div>
 
-          <div className="w-[100%] 800px:w-[50%] mt-5">
-            <label className="block pb-2">Shop ZipCode</label>
+          <div className="w-full mb-4">
+            <label className="block text-sm font-medium mb-1">Zip Code</label>
             <input
               type="number"
-              className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
+              className={inputClass}
               required
-              placeholder={seller?.zipcode}
               value={zipCode}
               onChange={(e) => setZipCode(e.target.value)}
+              placeholder="Enter zip code"
             />
           </div>
 
-          <div className="w-[100%] 800px:w-[50%] mt-5">
-            <input
-              type="submit"
-              className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
-              required
-              value="Update Shop"
-              readOnly
-            />
-          </div>
+          <button
+            type="submit"
+            className="w-full bg-[#2D6A4F] text-white py-2 rounded-md text-sm font-medium hover:bg-[#1f5239] transition-colors"
+          >
+            Update Shop
+          </button>
         </form>
       </div>
     </div>

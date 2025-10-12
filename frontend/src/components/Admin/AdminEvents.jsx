@@ -8,7 +8,6 @@ import { getAllEvents } from "../../redux/features/eventSlice";
 
 const AdminEvents = () => {
   const { allEvents } = useSelector((state) => state.events);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -22,13 +21,22 @@ const AdminEvents = () => {
       headerName: "Name",
       minWidth: 180,
       flex: 1.4,
+      renderCell: (params) => (
+        <span
+          style={{
+            backgroundColor: "#FFF4CC",
+            color: "#856404",
+            padding: "3px 8px",
+            borderRadius: "6px",
+            fontWeight: 500,
+            fontSize: "13px",
+          }}
+        >
+          {params.value}
+        </span>
+      ),
     },
-    {
-      field: "price",
-      headerName: "Price",
-      minWidth: 100,
-      flex: 0.6,
-    },
+    { field: "price", headerName: "Price", minWidth: 100, flex: 0.6 },
     {
       field: "Stock",
       headerName: "Stock",
@@ -36,7 +44,6 @@ const AdminEvents = () => {
       minWidth: 80,
       flex: 0.5,
     },
-
     {
       field: "sold",
       headerName: "Sold out",
@@ -46,56 +53,59 @@ const AdminEvents = () => {
     },
     {
       field: "Preview",
-      flex: 0.8,
-      minWidth: 100,
       headerName: "Preview",
-      type: "number",
+      minWidth: 100,
+      flex: 0.8,
       sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Link to={`/product/${params._id}`}>
-              <Button>
-                <AiOutlineEye size={20} />
-              </Button>
-            </Link>
-          </>
-        );
-      },
+      renderCell: (params) => (
+        <Link to={`/product/${params.id}`}>
+          <Button sx={{ color: "#2D6A4F", minWidth: 0 }}>
+            <AiOutlineEye size={20} />
+          </Button>
+        </Link>
+      ),
     },
   ];
 
-  const row = [];
-
-  allEvents &&
-    allEvents.forEach((item) => {
-      row.push({
-        id: item._id,
-        name: item.name,
-        price: "US$ " + item.discountPrice,
-        Stock: item.stock,
-        sold: item.sold_out,
-      });
-    });
+  const rows =
+    allEvents?.map((item) => ({
+      id: item._id,
+      name: item.name,
+      price: "US$ " + item.discountPrice,
+      Stock: item.stock,
+      sold: item.sold_out,
+    })) || [];
 
   return (
-    <>
-      <div className="w-full mx-8 pt-1 mt-10 bg-white">
-        <DataGrid
-          rows={row}
-          columns={columns}
-          pageSize={10}
-          disableRowSelectionOnClick
-          autoHeight
-          initialState={{
-            pagination: {
-              paginationModel: { pageSize: 10, page: 0 },
-            },
-          }}
-          pageSizeOptions={[8, 9, 10]}
-        />
-      </div>
-    </>
+    <div className="w-full mx-8 pt-1 mt-10 bg-white rounded-lg shadow-sm">
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        pageSize={10}
+        disableRowSelectionOnClick
+        autoHeight
+        density="compact"
+        initialState={{
+          pagination: { paginationModel: { pageSize: 10, page: 0 } },
+        }}
+        pageSizeOptions={[8, 9, 10]}
+        sx={{
+          fontSize: "13px",
+          "& .MuiDataGrid-columnHeaders": {
+            fontSize: "14px",
+            fontWeight: 600,
+            backgroundColor: "#E6F4EA",
+            color: "#2D6A4F",
+          },
+          "& .MuiDataGrid-cell": {
+            borderBottom: "1px solid #f0f0f0",
+          },
+          "& .MuiDataGrid-row:hover": {
+            backgroundColor: "#E9F8E5",
+          },
+        }}
+      />
+    </div>
   );
 };
 

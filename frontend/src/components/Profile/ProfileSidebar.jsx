@@ -58,18 +58,25 @@ const ProfileSidebar = ({ active, setActive }) => {
   };
 
   return (
-    <div className="w-full bg-white shadow-sm rounded-[10px] p-4 pt-8">
+    <div className="w-full bg-white shadow rounded-lg p-1 flex flex-col space-y-1 800px:p-4 800px:space-y-4">
       {sidebarItems.map(({ id, label, icon: Icon, route, logout }) => (
         <div
           key={id}
-          className="flex items-center cursor-pointer w-full mb-8"
+          className={`flex flex-col 800px:flex-row items-center justify-center  800px:justify-start cursor-pointer p-1 rounded-md hover:bg-[#f1f1f1] transition-all duration-200 ${
+            active === id ? "bg-[#e6f4ea]" : ""
+          }`}
           onClick={() => handleClick(id, route, logout)}
         >
-          <Icon size={20} color={active === id ? "red" : ""} title={label} />
+          <Icon
+            size={22}
+            color={active === id ? "#2D6A4F" : "#555"}
+            title={label}
+            className="my-2 md:my-0"
+          />
           <span
-            className={`pl-3 ${
-              active === id ? "text-[red]" : ""
-            } 800px:block hidden`}
+            className={`mt-0.5 800px:mt-0 800px:pl-2 text-sm font-medium text-center 800px:text-left ${
+              active === id ? "text-[#2D6A4F]" : "text-gray-700"
+            } hidden md:inline-block`}
           >
             {label}
           </span>

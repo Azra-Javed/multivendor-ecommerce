@@ -3,7 +3,7 @@ import styles from "../../styles/style";
 const Sponsored = () => {
   return (
     <div
-      className={`${styles.section} hidden sm:block bg-white py-5 px-5 mb-12 cursor-pointer rounded-xl`}
+      className={`${styles.section} hidden sm:block bg-gray-50 shadow shadow-gray-400 py-5 px-5 mb-12 cursor-pointer rounded-xl`}
     >
       <div className="flex justify-between w-full">
         <div className="flex items-start">

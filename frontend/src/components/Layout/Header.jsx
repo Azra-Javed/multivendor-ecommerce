@@ -62,7 +62,7 @@ const Header = ({ activeHeading }) => {
           <div className="hidden 800px:flex items-center justify-between">
             {/* Logo  */}
             <Link to={"/"} className="flex items-center gap-2">
-              <img src={Logo} alt="" className="h-[50px] w-full" />
+              <img src={Logo} alt="" className="h-[45px] w-full" />
             </Link>
             {/*Search Bar */}
             <div className="w-[50%] relative">
@@ -242,7 +242,7 @@ const Header = ({ activeHeading }) => {
             </div>
             <div>
               <Link to={"/"} className="flex items-center gap-2">
-                <img src={Logo} alt="" className="h-[50px] w-full" />
+                <img src={Logo} alt="" className="h-[45px] w-full" />
               </Link>
             </div>
 

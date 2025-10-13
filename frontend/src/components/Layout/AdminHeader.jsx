@@ -15,7 +15,7 @@ const AdminHeader = () => {
       <div>
         {/* Logo  */}
         <Link to={"/admin/dashboard"} className="flex items-center gap-2">
-          <img src={Logo} alt="" className="h-[50px] w-full" />
+          <img src={Logo} alt="" className="h-[45px] w-full" />
         </Link>
       </div>
 

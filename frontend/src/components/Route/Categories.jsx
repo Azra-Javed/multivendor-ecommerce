@@ -5,47 +5,46 @@ import { useNavigate } from "react-router-dom";
 
 const Categories = () => {
   const navigate = useNavigate();
+
   return (
     <>
+      {/* Branding Section */}
       <section className={`${styles.section} hidden sm:block`}>
-        <div
-          className={`branding my-12 mt-0 flex justify-between w-full shadow-sm bg-gray-50 p-5 rounded-md`}
-        >
+        <div className="branding my-8 mt-0 flex justify-between w-full shadow-sm bg-gray-50 p-4 rounded-md">
           {brandingData &&
             brandingData.map((i, index) => (
               <div className="flex items-start" key={index}>
-                {i.icon}
-                <div className="px-3">
-                  <h3 className="font-bold text-sm md:text-base">{i.title}</h3>
-                  <p className="text-xs md:text-sm">{i.Description}</p>
+                <div className="text-xl">{i.icon}</div>
+                <div className="px-2">
+                  <h3 className="font-semibold text-sm">{i.title}</h3>
+                  <p className="text-xs text-gray-600">{i.Description}</p>
                 </div>
               </div>
             ))}
         </div>
       </section>
 
-      {/* categories section */}
-
+      {/* Categories Section */}
       <section
-        className={`${styles.section} bg-gray-50 shadow shadow-gray-400 p-6 rounded-lg mb-12`}
+        className={`${styles.section} bg-gray-50 shadow p-4 rounded-md mb-10`}
       >
-        <div className="grid grid-cols-1 gap-[5px] md:grid-cols-2 lg:grid-cols-4 lg:gap-[20px] xl:grid-cols-5 xl:gap-[30px]">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
           {categoriesData &&
             categoriesData.map((i) => {
-              const handleSubmit = (i) => {
+              const handleSubmit = (i) =>
                 navigate(`/products?category=${i.title}`);
-              };
+
               return (
                 <div
-                  className="w-full h-[100px] flex items-center justify-between cursor-pointer overflow-hidden"
                   key={i.id}
                   onClick={() => handleSubmit(i)}
+                  className="w-full h-[80px] flex items-center justify-between cursor-pointer overflow-hidden hover:shadow-sm transition-all duration-200 rounded-md px-2 "
                 >
-                  <h5 className={`text-[18px] leading-[1.3]`}>{i.title}</h5>
+                  <h5 className="text-sm font-medium">{i.title}</h5>
                   <img
                     src={i.image_Url}
-                    alt=""
-                    className="w-[120px] object-cover"
+                    alt={i.title}
+                    className="w-[90px] object-contain"
                   />
                 </div>
               );

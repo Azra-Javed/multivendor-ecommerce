@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://multivendor-ecommerce-l46n.vercel.app",
+    origin: "https://shop-trendora.vercel.app",
     credentials: true,
   })
 );

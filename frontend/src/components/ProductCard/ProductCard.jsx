@@ -48,10 +48,10 @@ const ProductCard = ({ data, isEvent }) => {
     setClick(wishlist?.some((i) => i._id === data._id));
   }, [wishlist, data._id]);
 
-  // Helper component for the action icons with white circular background
+  // Compact action icon component
   const ActionIcon = ({ children, onClick, title }) => (
     <div
-      className="w-8 h-8 rounded-full bg-white shadow shadow-gray-600 flex items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors"
+      className="w-7 h-7 rounded-full bg-white shadow-sm flex items-center justify-center cursor-pointer hover:bg-gray-100 transition"
       onClick={onClick}
       title={title}
     >
@@ -60,9 +60,9 @@ const ProductCard = ({ data, isEvent }) => {
   );
 
   return (
-    <div className="group relative w-full bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer">
-      {/* ===== Action Buttons ===== */}
-      <div className="absolute top-4 right-4 z-10 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+    <div className="group relative w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden cursor-pointer">
+      {/* Action Buttons */}
+      <div className="absolute top-3 right-3 z-10 flex flex-col space-y-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
         <ActionIcon
           onClick={(e) => {
             e.stopPropagation();
@@ -70,82 +70,76 @@ const ProductCard = ({ data, isEvent }) => {
           }}
           title="Quick view"
         >
-          <AiOutlineEye size={18} color="#2D6A4F" />
+          <AiOutlineEye size={16} color="#2D6A4F" />
         </ActionIcon>
 
         <ActionIcon onClick={handleToggleWishlist}>
           {click ? (
             <AiFillHeart
-              size={18}
+              size={16}
               color="#FF4B4B"
               title="Remove from wishlist"
             />
           ) : (
-            <AiOutlineHeart size={18} color="#2D6A4F" title="Add to wishlist" />
+            <AiOutlineHeart size={16} color="#2D6A4F" title="Add to wishlist" />
           )}
         </ActionIcon>
 
         <ActionIcon onClick={() => addToCartHandler(data._id)}>
           <AiOutlineShoppingCart
-            size={18}
+            size={16}
             color="#2D6A4F"
             title="Add to cart"
           />
         </ActionIcon>
       </div>
 
-      {/* ===== Product Image ===== */}
+      {/* Product Image */}
       <Link
         to={
           isEvent ? `/product/${data._id}?isEvent=true` : `/product/${data._id}`
         }
       >
-        <div className="relative flex items-center justify-center h-[250px] w-full overflow-hidden bg-[#f9f9f9]">
+        <div className="relative flex items-center justify-center h-[200px] w-full overflow-hidden bg-[#f9f9f9]">
           <img
             src={
               data.images?.[0]?.url ||
               "https://via.placeholder.com/300x400.png?text=Product+Image"
             }
             alt={data.name}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
-
-          {/* Small “Sale” badge if applicable */}
           {data.discountPrice && (
-            <span className="absolute top-3 left-3 bg-[#FFD166] text-[#2D6A4F] text-xs font-semibold px-2 py-1 rounded-md shadow-sm">
+            <span className="absolute top-2 left-2 bg-[#FFD166] text-[#2D6A4F] text-[10px] font-semibold px-1.5 py-0.5 rounded-sm shadow-sm">
               Sale
             </span>
           )}
         </div>
       </Link>
 
-      {/* ===== Product Info ===== */}
-      <div className="p-5">
-        {/* Name + Rating */}
-        <div className="flex justify-between items-start mb-3">
+      {/* Product Info */}
+      <div className="p-3">
+        <div className="flex justify-between items-start mb-2">
           <h2
-            className="text-[18px] font-semibold text-gray-800 leading-tight line-clamp-2 group-hover:text-[#2D6A4F] transition-colors"
+            className="text-[15px] font-semibold text-gray-800 leading-snug line-clamp-2 group-hover:text-[#2D6A4F] transition-colors"
             title={data.name}
           >
             {data.name}
           </h2>
 
-          <div className="flex items-center text-sm font-semibold text-[#2D6A4F] shrink-0 ml-2">
-            <BsStarFill size={16} className="text-[#FFD166] mr-1" />
-            <span className="text-[15px]">
-              {data.ratings ? data.ratings.toFixed(1) : "4.5"}
-            </span>
+          <div className="flex items-center text-xs font-semibold text-[#2D6A4F] ml-1 shrink-0">
+            <BsStarFill size={12} className="text-[#FFD166] mr-0.5" />
+            <span>{data.ratings ? data.ratings.toFixed(1) : "4.5"}</span>
           </div>
         </div>
 
-        {/* Price Display */}
-        <div className="mt-3 flex items-baseline  space-x-2">
+        <div className="flex items-baseline space-x-1">
           {data.originalPrice && (
-            <span className="text-[15px] text-gray-400 line-through">
+            <span className="text-[12px] text-gray-400 line-through">
               ${data.originalPrice.toFixed(2)}
             </span>
           )}
-          <h3 className="text-[22px] font-bold text-[#2D6A4F]">
+          <h3 className="text-[16px] font-bold text-[#2D6A4F]">
             ${(data.discountPrice || data.originalPrice)?.toFixed(2) || "XX.XX"}
           </h3>
         </div>

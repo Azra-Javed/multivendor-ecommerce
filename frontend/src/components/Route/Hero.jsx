@@ -4,7 +4,7 @@ import styles from "../../styles/style";
 
 const Hero = () => {
   return (
-    <section className="w-full bg-white  min-h-[calc(100vh-80px)] flex flex-col md:flex-row items-center justify-center md:px-20 px-6 gap-10 ">
+    <section className="w-full min-h-[calc(100vh-80px)] flex flex-col md:flex-row items-center justify-center md:px-20 px-6 gap-10 ">
       {/* ===== LEFT CONTENT ===== */}
       <div className="flex flex-col justify-center items-center md:items-start max-w-[600px] text-center md:text-left">
         <h1 className="text-[36px] md:text-[48px] leading-[1.2] text-[#2D6A4F] font-[700] capitalize font-[Poppins]">

@@ -44,7 +44,7 @@ const createUser = async (req, res, next) => {
 
     const activationToken = createActivationToken(user);
 
-    const activationUrl = `https://multivendor-ecommerce-l46n.vercel.app/activation/${activationToken}`;
+    const activationUrl = `https://shop-trendora.vercel.app/activation/${activationToken}`;
     try {
       await sendMail({
         email: user.email,

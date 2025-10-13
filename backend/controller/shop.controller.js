@@ -52,7 +52,7 @@ const createShop = async (req, res, next) => {
     // Create activation token
     const activationToken = createActivationToken(seller);
 
-    const activationUrl = `https://multivendor-ecommerce-l46n.vercel.app/activation/${activationToken}`;
+    const activationUrl = `https://shop-trendora.vercel.app/activation/${activationToken}`;
 
     try {
       await sendMail({

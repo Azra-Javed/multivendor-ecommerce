@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import { MdTrackChanges } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getAllOrders } from "../../redux/features/orderSlice";
 
 const AllRefundOrders = () => {
@@ -13,7 +13,7 @@ const AllRefundOrders = () => {
 
   useEffect(() => {
     dispatch(getAllOrders(user?._id));
-  }, []);
+  }, [dispatch, user?._id]);
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
@@ -23,10 +23,23 @@ const AllRefundOrders = () => {
       headerName: "Status",
       minWidth: 130,
       flex: 0.7,
-      cellClassName: (params) => {
-        return params.row.status === "Delivered" ? "greenColor" : "redColor";
+      renderCell: (params) => {
+        let bgClass = "bg-red-100 text-red-800"; // default
+        if (params.value === "Delivered")
+          bgClass = "bg-green-100 text-green-800";
+        else if (params.value === "Processing refund")
+          bgClass = "bg-yellow-100 text-yellow-800";
+
+        return (
+          <span
+            className={`px-2 py-1 rounded-md font-medium text-sm ${bgClass}`}
+          >
+            {params.value}
+          </span>
+        );
       },
     },
+
     {
       field: "itemsQty",
       headerName: "Items Qty",
@@ -50,17 +63,13 @@ const AllRefundOrders = () => {
       headerName: "",
       type: "number",
       sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Link to={`/user/order/track/${params.id}`}>
-              <Button>
-                <MdTrackChanges size={20} />
-              </Button>
-            </Link>
-          </>
-        );
-      },
+      renderCell: (params) => (
+        <Link to={`/user/order/track/${params.id}`}>
+          <Button>
+            <MdTrackChanges size={20} />
+          </Button>
+        </Link>
+      ),
     },
   ];
 
@@ -77,13 +86,18 @@ const AllRefundOrders = () => {
     });
 
   return (
-    <div className="pl-8 pt-1">
+    <div className="px-4 py-2">
       <DataGrid
         rows={row}
         columns={columns}
-        pageSize={10}
-        disableSelectionOnClick
         autoHeight
+        disableSelectionOnClick
+        density="compact"
+        pagination
+        initialState={{
+          pagination: { paginationModel: { pageSize: 9, page: 0 } },
+        }}
+        pageSizeOptions={[9, 12, 25]}
       />
     </div>
   );

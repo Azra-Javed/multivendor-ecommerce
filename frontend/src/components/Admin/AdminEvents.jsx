@@ -58,7 +58,7 @@ const AdminEvents = () => {
       flex: 0.8,
       sortable: false,
       renderCell: (params) => (
-        <Link to={`/product/${params.id}`}>
+        <Link to={`/product/${params.id}?isEvent=true`}>
           <Button sx={{ color: "#2D6A4F", minWidth: 0 }}>
             <AiOutlineEye size={20} />
           </Button>

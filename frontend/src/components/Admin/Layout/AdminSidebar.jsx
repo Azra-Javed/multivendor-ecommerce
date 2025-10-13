@@ -1,4 +1,5 @@
-import { CiMoneyBill } from "react-icons/ci";
+import { Link } from "react-router-dom";
+import { CiMoneyBill, CiSettings } from "react-icons/ci";
 import { FiShoppingBag } from "react-icons/fi";
 import { RxDashboard } from "react-icons/rx";
 import { GrWorkshop } from "react-icons/gr";
@@ -6,7 +7,6 @@ import { HiOutlineUserGroup } from "react-icons/hi";
 import { BsHandbag } from "react-icons/bs";
 import { MdOutlineLocalOffer } from "react-icons/md";
 import { AiOutlineSetting } from "react-icons/ai";
-import { Link } from "react-router-dom";
 
 const AdminSidebar = ({ active }) => {
   const sidebarItems = [
@@ -36,31 +36,26 @@ const AdminSidebar = ({ active }) => {
   ];
 
   return (
-    <div className="w-64 h-[89vh] bg-[#f9fafb] shadow-md overflow-y-auto rounded-lg py-4">
+    <div className="w-20 sm:w-64 h-[89vh] bg-[#f9fafb] shadow-sm overflow-y-auto sticky top-0 left-0 z-10 rounded-lg py-2">
       {sidebarItems.map(({ id, label, icon: Icon, path }) => {
         const isActive = active === id;
         return (
           <Link
             to={path}
             key={id}
-            className={`flex items-center gap-4 px-5 py-3 my-1 rounded-lg transition-all duration-200
+            className={`flex items-center justify-center sm:justify-start px-2 sm:px-4 py-2 my-1 rounded-lg transition-all duration-200
               ${
                 isActive
-                  ? "bg-[#E3F2E1] text-[#2D6A4F] shadow-sm"
-                  : "text-gray-700 hover:bg-[#FFD166]/30 hover:text-[#2D6A4F]"
+                  ? "bg-[#E3F2E1] text-[#2D6A4F]"
+                  : "text-gray-600 hover:bg-[#FFD166]/30 hover:text-[#2D6A4F]"
               }`}
+            title={label}
           >
             <Icon
-              size={22}
-              className={`${
-                isActive ? "text-[#2D6A4F]" : "text-[#2D6A4F]"
-              } min-w-[22px]`}
+              size={24}
+              className={`${isActive ? "text-[#2D6A4F]" : "text-gray-600"}`}
             />
-            <span
-              className={`text-base font-sm ${
-                isActive ? "text-[#2D6A4F]" : ""
-              }`}
-            >
+            <span className="hidden sm:inline ml-2 text-sm font-medium">
               {label}
             </span>
           </Link>

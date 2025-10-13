@@ -17,16 +17,14 @@ const ShopInfo = ({ isOwner }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const totalReviewsLength =
-    products &&
-    products.reduce((acc, product) => acc + product.reviews.length, 0);
+    products?.reduce((acc, product) => acc + product.reviews.length, 0) || 0;
 
   const totalRatings =
-    products &&
-    products.reduce(
+    products?.reduce(
       (acc, product) =>
         acc + product.reviews.reduce((sum, review) => sum + review.rating, 0),
       0
-    );
+    ) || 0;
 
   const averageRatings = totalRatings / totalReviewsLength || 0;
 
@@ -43,14 +41,13 @@ const ShopInfo = ({ isOwner }) => {
         toast.error(error.message);
         setIsLoading(false);
       });
-  }, []);
+  }, [dispatch, id]);
 
   const logoutHandler = async () => {
     try {
       const res = await axios.get(`${server}/shop/logoutShop`, {
         withCredentials: true,
       });
-
       toast.success(res.data.message || "Logged out successfully");
       window.location.href = "/shop-login";
     } catch (error) {
@@ -58,68 +55,67 @@ const ShopInfo = ({ isOwner }) => {
     }
   };
 
+  if (isLoading) return <Loader />;
+
   return (
-    <>
-      {isLoading ? (
-        <Loader />
-      ) : (
+    <div className="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden p-6 pt-3 space-y-6 h-[95vh]">
+      {/* Shop Avatar & Name */}
+      <div className="flex flex-col items-center">
+        <img
+          src={data?.avatar?.url || "/default-avatar.png"}
+          alt={data.name}
+          className="w-28 h-28 rounded-full object-cover border-2 border-gray-200"
+        />
+        <h3 className="text-2xl font-semibold mt-3">{data.name}</h3>
+        <p className="text-sm text-gray-600 text-center mt-2">
+          {data?.description?.length > 60
+            ? data.description.slice(0, 60) + "..."
+            : data.description || "No description provided."}
+        </p>
+      </div>
+
+      {/* Shop Details */}
+      <div className="space-y-3 text-sm">
         <div>
-          <div className="w-full py-5">
-            <div className="w-full flex item-center justify-center">
-              <img
-                src={data?.avatar?.url}
-                alt=""
-                className="w-[150px] h-[150px] object-cover rounded-full"
-              />
-            </div>
-            <h3 className="text-center py-2 text-[20px]">{data.name}</h3>
-            <p className="text-[16px] text-[#000000a6] p-[10px] flex items-center">
-              {data?.description?.length > 60
-                ? data.description.slice(0, 60) + "..."
-                : data.description}
-            </p>
-          </div>
-          <div className="p-3">
-            <h5 className="font-[600]">Address</h5>
-            <h4 className="text-[#000000a6]">{data.address}</h4>
-          </div>
-          <div className="p-3">
-            <h5 className="font-[600]">Phone Number</h5>
-            <h4 className="text-[#000000a6]">{data.phoneNumber}</h4>
-          </div>
-          <div className="p-3">
-            <h5 className="font-[600]">Total Products</h5>
-            <h4 className="text-[#000000a6]">{products?.length}</h4>
-          </div>
-          <div className="p-3">
-            <h5 className="font-[600]">Shop Ratings</h5>
-            <h4 className="text-[#000000b0]">{averageRatings}/5</h4>
-          </div>
-          <div className="p-3">
-            <h5 className="font-[600]">Joined On</h5>
-            <h4 className="text-[#000000b0]">
-              {data?.createdAt?.slice(0, 10)}
-            </h4>
-          </div>
-          {isOwner && (
-            <div className="py-3 px-4">
-              <Link
-                className={`${styles.button} !w-full !h-[42px] !rounded-[5px]`}
-                to="/settings"
-              >
-                <span className="text-white">Edit Shop</span>
-              </Link>
-              <div
-                className={`${styles.button} !w-full !h-[42px] !rounded-[5px]`}
-                onClick={logoutHandler}
-              >
-                <span className="text-white">Log Out</span>
-              </div>
-            </div>
-          )}
+          <h5 className="font-medium text-gray-700">Address</h5>
+          <p className="text-gray-500">{data.address}</p>
+        </div>
+        <div>
+          <h5 className="font-medium text-gray-700">Phone Number</h5>
+          <p className="text-gray-500">{data.phoneNumber}</p>
+        </div>
+        <div>
+          <h5 className="font-medium text-gray-700">Total Products</h5>
+          <p className="text-gray-500">{products?.length}</p>
+        </div>
+        <div>
+          <h5 className="font-medium text-gray-700">Shop Ratings</h5>
+          <p className="text-gray-500">{averageRatings.toFixed(1)}/5</p>
+        </div>
+        <div>
+          <h5 className="font-medium text-gray-700">Joined On</h5>
+          <p className="text-gray-500">{data?.createdAt?.slice(0, 10)}</p>
+        </div>
+      </div>
+
+      {/* Owner Actions */}
+      {isOwner && (
+        <div className="space-y-2">
+          <Link
+            className={`${styles.button} !w-full !h-[44px] !rounded-md text-white`}
+            to="/settings"
+          >
+            Edit Shop
+          </Link>
+          <button
+            onClick={logoutHandler}
+            className={`${styles.button} !w-full !h-[44px] !rounded-md text-white`}
+          >
+            Log Out
+          </button>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

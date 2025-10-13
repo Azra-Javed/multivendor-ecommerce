@@ -61,9 +61,9 @@ const Header = ({ activeHeading }) => {
         <section className={`${styles.section} 800px:!h-[80px]`}>
           <div className="hidden 800px:flex items-center justify-between">
             {/* Logo  */}
-            <div className="flex items-center gap-2">
-              <img src={Logo} alt="" className="h-[80px]" />
-            </div>
+            <Link to={"/"} className="flex items-center gap-2">
+              <img src={Logo} alt="" className="h-[50px] w-full" />
+            </Link>
             {/*Search Bar */}
             <div className="w-[50%] relative">
               <input
@@ -241,12 +241,8 @@ const Header = ({ activeHeading }) => {
               />
             </div>
             <div>
-              <Link to="/">
-                <img
-                  src="https://shopo.quomodothemes.website/assets/images/logo.svg"
-                  alt="shopo logo"
-                  className="mt-3 cursor-pointer"
-                />
+              <Link to={"/"} className="flex items-center gap-2">
+                <img src={Logo} alt="" className="h-[50px] w-full" />
               </Link>
             </div>
 
@@ -326,7 +322,7 @@ const Header = ({ activeHeading }) => {
                     </div>
                   ) : null}
                 </div>
-                <Navbar active={activeHeading} />
+                <Navbar active={activeHeading} /> {/* seller button */}
                 <div className={`${styles.button} ml-4 !rounded-[4px]`}>
                   <Link
                     to={isSellerAuthenticated ? "/dashboard" : "/shop-login"}

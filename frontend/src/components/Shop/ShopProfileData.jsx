@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getAllProductsShop } from "../../redux/features/productSlice";
 import styles from "../../styles/style";
 import ProductCard from "../ProductCard/ProductCard";
@@ -15,6 +15,7 @@ const ShopProfileData = ({ isOwner }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [active, setActive] = useState(1);
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getAllProductsShop(id));
@@ -73,6 +74,15 @@ const ShopProfileData = ({ isOwner }) => {
               </span>
             </div>
           </Link>
+        )}
+
+        {!isOwner && (
+          <div
+            className={`${styles.button} !rounded-md !h-[40px] bg-[#2D6A4F] hover:bg-[#1B4332] transition`}
+            onClick={() => navigate(-1)}
+          >
+            <span className="text-white text-[15px] font-medium">Go Back</span>
+          </div>
         )}
       </div>
 
@@ -146,6 +156,7 @@ const ShopProfileData = ({ isOwner }) => {
                         )}{" "}
                         days ago
                       </p>
+                      s
                     </div>
                   </div>
                 ))}

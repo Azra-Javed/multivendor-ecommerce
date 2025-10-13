@@ -36,7 +36,7 @@ const AdminSidebar = ({ active }) => {
   ];
 
   return (
-    <div className="w-20 sm:w-64 h-[89vh] bg-[#f9fafb] shadow-sm overflow-y-auto sticky top-0 left-0 z-10 rounded-lg py-2">
+    <div className="w-20 sm:w-64 h-[89vh] bg-[#f9fafb] shadow-sm overflow-y-auto sticky top-0 left-0 z-10 rounded-lg py-5">
       {sidebarItems.map(({ id, label, icon: Icon, path }) => {
         const isActive = active === id;
         return (

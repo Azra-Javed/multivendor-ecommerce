@@ -4,6 +4,7 @@ import { BiMessageSquareDetail } from "react-icons/bi";
 import { FaUsers } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import Logo from "/src/assets/logo.png";
 
 const AdminHeader = () => {
   const { user } = useSelector((state) => state.user);
@@ -12,12 +13,9 @@ const AdminHeader = () => {
   return (
     <div className="w-full h-[70px] bg-white shadow-sm sticky top-0 left-0 z-30 flex items-center justify-between px-4 border-b border-gray-100">
       <div>
-        <Link to="/">
-          <img
-            src="https://shopo.quomodothemes.website/assets/images/logo.svg"
-            alt="Shopo Logo"
-            className="h-[38px] object-contain"
-          />
+        {/* Logo  */}
+        <Link to={"/admin/dashboard"} className="flex items-center gap-2">
+          <img src={Logo} alt="" className="h-[50px] w-full" />
         </Link>
       </div>
 
@@ -57,7 +55,7 @@ const AdminHeader = () => {
           <BiMessageSquareDetail size={24} />
         </Link>
 
-        <Link to={`/shop/${seller?._id}`} className="ml-2">
+        <Link to={`/profile`} className="ml-2">
           <img
             src={user?.avatar?.url || "/default-avatar.png"}
             alt="Admin Avatar"

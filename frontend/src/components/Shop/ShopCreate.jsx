@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import styles from "../../styles/style";
-import { Link } from "react-router-dom";
 import { RxAvatar } from "react-icons/rx";
+import { Link } from "react-router-dom";
 import axios from "axios";
-import { server } from "../../server";
 import { toast } from "react-toastify";
+import { server } from "../../server";
 
 const ShopCreate = () => {
   const [email, setEmail] = useState("");
@@ -25,7 +24,6 @@ const ShopCreate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const config = { headers: { "Content-Type": "multipart/form-data" } };
-
     const newForm = new FormData();
 
     newForm.append("file", avatar);
@@ -54,210 +52,159 @@ const ShopCreate = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-[40rem]">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" onSubmit={(e) => handleSubmit(e)}>
-            <h2 className="text-center text-3xl font-medium text-gray-900">
-              Register as a seller
-            </h2>
+    <div className="min-h-screen bg-[#f5f5f5] flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-lg bg-white shadow-md rounded-md p-8">
+        <h2 className="text-center text-2xl font-semibold text-gray-800 mb-6">
+          Register as a Seller
+        </h2>
 
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Shop Name
-              </label>
-              <div className="mt-1">
-                <input
-                  type="text"
-                  name="name"
-                  autoComplete="name"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="appearance-none block w-full px-3 
-                  py-2 border border-gray-300 rounded-md 
-                  shadow-sm placeholder-gray-400 focus:outline-none
-                   focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                />
-              </div>
-            </div>
-            <div className="">
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Email
-              </label>
-              <div className="mt-1">
-                <input
-                  type="email"
-                  name="email"
-                  autoComplete="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="appearance-none block w-full px-3 
-                  py-2 border border-gray-300 rounded-md 
-                  shadow-sm placeholder-gray-400 focus:outline-none
-                   focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                />
-              </div>
-            </div>
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Shop Name */}
+          <div>
+            <label className="block text-sm text-gray-700 mb-1">
+              Shop Name
+            </label>
+            <input
+              type="text"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-[#2D6A4F]"
+              placeholder="Enter your shop name"
+            />
+          </div>
 
-            <div className="">
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Phone Number
-              </label>
-              <div className="mt-1">
-                <input
-                  type="number"
-                  name="phoneNumber"
-                  required
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  className="appearance-none block w-full px-3 
-                  py-2 border border-gray-300 rounded-md 
-                  shadow-sm placeholder-gray-400 focus:outline-none
-                   focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                />
-              </div>
-            </div>
+          {/* Email */}
+          <div>
+            <label className="block text-sm text-gray-700 mb-1">Email</label>
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-[#2D6A4F]"
+              placeholder="shop@example.com"
+            />
+          </div>
 
-            <div className="">
-              <label
-                htmlFor="address"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Address
-              </label>
-              <div className="mt-1">
-                <input
-                  type="text"
-                  name="address"
-                  required
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  className="appearance-none block w-full px-3 
-                  py-2 border border-gray-300 rounded-md 
-                  shadow-sm placeholder-gray-400 focus:outline-none
-                   focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                />
-              </div>
-            </div>
-            <div className="">
-              <label
-                htmlFor="zipCode"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Zip Code
-              </label>
-              <div className="mt-1 relative">
-                <input
-                  type="number"
-                  name="zipCode"
-                  required
-                  value={zipCode}
-                  onChange={(e) => setZipCode(e.target.value)}
-                  className="appearance-none block w-full px-3 
-                  py-2 border border-gray-300 rounded-md 
-                  shadow-sm placeholder-gray-400 focus:outline-none
-                   focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                />
-              </div>
-            </div>
+          {/* Phone Number */}
+          <div>
+            <label className="block text-sm text-gray-700 mb-1">
+              Phone Number
+            </label>
+            <input
+              type="number"
+              required
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-[#2D6A4F]"
+              placeholder="03XXXXXXXXX"
+            />
+          </div>
 
-            <div className="">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Password
-              </label>
-              <div className="mt-1 relative">
-                <input
-                  type={visible ? "text" : "password"}
-                  name="password"
-                  autoComplete="current-password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none block w-full px-3 
-                  py-2 border border-gray-300 rounded-md 
-                  shadow-sm placeholder-gray-400 focus:outline-none
-                   focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          {/* Address */}
+          <div>
+            <label className="block text-sm text-gray-700 mb-1">Address</label>
+            <input
+              type="text"
+              required
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-[#2D6A4F]"
+              placeholder="Enter shop address"
+            />
+          </div>
+
+          {/* Zip Code */}
+          <div>
+            <label className="block text-sm text-gray-700 mb-1">Zip Code</label>
+            <input
+              type="number"
+              required
+              value={zipCode}
+              onChange={(e) => setZipCode(e.target.value)}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-[#2D6A4F]"
+              placeholder="e.g. 54000"
+            />
+          </div>
+
+          {/* Password */}
+          <div>
+            <label className="block text-sm text-gray-700 mb-1">Password</label>
+            <div className="relative">
+              <input
+                type={visible ? "text" : "password"}
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-[#2D6A4F]"
+                placeholder="••••••••"
+              />
+              {visible ? (
+                <AiOutlineEye
+                  size={20}
+                  className="absolute right-3 top-2.5 text-gray-500 cursor-pointer"
+                  onClick={() => setVisible(false)}
                 />
-                {visible ? (
-                  <AiOutlineEye
-                    className=" absolute right-2 top-2 cursor-pointer"
-                    size={25}
-                    onClick={() => setVisible(false)}
+              ) : (
+                <AiOutlineEyeInvisible
+                  size={20}
+                  className="absolute right-3 top-2.5 text-gray-500 cursor-pointer"
+                  onClick={() => setVisible(true)}
+                />
+              )}
+            </div>
+          </div>
+
+          {/* Avatar Upload */}
+          <div>
+            <label className="block text-sm text-gray-700 mb-2">
+              Shop Avatar
+            </label>
+            <div className="flex items-center space-x-4">
+              <span className="inline-block h-10 w-10 rounded-full overflow-hidden bg-gray-100">
+                {avatar ? (
+                  <img
+                    src={URL.createObjectURL(avatar)}
+                    alt="avatar"
+                    className="h-full w-full object-cover"
                   />
                 ) : (
-                  <AiOutlineEyeInvisible
-                    className=" absolute right-2 top-2 cursor-pointer"
-                    size={25}
-                    onClick={() => setVisible(true)}
-                  />
+                  <RxAvatar className="h-10 w-10 text-gray-400" />
                 )}
-              </div>
-            </div>
-
-            <div>
+              </span>
               <label
-                htmlFor="avatar"
-                className="block text-sm font-medium text-gray-700"
-              ></label>
-              <div className="mt-2 flex items-center">
-                <span className="inline-block h-8 w-8 rounded-full overflow-hidden">
-                  {avatar ? (
-                    <img
-                      src={URL.createObjectURL(avatar)}
-                      alt="avatar"
-                      className="h-full w-full object-cover rounded-full"
-                    />
-                  ) : (
-                    <RxAvatar className="h-8 w-8" />
-                  )}
-                </span>
-                <label
-                  htmlFor="file-input"
-                  className="ml-5 flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-                >
-                  <span>Upload a file</span>
-                  <input
-                    type="file"
-                    name="avatar"
-                    id="file-input"
-                    onChange={handleFileInputChange}
-                    className="sr-only"
-                  />
-                </label>
-              </div>
-            </div>
-
-            <div>
-              <button
-                type="submit"
-                className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                htmlFor="file-input"
+                className="cursor-pointer text-sm text-[#2D6A4F] font-medium border border-gray-300 rounded-md px-3 py-1 hover:bg-gray-50"
               >
-                Submit
-              </button>
+                Upload
+                <input
+                  type="file"
+                  id="file-input"
+                  hidden
+                  accept="image/*"
+                  onChange={handleFileInputChange}
+                />
+              </label>
             </div>
+          </div>
 
-            <div className={`${styles.noramlFlex} w-full`}>
-              <h4>Already have an account?</h4>
-              <Link to="/shop-login" className="text-blue-600 pl-2">
-                Login
-              </Link>
-            </div>
-          </form>
-        </div>
+          {/* Submit */}
+          <button
+            type="submit"
+            className="w-full py-2 bg-[#FFD166] text-[#2D6A4F] font-semibold rounded-md hover:bg-[#ffca3a] transition"
+          >
+            Create Shop
+          </button>
+
+          {/* Login Link */}
+          <p className="text-center text-sm text-gray-700">
+            Already have an account?{" "}
+            <Link to="/shop-login" className="text-[#2D6A4F] font-medium">
+              Login
+            </Link>
+          </p>
+        </form>
       </div>
     </div>
   );

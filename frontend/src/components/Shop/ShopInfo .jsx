@@ -58,7 +58,7 @@ const ShopInfo = ({ isOwner }) => {
   if (isLoading) return <Loader />;
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden p-6 pt-3 space-y-6 h-[95vh]">
+    <div className="max-w-md mx-auto p-6 pt-3 space-y-6">
       {/* Shop Avatar & Name */}
       <div className="flex flex-col items-center">
         <img

@@ -35,7 +35,7 @@ const EventCard = ({ active, data }) => {
       <div className="w-full lg:w-[50%] flex justify-center items-center relative">
         {/* SALE Badge */}
         {data.discountPrice && (
-          <span className="absolute top-4 left-4 bg-[#FFD166] text-[#2D6A4F] z-99 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+          <span className="absolute top-4 left-4 bg-[#FFD166] text-[#2D6A4F] z-9 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
             SALE
           </span>
         )}

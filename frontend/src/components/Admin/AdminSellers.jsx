@@ -89,7 +89,9 @@ const AdminSellers = () => {
   return (
     <>
       {isLoading ? (
-        <Loader />
+        <div className="w-full">
+          <Loader />
+        </div>
       ) : (
         <div className="w-[calc(100vw-5rem-20px)] md:w-[calc(100vw-16rem-20px)] !h-[89vh] overflow-y-auto p-3 md:pt-4 bg-[#f9fafb]">
           <div className="">

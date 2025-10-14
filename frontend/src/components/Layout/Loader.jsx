@@ -1,20 +1,19 @@
-import Lottie from "react-lottie";
-import animationData from "../../assets/animations/Loader.json";
+import { motion } from "framer-motion";
 
-const Loader = () => {
-  const defaultOptions = {
-    loop: false,
-    autoplay: true,
-    animationData: animationData,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  };
+const SimpleLoader = () => {
   return (
-    <div className="w-full h-screen flex items-center justify-center">
-      <Lottie options={defaultOptions} width={300} height={300} />
+    <div className="flex items-center justify-center h-screen bg-transparent">
+      <motion.div
+        className="w-16 h-16 rounded-full border-4 border-gray-300 border-t-gray-600"
+        animate={{ rotate: 360 }}
+        transition={{
+          repeat: Infinity,
+          duration: 1,
+          ease: "linear",
+        }}
+      />
     </div>
   );
 };
 
-export default Loader;
+export default SimpleLoader;

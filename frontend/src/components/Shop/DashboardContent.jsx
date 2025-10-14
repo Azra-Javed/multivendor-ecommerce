@@ -34,14 +34,14 @@ const DashboardContent = () => {
       minWidth: 100,
       flex: 0.5,
       renderCell: (params) => {
-        let bg = "rgba(255, 209, 102, 0.25)";
+        let bg = "rgba(255, 209, 102, 0.25)"; // default yellow
         let color = "#7A5C00";
 
         if (params.row.status === "Delivered") {
-          bg = "rgba(45, 106, 79, 0.15)";
+          bg = "rgba(45, 106, 79, 0.15)"; // green tint
           color = "#2D6A4F";
         } else if (params.row.status === "Processing refund") {
-          bg = "rgba(255, 99, 71, 0.15)";
+          bg = "rgba(255, 99, 71, 0.15)"; // red tint
           color = "#C53030";
         }
 
@@ -88,10 +88,8 @@ const DashboardContent = () => {
       createdAt: item.createdAt.slice(0, 10),
     })) || [];
 
-  if (isLoading) return <Loader />;
-
   return (
-    <div className="w-full p-4 md:p-6 bg-[#f9fafb] min-h-screen">
+    <div className="w-[calc(100vw-5rem)] md:w-[calc(100vw-16rem)] !h-[89vh] overflow-y-auto p-3 md:pt-4 bg-[#f9fafb]">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         {/* Account Balance */}

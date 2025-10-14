@@ -31,7 +31,7 @@ const AllEvents = () => {
       renderCell: (params) => (
         <span
           style={{
-            backgroundColor: "#FFF4CC",
+            backgroundColor: "#FFF4CC", // soft yellow
             color: "#856404",
             padding: "3px 8px",
             borderRadius: "6px",
@@ -101,34 +101,48 @@ const AllEvents = () => {
   return isLoading ? (
     <Loader />
   ) : (
-    <div className="w-full mx-8 pt-1 mt-10 bg-white rounded-lg shadow-sm">
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={10}
-        disableRowSelectionOnClick
-        autoHeight
-        density="compact"
-        initialState={{
-          pagination: { paginationModel: { pageSize: 10, page: 0 } },
-        }}
-        pageSizeOptions={[8, 9, 10]}
-        sx={{
-          fontSize: "13px",
-          "& .MuiDataGrid-columnHeaders": {
-            fontSize: "14px",
-            fontWeight: 600,
-            backgroundColor: "#E6F4EA",
-            color: "#2D6A4F",
-          },
-          "& .MuiDataGrid-cell": {
-            borderBottom: "1px solid #f0f0f0",
-          },
-          "& .MuiDataGrid-row:hover": {
-            backgroundColor: "#E9F8E5",
-          },
-        }}
-      />
+    <div className="w-[calc(100vw-5rem-20px)] md:w-[calc(100vw-16rem-20px)] !h-[89vh] overflow-y-auto p-3 md:pt-4 bg-[#f9fafb]">
+      <div className="bg-white shadow-sm rounded-lg border border-gray-100 p-4">
+        <h4 className="text-[16px] font-medium text-gray-700 mb-2">
+          All Events
+        </h4>
+        <div className="overflow-x-auto">
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            initialState={{ pagination: { paginationModel: { pageSize: 10 } } }}
+            pageSizeOptions={[7, 10, 15]}
+            disableSelectionOnClick
+            autoHeight
+            density="compact"
+            sx={{
+              border: "1px solid #e5e7eb",
+              borderRadius: "10px",
+              backgroundColor: "#fff",
+              fontSize: "13px",
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: "#E3F2E1",
+                color: "#2D6A4F",
+                fontWeight: 600,
+                fontSize: "13px",
+              },
+              "& .MuiDataGrid-cell": {
+                padding: "6px 8px",
+                color: "#333",
+                borderBottom: "1px solid #f0f0f0",
+              },
+              "& .MuiDataGrid-row:hover": {
+                backgroundColor: "rgba(45, 106, 79, 0.08)",
+              },
+              "& .MuiDataGrid-footerContainer": {
+                borderTop: "1px solid #eee",
+                backgroundColor: "#fafafa",
+                color: "#2D6A4F",
+              },
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 };

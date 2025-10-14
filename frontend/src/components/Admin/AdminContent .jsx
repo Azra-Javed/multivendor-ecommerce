@@ -76,10 +76,8 @@ const AdminContent = () => {
       createdAt: item.createdAt.slice(0, 10),
     })) || [];
 
-  return isLoading ? (
-    <Loader />
-  ) : (
-    <div className="w-full p-4 md:p-6 bg-[#f9fafb] min-h-screen">
+  return (
+    <div className="w-[calc(100vw-5rem)] md:w-[calc(100vw-16rem)] !h-[89vh] overflow-y-auto p-3 md:pt-4 bg-[#f9fafb]">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         {/* Earnings */}

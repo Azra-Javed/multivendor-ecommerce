@@ -25,14 +25,14 @@ const AllOrders = () => {
       minWidth: 100,
       flex: 0.5,
       renderCell: (params) => {
-        let bg = "rgba(255, 209, 102, 0.25)";
+        let bg = "rgba(255, 209, 102, 0.25)"; // default yellow
         let color = "#7A5C00";
 
         if (params.row.status === "Delivered") {
-          bg = "rgba(45, 106, 79, 0.15)";
+          bg = "rgba(45, 106, 79, 0.15)"; // green tint
           color = "#2D6A4F";
         } else if (params.row.status === "Processing refund") {
-          bg = "rgba(255, 99, 71, 0.15)";
+          bg = "rgba(255, 99, 71, 0.15)"; // red tint
           color = "#C53030";
         }
 
@@ -80,17 +80,17 @@ const AllOrders = () => {
   if (isLoading) return <Loader />;
 
   return (
-    <div className="w-full p-4 md:p-6 bg-[#f9fafb] min-h-screen">
+    <div className="w-[calc(100vw-5rem-20px)] md:w-[calc(100vw-16rem-20px)] !h-[89vh] overflow-y-auto p-3 md:pt-4 bg-[#f9fafb]">
       <div className="bg-white shadow-sm rounded-lg border border-gray-100 p-4">
         <h4 className="text-[16px] font-medium text-gray-700 mb-2">
-          Latest Orders
+          All Orders
         </h4>
         <div className="overflow-x-auto">
           <DataGrid
             rows={rows}
             columns={columns}
-            initialState={{ pagination: { paginationModel: { pageSize: 12 } } }}
-            pageSizeOptions={[12, 14, 18]}
+            initialState={{ pagination: { paginationModel: { pageSize: 10 } } }}
+            pageSizeOptions={[7, 10, 15]}
             disableSelectionOnClick
             autoHeight
             density="compact"

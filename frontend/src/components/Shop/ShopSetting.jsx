@@ -59,8 +59,8 @@ const ShopSetting = () => {
     "mt-2 block w-full px-3 h-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#2D6A4F] focus:border-[#2D6A4F] text-sm";
 
   return (
-    <div className="w-full min-h-screen flex justify-center bg-gray-100 py-10">
-      <div className="w-[95%] md:w-[70%] lg:w-[50%] bg-white rounded-lg shadow p-6 flex flex-col items-center">
+    <div className="w-full flex justify-center bg-gray-100 py-10 max-h-[80vh] overflow-y-auto">
+      <div className="w-[95%] md:w-[70%] lg:w-[50%] bg-white rounded-lg shadow p-6 flex flex-col items-center h-full">
         {/* Avatar */}
         <div className="relative mb-6">
           <img

@@ -84,19 +84,43 @@ const AdminOrders = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="w-full min-h-[45vh] flex justify-center">
-          <div className="w-[98%] mt-3">
+        <div className="w-[calc(100vw-5rem-20px)] md:w-[calc(100vw-16rem-20px)] !h-[89vh] overflow-y-auto p-3 md:pt-4 bg-[#f9fafb]">
+          <div className="">
             <DataGrid
               rows={rows}
               columns={columns}
-              pageSize={8}
-              disableRowSelectionOnClick
-              autoHeight
               initialState={{
-                pagination: { paginationModel: { pageSize: 12, page: 0 } },
+                pagination: { paginationModel: { pageSize: 12 } },
               }}
-              pageSizeOptions={[12, 14, 18]}
+              pageSizeOptions={[10, 12, 15]}
+              disableSelectionOnClick
+              autoHeight
               density="compact"
+              sx={{
+                border: "1px solid #e5e7eb",
+                borderRadius: "10px",
+                backgroundColor: "#fff",
+                fontSize: "13px",
+                "& .MuiDataGrid-columnHeaders": {
+                  backgroundColor: "#E3F2E1",
+                  color: "#2D6A4F",
+                  fontWeight: 600,
+                  fontSize: "13px",
+                },
+                "& .MuiDataGrid-cell": {
+                  padding: "6px 8px",
+                  color: "#333",
+                  borderBottom: "1px solid #f0f0f0",
+                },
+                "& .MuiDataGrid-row:hover": {
+                  backgroundColor: "rgba(45, 106, 79, 0.08)",
+                },
+                "& .MuiDataGrid-footerContainer": {
+                  borderTop: "1px solid #eee",
+                  backgroundColor: "#fafafa",
+                  color: "#2D6A4F",
+                },
+              }}
             />
           </div>
         </div>

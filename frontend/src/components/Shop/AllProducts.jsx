@@ -36,7 +36,7 @@ const AllProducts = () => {
       renderCell: (params) => (
         <span
           style={{
-            backgroundColor: "#FFF4CC",
+            backgroundColor: "#FFF4CC", // soft yellow
             color: "#856404",
             padding: "3px 8px",
             borderRadius: "6px",
@@ -103,7 +103,7 @@ const AllProducts = () => {
   if (isLoading) return <Loader />;
 
   return (
-    <div className="w-full p-4 md:p-6 bg-[#f9fafb] min-h-screen">
+    <div className="w-[calc(100vw-5rem-20px)] md:w-[calc(100vw-16rem-20px)] !h-[89vh] overflow-y-auto p-3 md:pt-4 bg-[#f9fafb]">
       <div className="bg-white shadow-sm rounded-lg border border-gray-100 p-4">
         <h4 className="text-[16px] font-medium text-gray-700 mb-2">
           All Products

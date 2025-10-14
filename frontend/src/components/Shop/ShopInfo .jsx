@@ -58,7 +58,7 @@ const ShopInfo = ({ isOwner }) => {
   if (isLoading) return <Loader />;
 
   return (
-    <div className="max-w-md mx-auto p-6 pt-3 space-y-6">
+    <div className="max-w-d mx-auto p-6 pt-3 space-y-6">
       {/* Shop Avatar & Name */}
       <div className="flex flex-col items-center">
         <img
@@ -102,14 +102,14 @@ const ShopInfo = ({ isOwner }) => {
       {isOwner && (
         <div className="space-y-2">
           <Link
-            className={`${styles.button} !w-full !h-[44px] !rounded-md text-white`}
+            className={`${styles.button} !w-full !h-[32px] !rounded-md text-white`}
             to="/settings"
           >
             Edit Shop
           </Link>
           <button
             onClick={logoutHandler}
-            className={`${styles.button} !w-full !h-[44px] !rounded-md text-white`}
+            className={`${styles.button} !w-full !h-[32px] !rounded-md text-white`}
           >
             Log Out
           </button>

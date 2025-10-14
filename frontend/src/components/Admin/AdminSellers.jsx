@@ -91,90 +91,44 @@ const AdminSellers = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="w-full flex justify-center pt-5 bg-[#f9fafb]">
-          <div className="w-[98%]">
-            <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-3">
-              <DataGrid
-                rows={rows}
-                columns={columns.map((col) =>
-                  col.field === "name"
-                    ? {
-                        ...col,
-                        renderCell: (params) => (
-                          <span
-                            className="px-2 py-1 rounded-md font-medium"
-                            style={{
-                              backgroundColor: "#FFF4CC",
-                              color: "#856404",
-                            }}
-                          >
-                            {params.value}
-                          </span>
-                        ),
-                      }
-                    : col
-                )}
-                pageSize={8}
-                disableRowSelectionOnClick
-                autoHeight
-                density="compact"
-                initialState={{
-                  pagination: { paginationModel: { pageSize: 12, page: 0 } },
-                }}
-                pageSizeOptions={[12, 14, 18]}
-                sx={{
-                  fontSize: "14px",
-                  "& .MuiDataGrid-columnHeaders": {
-                    fontSize: "14px",
-                    fontWeight: 600,
-                    backgroundColor: "#FFF4CC",
-                  },
-                  "& .MuiDataGrid-cell": {
-                    fontSize: "13px",
-                    color: "#444",
-                    borderBottom: "1px solid #f0f0f0",
-                  },
-                  "& .MuiDataGrid-row:hover": {
-                    backgroundColor: "#FFF9E5",
-                  },
-                  "& .MuiDataGrid-footerContainer": {
-                    borderTop: "1px solid #eee",
-                    backgroundColor: "#FAFAFA",
-                  },
-                }}
-              />
-            </div>
-
-            {open && (
-              <div className="fixed inset-0 bg-[#00000050] flex items-center justify-center z-[999]">
-                <div className="bg-white w-[90%] sm:w-[400px] rounded-lg shadow-lg p-6">
-                  <div className="flex justify-end">
-                    <RxCross1
-                      size={22}
-                      className="cursor-pointer text-gray-500 hover:text-gray-700"
-                      onClick={() => setOpen(false)}
-                    />
-                  </div>
-                  <h3 className="text-[20px] text-center font-medium text-gray-700 py-3">
-                    Are you sure you want to delete this seller?
-                  </h3>
-                  <div className="flex justify-center gap-4 mt-3">
-                    <div
-                      className={`${styles.button} bg-gray-400 hover:bg-gray-500 text-white text-[15px] !h-[38px] px-4 rounded-md`}
-                      onClick={() => setOpen(false)}
-                    >
-                      Cancel
-                    </div>
-                    <div
-                      className={`${styles.button} bg-[#FFD166] hover:bg-[#E6C15A] text-gray-800 text-[15px] !h-[38px] px-4 rounded-md`}
-                      onClick={handleDelete}
-                    >
-                      Confirm
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
+        <div className="w-[calc(100vw-5rem-20px)] md:w-[calc(100vw-16rem-20px)] !h-[89vh] overflow-y-auto p-3 md:pt-4 bg-[#f9fafb]">
+          <div className="">
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              initialState={{
+                pagination: { paginationModel: { pageSize: 12 } },
+              }}
+              pageSizeOptions={[10, 12, 15]}
+              disableSelectionOnClick
+              autoHeight
+              density="compact"
+              sx={{
+                border: "1px solid #e5e7eb",
+                borderRadius: "10px",
+                backgroundColor: "#fff",
+                fontSize: "13px",
+                "& .MuiDataGrid-columnHeaders": {
+                  backgroundColor: "#E3F2E1",
+                  color: "#2D6A4F",
+                  fontWeight: 600,
+                  fontSize: "13px",
+                },
+                "& .MuiDataGrid-cell": {
+                  padding: "6px 8px",
+                  color: "#333",
+                  borderBottom: "1px solid #f0f0f0",
+                },
+                "& .MuiDataGrid-row:hover": {
+                  backgroundColor: "rgba(45, 106, 79, 0.08)",
+                },
+                "& .MuiDataGrid-footerContainer": {
+                  borderTop: "1px solid #eee",
+                  backgroundColor: "#fafafa",
+                  color: "#2D6A4F",
+                },
+              }}
+            />
           </div>
         </div>
       )}

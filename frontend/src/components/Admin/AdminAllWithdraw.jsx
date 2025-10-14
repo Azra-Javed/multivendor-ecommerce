@@ -33,6 +33,7 @@ const AdminAllWithdraw = () => {
         toast.success(res.data.message);
         setData(res.data.withdraw);
         setOpen(false);
+        window.location.reload();
       });
   };
 
@@ -47,17 +48,17 @@ const AdminAllWithdraw = () => {
       minWidth: 120,
       flex: 0.6,
       renderCell: (params) => {
-        let bg = "#FFF4CC";
+        let bg = "#FFF4CC"; // default yellow
         let color = "#856404";
 
         if (params.value === "Processing") {
-          bg = "#FFE5B4";
+          bg = "#FFE5B4"; // light orange
           color = "#B85C00";
         } else if (params.value === "Succeeded") {
-          bg = "#E6F4EA";
+          bg = "#E6F4EA"; // light green
           color = "#256D3B";
         } else if (params.value === "Refund") {
-          bg = "#FBEAEA";
+          bg = "#FBEAEA"; // light red
           color = "#B71C1C";
         }
 
@@ -106,15 +107,16 @@ const AdminAllWithdraw = () => {
     },
   ];
 
-  const rows =
-    data?.map((item) => ({
-      id: item._id,
-      name: item.seller.name,
-      shopId: item.seller._id,
-      amount: "US$ " + item.amount,
-      status: item.status,
-      createdAt: item.createdAt.slice(0, 10),
-    })) || [];
+  const rows = Array.isArray(data)
+    ? data.map((item) => ({
+        id: item._id,
+        name: item.seller.name,
+        shopId: item.seller._id,
+        amount: "US$ " + item.amount,
+        status: item.status,
+        createdAt: item.createdAt.slice(0, 10),
+      }))
+    : [];
 
   return (
     <div className="w-full mx-8 pt-1 mt-10 bg-white rounded-lg shadow-sm p-3">

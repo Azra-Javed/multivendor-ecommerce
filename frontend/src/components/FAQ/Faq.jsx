@@ -308,6 +308,104 @@ const Faq = () => {
             </div>
           )}
         </div>
+
+        <div className="border-b border-gray-200 pb-2">
+          <button
+            className="flex items-center justify-between w-full cursor-pointer"
+            onClick={() => toggleTab(8)}
+          >
+            <span className="text-sm sm:text-base font-medium text-gray-900">
+              How long does shipping take?
+            </span>
+            {activeTab === 8 ? (
+              <svg
+                className="h-5 w-5 text-gray-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            ) : (
+              <svg
+                className="h-5 w-5 text-gray-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            )}
+          </button>
+          {activeTab === 8 && (
+            <div className="mt-2">
+              <p className="text-sm text-gray-600">
+                Standard shipping usually takes 5-7 business days. Expedited
+                shipping options are available at checkout for faster delivery.
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* New FAQ 2 */}
+        <div className="border-b border-gray-200 pb-2">
+          <button
+            className="flex items-center justify-between w-full cursor-pointer"
+            onClick={() => toggleTab(9)}
+          >
+            <span className="text-sm sm:text-base font-medium text-gray-900">
+              Do you offer gift wrapping?
+            </span>
+            {activeTab === 9 ? (
+              <svg
+                className="h-5 w-5 text-gray-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            ) : (
+              <svg
+                className="h-5 w-5 text-gray-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            )}
+          </button>
+          {activeTab === 9 && (
+            <div className="mt-2 mb-5">
+              <p className="text-sm text-gray-600">
+                Yes, we offer gift wrapping for a small additional fee. You can
+                select the gift wrap option during checkout and include a
+                personalized message.
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

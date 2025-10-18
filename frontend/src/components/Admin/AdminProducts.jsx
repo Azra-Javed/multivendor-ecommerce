@@ -75,7 +75,7 @@ const AdminProducts = () => {
       name: item.name,
       price: "US$ " + item.discountPrice,
       Stock: item.stock,
-      sold: item.sold || 0,
+      sold: item.sold_out < 0 ? item.stock : item.sold_out,
     })) || [];
 
   return (

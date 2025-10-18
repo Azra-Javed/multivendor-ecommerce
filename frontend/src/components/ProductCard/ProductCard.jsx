@@ -48,7 +48,6 @@ const ProductCard = ({ data, isEvent }) => {
     setClick(wishlist?.some((i) => i._id === data._id));
   }, [wishlist, data._id]);
 
-  // Compact action icon component
   const ActionIcon = ({ children, onClick, title }) => (
     <div
       className="w-7 h-7 rounded-full bg-white shadow-sm flex items-center justify-center cursor-pointer hover:bg-gray-100 transition"
@@ -85,11 +84,13 @@ const ProductCard = ({ data, isEvent }) => {
           )}
         </ActionIcon>
 
-        <ActionIcon onClick={() => addToCartHandler(data._id)}>
+        <ActionIcon
+          onClick={() => addToCartHandler(data._id)}
+          title={data.stock < 1 ? "Sold Out" : "Add to cart"}
+        >
           <AiOutlineShoppingCart
             size={16}
-            color="#2D6A4F"
-            title="Add to cart"
+            color={data.stock < 1 ? "gray" : "#2D6A4F"}
           />
         </ActionIcon>
       </div>
@@ -133,15 +134,26 @@ const ProductCard = ({ data, isEvent }) => {
           </div>
         </div>
 
-        <div className="flex items-baseline space-x-1">
-          {data.originalPrice && (
-            <span className="text-[12px] text-gray-400 line-through">
-              ${data.originalPrice.toFixed(2)}
-            </span>
+        {/* Price and Sold */}
+        <div className="flex items-baseline justify-between">
+          <div className="flex items-baseline space-x-1">
+            {data.originalPrice && (
+              <span className="text-[12px] text-gray-400 line-through">
+                ${data.originalPrice.toFixed(2)}
+              </span>
+            )}
+            <h3 className="text-[16px] font-bold text-[#2D6A4F]">
+              $
+              {(data.discountPrice || data.originalPrice)?.toFixed(2) ||
+                "XX.XX"}
+            </h3>
+          </div>
+
+          {data.sold_out > 0 && (
+            <p className="text-[12px] text-[#2D6A4F] font-medium bg-[#d9f6ed] px-2 py-0.5 rounded">
+              Sold: {data.sold_out}
+            </p>
           )}
-          <h3 className="text-[16px] font-bold text-[#2D6A4F]">
-            ${(data.discountPrice || data.originalPrice)?.toFixed(2) || "XX.XX"}
-          </h3>
         </div>
       </div>
 

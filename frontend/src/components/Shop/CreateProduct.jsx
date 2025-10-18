@@ -115,7 +115,9 @@ const CreateProduct = () => {
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium">Original Price</label>
+            <label className="block text-sm font-medium">
+              Original Price <span className="text-red-500">*</span>
+            </label>
             <input
               type="number"
               value={originalPrice}
@@ -125,9 +127,7 @@ const CreateProduct = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium">
-              Discount Price <span className="text-red-500">*</span>
-            </label>
+            <label className="block text-sm font-medium">Discount Price</label>
             <input
               type="number"
               value={discountPrice}

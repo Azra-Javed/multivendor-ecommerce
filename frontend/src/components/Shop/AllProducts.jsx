@@ -97,7 +97,7 @@ const AllProducts = () => {
       name: item.name,
       price: "US$ " + item.discountPrice,
       Stock: item.stock,
-      sold: 10,
+      sold: item.sold_out,
     })) || [];
 
   if (isLoading) return <Loader />;
